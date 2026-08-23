@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой Аркадный Портал | Инди Игры</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>NEXUS // Indie Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0b0b0e;
-            --accent-red: #ff2a2a;
-            --accent-glow: rgba(255, 42, 42, 0.35);
-            --glass-bg: rgba(18, 18, 24, 0.7);
-            --glass-border: rgba(255, 42, 42, 0.2);
-            --text-main: #ffffff;
+            --bg: #070709;
+            --surface: rgba(18, 18, 24, 0.65);
+            --surface-hover: rgba(28, 28, 38, 0.85);
+            --red: #ff1e38;
+            --red-glow: rgba(255, 30, 56, 0.35);
+            --border: rgba(255, 30, 56, 0.18);
+            --border-hover: rgba(255, 30, 56, 0.5);
+            --text-main: #f4f4f6;
             --text-muted: #9494a0;
         }
 
@@ -20,177 +22,184 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            /* Атмосферный киберпанк-фон с глубоким свечением */
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(255, 42, 42, 0.12) 0%, transparent 45%),
-                radial-gradient(circle at 85% 85%, rgba(120, 0, 0, 0.08) 0%, transparent 45%);
+                radial-gradient(circle at 10% 10%, rgba(255, 30, 56, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(120, 0, 20, 0.08) 0%, transparent 40%);
         }
 
-        /* Telegram Mini App Top Bar */
-        .tg-topbar {
+        /* Главный контейнер */
+        .wrapper {
             width: 100%;
-            max-width: 600px;
+            max-width: 680px;
+            padding: 40px 20px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 20px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--text-muted);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 20px;
-        }
-
-        .tg-topbar span {
-            color: var(--text-main);
-            font-weight: 600;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #2ecc71;
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 8px #2ecc71;
-            margin-right: 6px;
+            flex-direction: column;
+            gap: 24px;
         }
 
         /* Шапка профиля */
-        header {
-            width: 100%;
-            max-width: 600px;
-            padding: 10px 20px 25px;
+        .profile-card {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
         }
 
-        .avatar-container {
-            position: relative;
-            margin-bottom: 15px;
+        /* Фоновый неон в профиле */
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            width: 150px;
+            height: 150px;
+            background: var(--red);
+            filter: blur(70px);
+            opacity: 0.25;
+            z-index: 0;
         }
 
         .avatar {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff2a2a, #300000);
+            width: 88px;
+            height: 88px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #ff1e38, #400008);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 38px;
-            box-shadow: 0 0 30px var(--accent-glow);
-            border: 2px solid var(--accent-red);
+            font-size: 36px;
+            box-shadow: 0 0 25px var(--red-glow);
+            border: 2px solid rgba(255, 30, 56, 0.6);
+            margin-bottom: 16px;
+            z-index: 1;
         }
 
-        h1 {
-            font-size: 26px;
+        .profile-name {
+            font-size: 24px;
             font-weight: 800;
+            letter-spacing: -0.5px;
             margin-bottom: 6px;
-            letter-spacing: 0.5px;
+            z-index: 1;
         }
 
-        p.bio {
+        .profile-bio {
             color: var(--text-muted);
             font-size: 14px;
-            max-width: 400px;
-            line-height: 1.4;
+            max-width: 420px;
+            line-height: 1.5;
+            z-index: 1;
         }
 
-        /* Контейнер */
-        .container {
-            width: 100%;
-            max-width: 600px;
-            padding: 0 20px 40px;
+        /* Панель фильтров (Интерактивная) */
+        .filter-nav {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .filter-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 10px 18px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn:hover {
+            color: var(--text-main);
+            border-color: var(--border-hover);
+        }
+
+        .filter-btn.active {
+            background: var(--red);
+            color: white;
+            border-color: var(--red);
+            box-shadow: 0 0 20px var(--red-glow);
+        }
+
+        /* Список игр */
+        .games-grid {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
 
-        /* Вкладки категорий в стиле Telegram */
-        .tabs {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-        }
-
-        .tab {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-muted);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .tab.active, .tab:hover {
-            background: var(--accent-red);
-            color: white;
-            border-color: var(--accent-red);
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        /* Карточка игры со стеклом */
+        /* Карточка игры */
         .game-card {
-            background: var(--glass-bg);
+            background: var(--surface);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 18px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            gap: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .game-card:hover {
-            border-color: var(--accent-red);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 35px var(--accent-glow);
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px var(--red-glow);
         }
 
-        /* Имитация превью/обложки игры */
         .game-banner {
             width: 100%;
-            height: 140px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #1f1f2e, #0a0a0f);
-            border: 1px solid rgba(255, 42, 42, 0.15);
+            height: 150px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #13131c, #050508);
+            border: 1px solid rgba(255, 30, 56, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            color: var(--accent-red);
+            font-size: 40px;
             position: relative;
             overflow: hidden;
         }
 
-        .game-info {
+        .game-details {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .game-header-row {
+        .game-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -199,114 +208,129 @@
         .game-title {
             font-size: 18px;
             font-weight: 700;
+            letter-spacing: -0.3px;
         }
 
-        .game-badge {
-            background: rgba(255, 42, 42, 0.12);
-            color: var(--accent-red);
-            padding: 3px 10px;
-            border-radius: 12px;
+        .game-tag {
+            background: rgba(255, 30, 56, 0.1);
+            color: var(--red);
+            padding: 4px 10px;
+            border-radius: 8px;
             font-size: 11px;
-            font-weight: 600;
-            border: 1px solid rgba(255, 42, 42, 0.25);
+            font-weight: 700;
+            border: 1px solid rgba(255, 30, 56, 0.2);
+            text-transform: uppercase;
         }
 
         .game-desc {
             color: var(--text-muted);
             font-size: 13.5px;
-            line-height: 1.45;
+            line-height: 1.5;
         }
 
-        /* Кнопка */
-        .btn-play {
-            display: block;
+        /* Кнопка действия */
+        .btn-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             text-decoration: none;
-            background: var(--accent-red);
+            background: var(--red);
             color: white;
-            padding: 11px;
-            border-radius: 12px;
-            font-weight: 600;
+            padding: 12px;
+            border-radius: 14px;
+            font-weight: 700;
             font-size: 14px;
-            text-align: center;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(255, 42, 42, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 30, 56, 0.3);
         }
 
-        .btn-play:hover {
-            background: #ff4747;
-            box-shadow: 0 0 22px var(--accent-glow);
+        .btn-action:hover {
+            background: #ff3b53;
+            box-shadow: 0 0 25px var(--red-glow);
         }
 
+        /* Футер */
         footer {
-            margin-top: auto;
-            padding: 25px;
+            text-align: center;
             color: var(--text-muted);
             font-size: 12px;
-            text-align: center;
+            padding-top: 10px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Шапка мини-приложения в стиле Telegram -->
-    <div class="tg-topbar">
-        <div><span class="status-dot"></span>Online разработчик</div>
-        <div>v1.2.0</div>
-    </div>
-
-    <!-- Профиль -->
-    <header>
-        <div class="avatar-container">
+    <div class="wrapper">
+        <!-- Шапка профиля разработчика -->
+        <div class="profile-card">
             <div class="avatar">⚡</div>
-        </div>
-        <h1>CyberDev Games</h1>
-        <p class="bio">Создаю атмосферные инди-игры. Зацени релизы, играй прямо в браузере или качай на ПК!</p>
-    </header>
-
-    <!-- Игры -->
-    <div class="container">
-        <!-- Вкладки фильтров -->
-        <div class="tabs">
-            <div class="tab active">Все игры</div>
-            <div class="tab">Экшен</div>
-            <div class="tab">Рогалики</div>
-            <div class="tab">Обновления</div>
+            <h1 class="profile-name">KRYPTON DEV</h1>
+            <p class="profile-bio">Создаю независимые игры с атмосферным геймплеем и мрачным визуалом. Выбирай проект и погнали тестить.</p>
         </div>
 
-        <!-- Игра 1 -->
-        <div class="game-card">
-            <div class="game-banner">
-                🚀
-            </div>
-            <div class="game-info">
-                <div class="game-header-row">
-                    <h2 class="game-title">Cyber Runner 2077</h2>
-                    <span class="game-badge">Экшен</span>
+        <!-- Интерактивные фильтры -->
+        <div class="filter-nav">
+            <button class="filter-btn active" onclick="filterGames('all', this)">Все игры</button>
+            <button class="filter-btn" onclick="filterGames('action', this)">Экшены</button>
+            <button class="filter-btn" onclick="filterGames('roguelike', this)">Рогалики</button>
+            <button class="filter-btn" onclick="filterGames('cyberpunk', this)">Киберпанк</button>
+        </div>
+
+        <!-- Сетка проектов -->
+        <div class="games-grid" id="gamesGrid">
+            
+            <!-- Игра 1 -->
+            <div class="game-card" data-category="action cyberpunk">
+                <div class="game-banner">🚀</div>
+                <div class="game-details">
+                    <div class="game-top">
+                        <h2 class="game-title">Cyber Runner 2077</h2>
+                        <span class="game-tag">Экшен</span>
+                    </div>
+                    <p class="game-desc">Динамичный неоновый раннер на выживание. Уклоняйся от ловушек под качающий кибер-саундтрек.</p>
                 </div>
-                <p class="game-desc">Динамичный раннер с неоновой графикой. Уворачивайся от преград и ставь рекорды скорости.</p>
+                <a href="#" class="btn-action">Играть / Скачать</a>
             </div>
-            <a href="#" class="btn-play">Играть / Скачать</a>
+
+            <!-- Игра 2 -->
+            <div class="game-card" data-category="roguelike">
+                <div class="game-banner">🗡️</div>
+                <div class="game-details">
+                    <div class="game-top">
+                        <h2 class="game-title">Red Dungeon</h2>
+                        <span class="game-tag">Рогалик</span>
+                    </div>
+                    <p class="game-desc">Хардкорное подземелье с процедурной генерацией, кучей монстров и мрачной атмосферой.</p>
+                </div>
+                <a href="#" class="btn-action">Играть / Скачать</a>
+            </div>
+
         </div>
 
-        <!-- Игра 2 -->
-        <div class="game-card">
-            <div class="game-banner">
-                🗡️
-            </div>
-            <div class="game-info">
-                <div class="game-header-row">
-                    <h2 class="game-title">Red Dungeon</h2>
-                    <span class="game-badge">Рогалик</span>
-                </div>
-                <p class="game-desc">Мрачное подземелье, монстры и процедурная генерация уровней. Выживи любой ценой.</p>
-            </div>
-            <a href="#" class="btn-play">Играть / Скачать</a>
-        </div>
+        <footer>
+            &copy; 2026 KRYPTON. Все права защищены.
+        </footer>
     </div>
 
-    <footer>
-        &copy; 2026 CyberDev. Сделано с душой в черно-красном стиле.
-    </footer>
+    <!-- Интерактивный скрипт для фильтрации -->
+    <script>
+        function filterGames(category, element) {
+            // Переключаем активную кнопку
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
 
+            // Фильтруем карточки
+            const cards = document.querySelectorAll('.game-card');
+            cards.forEach(card => {
+                const categories = card.getAttribute('data-category');
+                if (category === 'all' || categories.includes(category)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
