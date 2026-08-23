@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мой Аркадный Портал | Инди Игры</title>
-    <!-- Подключаем шрифт Outfit для современного стиля -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0d0d0f;
+            --bg-color: #0b0b0e;
             --accent-red: #ff2a2a;
-            --accent-glow: rgba(255, 42, 42, 0.4);
-            --glass-bg: rgba(20, 20, 25, 0.65);
+            --accent-glow: rgba(255, 42, 42, 0.35);
+            --glass-bg: rgba(18, 18, 24, 0.7);
             --glass-border: rgba(255, 42, 42, 0.2);
             --text-main: #ffffff;
-            --text-muted: #a0a0ab;
+            --text-muted: #9494a0;
         }
 
         * {
@@ -32,185 +31,281 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
-            /* Абстрактный черно-красный фон */
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 42, 42, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(150, 0, 0, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 15% 15%, rgba(255, 42, 42, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(120, 0, 0, 0.08) 0%, transparent 45%);
         }
 
-        /* Шапка профиля в стиле Telegram */
+        /* Telegram Mini App Top Bar */
+        .tg-topbar {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .tg-topbar span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #2ecc71;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #2ecc71;
+            margin-right: 6px;
+        }
+
+        /* Шапка профиля */
         header {
             width: 100%;
-            max-width: 800px;
-            padding: 40px 20px 20px;
+            max-width: 600px;
+            padding: 10px 20px 25px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
         }
 
-        .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff2a2a, #550000);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            box-shadow: 0 0 25px var(--accent-glow);
-            border: 2px solid var(--accent-red);
+        .avatar-container {
+            position: relative;
             margin-bottom: 15px;
         }
 
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff2a2a, #300000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            box-shadow: 0 0 30px var(--accent-glow);
+            border: 2px solid var(--accent-red);
+        }
+
         h1 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
         }
 
         p.bio {
             color: var(--text-muted);
-            font-size: 15px;
-            max-width: 450px;
-            margin-bottom: 20px;
+            font-size: 14px;
+            max-width: 400px;
+            line-height: 1.4;
         }
 
-        /* Основной контейнер с эффектом стекла (Glassmorphism) */
+        /* Контейнер */
         .container {
             width: 100%;
-            max-width: 700px;
+            max-width: 600px;
             padding: 0 20px 40px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 16px;
         }
 
-        .section-title {
-            font-size: 18px;
+        /* Вкладки категорий в стиле Telegram */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .tab {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: 600;
-            color: var(--accent-red);
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
-        /* Карточка игры (Стекло + черно-красный неон) */
+        .tab.active, .tab:hover {
+            background: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        /* Карточка игры со стеклом */
         .game-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
         .game-card:hover {
             border-color: var(--accent-red);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px var(--accent-glow);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px var(--accent-glow);
         }
 
-        .game-header {
+        /* Имитация превью/обложки игры */
+        .game-banner {
+            width: 100%;
+            height: 140px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1f1f2e, #0a0a0f);
+            border: 1px solid rgba(255, 42, 42, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--accent-red);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .game-header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .game-title {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 700;
         }
 
         .game-badge {
-            background: rgba(255, 42, 42, 0.15);
+            background: rgba(255, 42, 42, 0.12);
             color: var(--accent-red);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
             font-weight: 600;
-            border: 1px solid rgba(255, 42, 42, 0.3);
+            border: 1px solid rgba(255, 42, 42, 0.25);
         }
 
         .game-desc {
             color: var(--text-muted);
-            font-size: 14px;
-            line-height: 1.4;
+            font-size: 13.5px;
+            line-height: 1.45;
         }
 
-        /* Кнопка скачивания/игры */
+        /* Кнопка */
         .btn-play {
-            display: inline-block;
+            display: block;
             text-decoration: none;
             background: var(--accent-red);
             color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 11px;
+            border-radius: 12px;
             font-weight: 600;
             font-size: 14px;
             text-align: center;
-            transition: background 0.2s, box-shadow 0.2s;
-            box-shadow: 0 0 10px rgba(255, 42, 42, 0.4);
-            align-self: flex-start;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(255, 42, 42, 0.3);
         }
 
         .btn-play:hover {
             background: #ff4747;
-            box-shadow: 0 0 20px var(--accent-glow);
+            box-shadow: 0 0 22px var(--accent-glow);
         }
 
-        /* Подвал */
         footer {
             margin-top: auto;
-            padding: 20px;
+            padding: 25px;
             color: var(--text-muted);
-            font-size: 13px;
+            font-size: 12px;
             text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <!-- Шапка профиля -->
+    <!-- Шапка мини-приложения в стиле Telegram -->
+    <div class="tg-topbar">
+        <div><span class="status-dot"></span>Online разработчик</div>
+        <div>v1.2.0</div>
+    </div>
+
+    <!-- Профиль -->
     <header>
-        <div class="avatar">🎮</div>
-        <h1>Игровой Кабинет</h1>
-        <p class="bio">Создаю крутые инди-игры в темном стиле. Зацени мои проекты и качай лучшие релизы!</p>
+        <div class="avatar-container">
+            <div class="avatar">⚡</div>
+        </div>
+        <h1>CyberDev Games</h1>
+        <p class="bio">Создаю атмосферные инди-игры. Зацени релизы, играй прямо в браузере или качай на ПК!</p>
     </header>
 
-    <!-- Список игр -->
+    <!-- Игры -->
     <div class="container">
-        <div class="section-title">Мои релизы</div>
+        <!-- Вкладки фильтров -->
+        <div class="tabs">
+            <div class="tab active">Все игры</div>
+            <div class="tab">Экшен</div>
+            <div class="tab">Рогалики</div>
+            <div class="tab">Обновления</div>
+        </div>
 
-        <!-- Карточка игры 1 -->
+        <!-- Игра 1 -->
         <div class="game-card">
-            <div class="game-header">
-                <h2 class="game-title">Cyber Runner 2077</h2>
-                <span class="game-badge">Экшен</span>
+            <div class="game-banner">
+                🚀
             </div>
-            <p class="game-desc">Динамичный раннер с неоновой графикой. Уворачивайся от преград и ставь рекорды скорости.</p>
+            <div class="game-info">
+                <div class="game-header-row">
+                    <h2 class="game-title">Cyber Runner 2077</h2>
+                    <span class="game-badge">Экшен</span>
+                </div>
+                <p class="game-desc">Динамичный раннер с неоновой графикой. Уворачивайся от преград и ставь рекорды скорости.</p>
+            </div>
             <a href="#" class="btn-play">Играть / Скачать</a>
         </div>
 
-        <!-- Карточка игры 2 -->
+        <!-- Игра 2 -->
         <div class="game-card">
-            <div class="game-header">
-                <h2 class="game-title">Red Dungeon</h2>
-                <span class="game-badge">Рогалик</span>
+            <div class="game-banner">
+                🗡️
             </div>
-            <p class="game-desc">Мрачное подземелье, монстры и процедурная генерация уровней. Выживи любой ценой.</p>
+            <div class="game-info">
+                <div class="game-header-row">
+                    <h2 class="game-title">Red Dungeon</h2>
+                    <span class="game-badge">Рогалик</span>
+                </div>
+                <p class="game-desc">Мрачное подземелье, монстры и процедурная генерация уровней. Выживи любой ценой.</p>
+            </div>
             <a href="#" class="btn-play">Играть / Скачать</a>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 Создано разработчиком игр. Все права защищены.
+        &copy; 2026 CyberDev. Сделано с душой в черно-красном стиле.
     </footer>
 
 </body>
