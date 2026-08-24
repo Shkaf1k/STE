@@ -123,11 +123,6 @@
             box-shadow: 0 0 10px rgba(181, 74, 43, 0.5);
         }
 
-        .row {
-            display: flex;
-            gap: 15px;
-        }
-
         .grid-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -169,6 +164,63 @@
         .card-item span {
             font-size: 12px;
             color: var(--accent-rust);
+        }
+
+        /* Стилі для панелей глав у виборі рівнів */
+        .chapters-wrapper {
+            width: 100%;
+            max-width: 900px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 10px;
+        }
+
+        .chapter-panel {
+            background: var(--panel-color);
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+
+        .chapter-panel h3 {
+            color: var(--bp-gold);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            font-size: 16px;
+            letter-spacing: 2px;
+        }
+
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .level-btn {
+            background: #0c0c0e;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .level-btn:hover:not(:disabled) {
+            border-color: var(--accent-rust);
+            background: var(--accent-rust);
+            color: #fff;
+        }
+
+        .level-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            border-style: dashed;
         }
 
         .bp-container {
@@ -219,7 +271,7 @@
     <div id="main-menu" class="screen">
         <h1>INDUSTRIAL ANOMALY</h1>
         <p>SYSTEM PROTOCOL: 0x4E // 25 CHAPTERS & EXPANDED ARSENAL</p>
-        <button class="btn" onclick="UI.showScreen('chapters-screen')">[ ПОЧАТИ ПРОТОКОЛ (ВИБІР ГЛАВИ) ]</button>
+        <button class="btn" onclick="UI.showScreen('chapters-screen')">[ ПОЧАТИ ПРОТОКОЛ (ВИБІР ГЛАВ) ]</button>
         <button class="btn" onclick="UI.showScreen('char-screen')">[ ВИБІР ПЕРСОНАЖА ]</button>
         <button class="btn" onclick="UI.showScreen('inventory-screen')">[ ІНВЕНТАР ]</button>
         <button class="btn" onclick="UI.showScreen('cases-screen')">[ КЕЙСИ ]</button>
@@ -228,11 +280,11 @@
         <button class="btn" onclick="UI.showScreen('settings-screen')">[ НАЛАШТУВАННЯ ]</button>
     </div>
 
-    <!-- ВИБІР ГЛАВ ТА РІВНІВ -->
+    <!-- ВИБІР ГЛАВ ТА РІВНІВ (ПАНЕЛІ) -->
     <div id="chapters-screen" class="screen hidden">
         <h2>ВИБІР СЕКТОРУ ТА ГЛАВИ</h2>
-        <p>Оберіть рівень (доступно до досягнутого максимального рівня).</p>
-        <div class="grid-container" id="chapters-grid"></div>
+        <p>Оберіть главу та доступний рівень протоколу.</p>
+        <div class="chapters-wrapper" id="chapters-wrapper"></div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
@@ -279,7 +331,7 @@
         <p>РЕЖИМ СТРІЛЬБИ: <span id="setting-fire-mode">АВТОМАТИЧНИЙ</span></p>
         <button class="btn" onclick="Settings.toggleFireMode()">ЗМІНИТИ РЕЖИМ СТРІЛЬБИ</button>
         <p>ШВИДКІСТЬ ГРИ (ПІДСИЛЕННЯ ВОРКЕРІВ): <span id="setting-speed-label">НОРМАЛЬНА (1.0x)</span></p>
-        <button class="btn" onclick="Settings.toggleGameSpeed()">ЗМІНИТЬ ШВИДКІСТЬ</button>
+        <button class="btn" onclick="Settings.toggleGameSpeed()">ЗМІНИТИ ШВИДКІСТЬ</button>
         <p>ЗВУКОВІ ЕФЕКТИ (SFX): <span id="setting-sfx-label">УВІМКНЕНО</span></p>
         <button class="btn" onclick="Settings.toggleSfx()">ПЕРЕКЛЮЧИТИ ЗВУК</button>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
@@ -481,17 +533,37 @@
             setTimeout(() => pop.classList.remove('show'), 3500);
         },
         updateChaptersScreen() {
-            let grid = document.getElementById('chapters-grid');
-            grid.innerHTML = '';
-            for (let i = 1; i <= 25; i++) {
-                let unlocked = i <= Storage.data.bestLevel;
-                let chapterNum = Math.floor((i - 1) / 10) + 1;
-                let div = document.createElement('div');
-                div.className = `card-item`;
-                div.style.borderColor = unlocked ? 'var(--border-color)' : '#1a1a22';
-                div.innerHTML = `<h3>РІВЕНЬ ${i}</h3><p>Глава ${chapterNum}</p><span>${unlocked ? '<button class="btn" onclick="Game.startLevel(' + i + ')">ГРАТИ</button>' : 'ЗАБЛОКОВАНО'}</span>`;
-                grid.appendChild(div);
-            }
+            let wrapper = document.getElementById('chapters-wrapper');
+            wrapper.innerHTML = '';
+            
+            // Розбиваємо 25 рівнів на 3 глави: Глава 1 (1-10), Глава 2 (11-20), Глава 3 (21-25)
+            let chaptersData = [
+                { title: "ГЛАВА 1: ПЕРВИННИЙ СЕКТОР", start: 1, end: 10 },
+                { title: "ГЛАВА 2: ГЛИБОКИЙ КОНВЕЄР", start: 11, end: 20 },
+                { title: "ГЛАВА 3: ЯДРО АНОМАЛІЇ", start: 21, end: 25 }
+            ];
+
+            chaptersData.forEach(ch => {
+                let panel = document.createElement('div');
+                panel.className = 'chapter-panel';
+                panel.innerHTML = `<h3>${ch.title}</h3>`;
+                
+                let grid = document.createElement('div');
+                grid.className = 'levels-grid';
+
+                for (let i = ch.start; i <= ch.end; i++) {
+                    let unlocked = i <= Storage.data.bestLevel;
+                    let btn = document.createElement('button');
+                    btn.className = 'level-btn';
+                    btn.disabled = !unlocked;
+                    btn.innerText = `РІВЕНЬ ${i}`;
+                    btn.onclick = () => Game.startLevel(i);
+                    grid.appendChild(btn);
+                }
+
+                panel.appendChild(grid);
+                wrapper.appendChild(panel);
+            });
         },
         updateInventory() {
             let grid = document.getElementById('inventory-grid');
@@ -672,7 +744,7 @@
                 Storage.data.scrap += bonus;
                 Storage.save();
                 AudioSys.buy();
-                document.getElementById('case-result').innerText = `РКІСНИЙ ДЕРЖАВНИЙ ПАКЕТ: +${bonus} БРУХТУ!`;
+                document.getElementById('case-result').innerText = `РІДКІСНИЙ ДЕРЖАВНИЙ ПАКЕТ: +${bonus} БРУХТУ!`;
             }
         },
 
