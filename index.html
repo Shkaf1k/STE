@@ -218,7 +218,7 @@
     <!-- ГОЛОВНЕ МЕНЮ -->
     <div id="main-menu" class="screen">
         <h1>INDUSTRIAL ANOMALY</h1>
-        <p>SYSTEM PROTOCOL: 0x4E // BATTLE PASS & EXPANDED ARSENAL</p>
+        <p>SYSTEM PROTOCOL: 0x4E // 25 CHAPTERS & EXPANDED ARSENAL</p>
         <button class="btn" onclick="Game.start()">[ ПОЧАТИ ПРОТОКОЛ ]</button>
         <button class="btn" onclick="UI.showScreen('char-screen')">[ ВИБІР ПЕРСОНАЖА ]</button>
         <button class="btn" onclick="UI.showScreen('bp-screen')">[ БОЙОВИЙ ПРОПУСК ]</button>
@@ -246,13 +246,17 @@
     <div id="settings-screen" class="screen hidden">
         <h2>НАЛАШТУВАННЯ</h2>
         <p>РЕЖИМ СТРІЛЬБИ: <span id="setting-fire-mode">АВТОМАТИЧНИЙ</span></p>
-        <button class="btn" onclick="Settings.toggleFireMode()">ЗМІНИТЬ РЕЖИМ СТРІЛЬБИ</button>
+        <button class="btn" onclick="Settings.toggleFireMode()">ЗМІНИТИ РЕЖИМ СТРІЛЬБИ</button>
+        <p>ШВИДКІСТЬ ГРИ (ПІДСИЛЕННЯ ВОРКЕРІВ): <span id="setting-speed-label">НОРМАЛЬНА (1.0x)</span></p>
+        <button class="btn" onclick="Settings.toggleGameSpeed()">ЗМІНИТЬ ШВИДКІСТЬ</button>
+        <p>ЗВУКОВІ ЕФЕКТИ (SFX): <span id="setting-sfx-label">УВІМКНЕНО</span></p>
+        <button class="btn" onclick="Settings.toggleSfx()">ПЕРЕКЛЮЧИТИ ЗВУК</button>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
     <!-- ДОСЯГНЕННЯ -->
     <div id="achievements-screen" class="screen hidden">
-        <h2>ЖУРНАЛ ДОСЯГНЕНЬ</h2>
+        <h2>ЖУРНАЛ ДОСЯГНЕНЬ (<span id="ach-count">0</span>/25)</h2>
         <div class="grid-container" id="achievements-container" style="max-height: 350px; overflow-y: auto;"></div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
@@ -262,13 +266,13 @@
         <h2 id="shop-title">СЕКТОР ОЧИЩЕНО // АРСЕНАЛ ТА АПГРЕЙДИ</h2>
         <p>ФРАГМЕНТИ РЕСУРСІВ: <span id="shop-scrap" style="color:var(--glow-green)">0</span></p>
         <div class="grid-container" id="shop-items-container"></div>
-        <button class="btn" onclick="Game.nextWave()">[ ПОЧАТИ НАСТУПНУ ХВИЛЮ ]</button>
+        <button class="btn" onclick="Game.nextWave()">[ ПОЧАТИ НАСТУПНИЙ РІВЕНЬ ]</button>
     </div>
 
     <!-- ЕКРАН СМЕРТІ -->
     <div id="gameover-screen" class="screen hidden">
         <h1 style="color: var(--accent-red);">ЗБОЇ СИСТЕМИ // СМЕРТЬ</h1>
-        <p id="gameover-stats">ВИ ПРОТРИМАЛИСЬ ХВИЛЬ: 0</p>
+        <p id="gameover-stats">ВИ ПРОТРИМАЛИСЬ РІВНІВ: 0</p>
         <button class="btn" onclick="Game.restart()">[ ПЕРЕЗАПУСТИТИ ]</button>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ ГОЛОВНЕ МЕНЮ ]</button>
     </div>
@@ -290,7 +294,7 @@
             if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         },
         playTone(freq, type, duration, vol = 0.1) {
-            if (!this.ctx) return;
+            if (!Settings.sfxEnabled || !this.ctx) return;
             try {
                 let osc = this.ctx.createOscillator();
                 let gain = this.ctx.createGain();
@@ -335,24 +339,53 @@
         { level: 5, cost: 250, rewardType: 'weapon', rewardId: 'minigun', desc: "Розблокувати зброю: Індустріальний кулемет" }
     ];
 
+    const AchievementsDef = {
+        first_blood: { title: "ПЕРША КРОВ", desc: "Знищіть першу аномалію." },
+        level_3: { title: "ІНДУСТРІАЛЬНИЙ ЖАХ", desc: "Доживіть до 3-го рівня." },
+        level_5: { title: "ГЛИБОКИЙ ШАТХАУТ", desc: "Доживіть до 5-го рівня." },
+        level_10: { title: "КОМАНДИР СЕКТОРУ", desc: "Досягніть кінця Глави 1 (Рівень 10)." },
+        level_15: { title: "ПЕРЕГРІВ СИСТЕМИ", desc: "Досягніть 15-го рівня." },
+        level_20: { title: "МЕХАНІЧНИЙ АПОКАЛІПСИС", desc: "Досягніть 20-го рівня." },
+        level_25: { title: "ВОЛОДАР ЗАВОДУ", desc: "Пройдіть усі 25 рівнів і всі Глави!" },
+        rich_1: { title: "МАРОДЕР", desc: "Накопичте 150 одиниць металобрухту загалом." },
+        rich_2: { title: "ІНВЕСТОР", desc: "Накопичте 300 одиниць металобрухту." },
+        rich_3: { title: "ОЛІГАРХ ЗВАРИХ", desc: "Накопичте 600 одиниць металобрухту." },
+        speed_demon: { title: "ПРИШВИДШЕНИЙ", desc: "Увімкніть підвищену швидкість гри в налаштуваннях." },
+        manual_sniper: { title: "СНАЙПЕР-РОБІТНИК", desc: "Грайте у ручному режимі стрільби." },
+        cyborg_user: { title: "КІБОРГІЗАЦІЯ", desc: "Виберіть оператора Кібер-інженер." },
+        tank_user: { title: "НЕПРОБИВНИЙ", desc: "Виберіть оператора Важкий оператор." },
+        survivor_1: { title: "СТІЙКІСТЬ", desc: "Знищіть 10 аномалій." },
+        survivor_2: { title: "МБОРЕЦЬ З ВІРУСАМИ", desc: "Знищіть 25 аномалій." },
+        survivor_3: { title: "ЧИСТИЛЬНИК", desc: "Знищіть 50 аномалій." },
+        weapon_saw: { title: "ПИЛЯЙ", desc: "Використайте циркулярну пилку." },
+        weapon_shotgun: { title: "ДРОБОВИК І СЕРЦЕ", desc: "Використайте тяжкий дробовик." },
+        weapon_laser: { title: "ПЛАЗМОВИЙ ПРОМІНЬ", desc: "Використайте експериментальний лазер." },
+        weapon_minigun: { title: "КУЛЕМЕТНИЙ ВОГОНЬ", desc: "Використайте індустріальний кулемет." },
+        shop_aholic: { title: "ШОПИНГ НА ЗАВОДІ", desc: "Придбайте аварійний ремонт у магазині." },
+        speed_upgrade: { title: "ПІДСИЛЕНИЙ НОГИ", desc: "Придбайте покращення швидкості у магазині." },
+        chapter_2: { title: "ПОЧАТОК ГЛАВИ 2", desc: "Розпочніть 11-й рівень." },
+        chapter_3: { title: "ПОЧАТОК ГЛАВИ 3", desc: "Розпочніть 21-й рівень." }
+    };
+
     const Storage = {
         data: {
-            bestWave: 0,
+            bestLevel: 0,
             scrap: 0,
             selectedChar: 'worker',
             unlockedWeapons: { pistol: true },
             unlockedChars: { worker: true, cyborg: true, tank: true },
             bpClaimed: {},
-            achievements: {}
+            achievements: {},
+            totalKills: 0
         },
         load() {
-            let saved = localStorage.getItem('IND_ANOMALY_SAVE_V2');
+            let saved = localStorage.getItem('IND_ANOMALY_SAVE_V3');
             if (saved) {
                 try { this.data = JSON.parse(saved); } catch(e) {}
             }
         },
         save() {
-            localStorage.setItem('IND_ANOMALY_SAVE_V2', JSON.stringify(this.data));
+            localStorage.setItem('IND_ANOMALY_SAVE_V3', JSON.stringify(this.data));
         },
         unlock(id, title, desc) {
             if (!this.data.achievements[id]) {
@@ -365,18 +398,31 @@
         }
     };
 
-    const AchievementsDef = {
-        first_blood: { title: "ПЕРША КРОВ", desc: "Знищіть першу аномалію." },
-        wave_3: { title: "ІНДУСТРІАЛЬНИЙ ЖАХ", desc: "Доживіть до 3-ї хвилі." },
-        wave_5: { title: "ГЛИБОКИЙ ШАТХАУТ", desc: "Доживіть до 5-ї хвилі." },
-        rich: { title: "МАРОДЕР", desc: "Накопичте 150 одиниць металобрухту загалом." }
-    };
-
     const Settings = {
         autoFire: true,
+        gameSpeedMultiplier: 1.0,
+        sfxEnabled: true,
         toggleFireMode() {
             this.autoFire = !this.autoFire;
             document.getElementById('setting-fire-mode').innerText = this.autoFire ? "АВТОМАТИЧНИЙ" : "РУЧНИЙ (КЛІК)";
+            if (!this.autoFire) Storage.unlock('manual_sniper', AchievementsDef.manual_sniper.title, AchievementsDef.manual_sniper.desc);
+        },
+        toggleGameSpeed() {
+            if (this.gameSpeedMultiplier === 1.0) {
+                this.gameSpeedMultiplier = 1.3;
+                document.getElementById('setting-speed-label').innerText = "ПРИШВИДШЕНА (1.3x)";
+                Storage.unlock('speed_demon', AchievementsDef.speed_demon.title, AchievementsDef.speed_demon.desc);
+            } else if (this.gameSpeedMultiplier === 1.3) {
+                this.gameSpeedMultiplier = 1.6;
+                document.getElementById('setting-speed-label').innerText = "ТУРБО (1.6x)";
+            } else {
+                this.gameSpeedMultiplier = 1.0;
+                document.getElementById('setting-speed-label').innerText = "НОРМАЛЬНА (1.0x)";
+            }
+        },
+        toggleSfx() {
+            this.sfxEnabled = !this.sfxEnabled;
+            document.getElementById('setting-sfx-label').innerText = this.sfxEnabled ? "УВІМКНЕНО" : "ВИМКНЕНО";
         }
     };
 
@@ -411,6 +457,8 @@
                 div.onclick = () => {
                     Storage.data.selectedChar = c.id;
                     Storage.save();
+                    if (c.id === 'cyborg') Storage.unlock('cyborg_user', AchievementsDef.cyborg_user.title, AchievementsDef.cyborg_user.desc);
+                    if (c.id === 'tank') Storage.unlock('tank_user', AchievementsDef.tank_user.title, AchievementsDef.tank_user.desc);
                     this.updateCharScreen();
                 };
                 grid.appendChild(div);
@@ -431,15 +479,19 @@
         updateAchievements() {
             let container = document.getElementById('achievements-container');
             container.innerHTML = '';
+            let count = 0;
+            let total = Object.keys(AchievementsDef).length;
             for (let id in AchievementsDef) {
                 let unlocked = Storage.data.achievements[id];
+                if (unlocked) count++;
                 let def = AchievementsDef[id];
                 let div = document.createElement('div');
-                div.className = `card-item ${unlocked ? '' : 'hidden'}`;
+                div.className = `card-item`;
                 div.style.borderColor = unlocked ? 'var(--glow-green)' : 'var(--border-color)';
                 div.innerHTML = `<h3>[${unlocked ? 'АКТИВНО' : 'ЗАБЛОКОВАНО'}] ${def.title}</h3><p>${def.desc}</p>`;
                 container.appendChild(div);
             }
+            document.getElementById('ach-count').innerText = count;
         }
     };
 
@@ -448,13 +500,14 @@
         ctx: null,
         keys: {},
         mouse: { x: 0, y: 0, down: false },
-        player: { x: 550, y: 350, radius: 12, speed: 3.2, hp: 100, maxHp: 100, regen: 0, damageMult: 1.0 },
+        player: { x: 550, y: 350, radius: 12, speed: 3.2, hp: 100, maxHp: 100, damageMult: 1.0 },
         currentWeapon: 'pistol',
         bullets: [],
         enemies: [],
-        wave: 1,
-        waveTimer: 0,
-        waveDuration: 1800,
+        level: 1,
+        chapter: 1,
+        levelTimer: 0,
+        levelDuration: 1800,
         spawnTimer: 0,
         scrap: 0,
         running: false,
@@ -464,7 +517,8 @@
             AudioSys.init();
             Storage.load();
             this.scrap = Storage.data.scrap;
-            this.wave = 1;
+            this.level = 1;
+            this.updateChapterInfo();
 
             let char = Characters.find(c => c.id === Storage.data.selectedChar) || Characters[0];
             this.player.maxHp = char.maxHp;
@@ -487,6 +541,10 @@
         },
 
         restart() { this.start(); },
+
+        updateChapterInfo() {
+            this.chapter = Math.floor((this.level - 1) / 10) + 1;
+        },
 
         setupListeners() {
             window.onkeydown = e => this.keys[e.key.toLowerCase()] = true;
@@ -517,21 +575,32 @@
         },
 
         nextWave() {
-            this.wave++;
-            this.waveTimer = 0;
+            this.level++;
+            this.updateChapterInfo();
+            this.levelTimer = 0;
             UI.showScreen('canvas');
             this.running = true;
             this.loop();
         },
 
-        endWave() {
+        endLevel() {
             this.running = false;
             Storage.data.scrap += this.scrap;
             Storage.save();
             
-            if (this.wave >= 3) Storage.unlock('wave_3', AchievementsDef.wave_3.title, AchievementsDef.wave_3.desc);
-            if (this.wave >= 5) Storage.unlock('wave_5', AchievementsDef.wave_5.title, AchievementsDef.wave_5.desc);
-            if (Storage.data.scrap >= 150) Storage.unlock('rich', AchievementsDef.rich.title, AchievementsDef.rich.desc);
+            if (this.level >= 3) Storage.unlock('level_3', AchievementsDef.level_3.title, AchievementsDef.level_3.desc);
+            if (this.level >= 5) Storage.unlock('level_5', AchievementsDef.level_5.title, AchievementsDef.level_5.desc);
+            if (this.level >= 10) Storage.unlock('level_10', AchievementsDef.level_10.title, AchievementsDef.level_10.desc);
+            if (this.level >= 15) Storage.unlock('level_15', AchievementsDef.level_15.title, AchievementsDef.level_15.desc);
+            if (this.level >= 20) Storage.unlock('level_20', AchievementsDef.level_20.title, AchievementsDef.level_20.desc);
+            if (this.level >= 25) Storage.unlock('level_25', AchievementsDef.level_25.title, AchievementsDef.level_25.desc);
+
+            if (this.level === 11) Storage.unlock('chapter_2', AchievementsDef.chapter_2.title, AchievementsDef.chapter_2.desc);
+            if (this.level === 21) Storage.unlock('chapter_3', AchievementsDef.chapter_3.title, AchievementsDef.chapter_3.desc);
+
+            if (Storage.data.scrap >= 150) Storage.unlock('rich_1', AchievementsDef.rich_1.title, AchievementsDef.rich_1.desc);
+            if (Storage.data.scrap >= 300) Storage.unlock('rich_2', AchievementsDef.rich_2.title, AchievementsDef.rich_2.desc);
+            if (Storage.data.scrap >= 600) Storage.unlock('rich_3', AchievementsDef.rich_3.title, AchievementsDef.rich_3.desc);
 
             this.openShop();
         },
@@ -539,10 +608,10 @@
         openShop() {
             UI.showScreen('shop-screen');
             document.getElementById('shop-scrap').innerText = this.scrap;
+            document.getElementById('shop-title').innerText = `ГЛАВА ${this.chapter} // РІВЕНЬ ${this.level} ПРОЙДЕНО`;
             let container = document.getElementById('shop-items-container');
             container.innerHTML = '';
 
-            // Додаємо зброю у магазин
             WeaponsDef.forEach(w => {
                 let unlocked = Storage.data.unlockedWeapons[w.id];
                 let equipped = this.currentWeapon === w.id;
@@ -552,10 +621,9 @@
                 container.appendChild(div);
             });
 
-            // Апгрейди
             let upgrades = [
-                { id: 'heal', name: 'Аварійний ремонт', desc: 'Відновити 50 HP', cost: 10, action: () => { if(this.scrap>=10){this.scrap-=10; this.player.hp=Math.min(this.player.maxHp, this.player.hp+50); AudioSys.buy(); this.openShop();}} },
-                { id: 'speed', name: 'Іржавий протез', desc: '+0.4 до швидкості', cost: 15, action: () => { if(this.scrap>=15){this.scrap-=15; this.player.speed+=0.4; AudioSys.buy(); this.openShop();}} }
+                { id: 'heal', name: 'Аварійний ремонт', desc: 'Відновити 50 HP', cost: 10, action: () => { if(this.scrap>=10){this.scrap-=10; this.player.hp=Math.min(this.player.maxHp, this.player.hp+50); AudioSys.buy(); Storage.unlock('shop_aholic', AchievementsDef.shop_aholic.title, AchievementsDef.shop_aholic.desc); this.openShop();}} },
+                { id: 'speed', name: 'Іржавий протез', desc: '+0.4 до швидкості', cost: 15, action: () => { if(this.scrap>=15){this.scrap-=15; this.player.speed+=0.4; AudioSys.buy(); Storage.unlock('speed_upgrade', AchievementsDef.speed_upgrade.title, AchievementsDef.speed_upgrade.desc); this.openShop();}} }
             ];
             upgrades.forEach(u => {
                 let div = document.createElement('div');
@@ -567,6 +635,10 @@
 
         equipWeapon(id) {
             this.currentWeapon = id;
+            if (id === 'saw') Storage.unlock('weapon_saw', AchievementsDef.weapon_saw.title, AchievementsDef.weapon_saw.desc);
+            if (id === 'shotgun') Storage.unlock('weapon_shotgun', AchievementsDef.weapon_shotgun.title, AchievementsDef.weapon_shotgun.desc);
+            if (id === 'laser') Storage.unlock('weapon_laser', AchievementsDef.weapon_laser.title, AchievementsDef.weapon_laser.desc);
+            if (id === 'minigun') Storage.unlock('weapon_minigun', AchievementsDef.weapon_minigun.title, AchievementsDef.weapon_minigun.desc);
             this.openShop();
         },
 
@@ -575,11 +647,13 @@
                 this.scrap -= 10;
                 this.player.hp = Math.min(this.player.maxHp, this.player.hp + 50);
                 AudioSys.buy();
+                Storage.unlock('shop_aholic', AchievementsDef.shop_aholic.title, AchievementsDef.shop_aholic.desc);
                 this.openShop();
             } else if(id === 'speed' && this.scrap >= 15) {
                 this.scrap -= 15;
                 this.player.speed += 0.4;
                 AudioSys.buy();
+                Storage.unlock('speed_upgrade', AchievementsDef.speed_upgrade.title, AchievementsDef.speed_upgrade.desc);
                 this.openShop();
             }
         },
@@ -589,10 +663,11 @@
             Storage.data.scrap += this.scrap;
             Storage.save();
             UI.showScreen('gameover-screen');
-            document.getElementById('gameover-stats').innerText = `ВИ ПРОТРИМАЛИСЬ ХВИЛЬ: ${this.wave}`;
+            document.getElementById('gameover-stats').innerText = `ВИ ПРОТРИМАЛИСЬ РІВНІВ: ${this.level} (ГЛАВА ${this.chapter})`;
         },
 
         update() {
+            let speedMult = Settings.gameSpeedMultiplier;
             let dx = 0, dy = 0;
             if (this.keys['w'] || this.keys['ц']) dy = -1;
             if (this.keys['s'] || this.keys['і']) dy = 1;
@@ -600,13 +675,13 @@
             if (this.keys['d'] || this.keys['в']) dx = 1;
             
             if (dx !== 0 && dy !== 0) { dx *= 0.7071; dy *= 0.7071; }
-            this.player.x += dx * this.player.speed;
-            this.player.y += dy * this.player.speed;
+            this.player.x += dx * this.player.speed * speedMult;
+            this.player.y += dy * this.player.speed * speedMult;
 
             this.player.x = Math.max(20, Math.min(1080, this.player.x));
             this.player.y = Math.max(20, Math.min(680, this.player.y));
 
-            this.lastShot++;
+            this.lastShot += speedMult;
             let weapon = WeaponsDef.find(w => w.id === this.currentWeapon) || WeaponsDef[0];
             if ((Settings.autoFire || this.mouse.down) && this.lastShot >= weapon.fireRate) {
                 this.lastShot = 0;
@@ -626,33 +701,33 @@
 
             for (let i = this.bullets.length - 1; i >= 0; i--) {
                 let b = this.bullets[i];
-                b.x += b.vx; b.y += b.vy;
-                b.dist += Math.hypot(b.vx, b.vy);
+                b.x += b.vx * speedMult; b.y += b.vy * speedMult;
+                b.dist += Math.hypot(b.vx, b.vy) * speedMult;
                 if (b.dist > b.range || b.x < 0 || b.x > 1100 || b.y < 0 || b.y > 700) {
                     this.bullets.splice(i, 1);
                 }
             }
 
-            this.waveTimer++;
-            this.spawnTimer++;
-            if (this.spawnTimer > Math.max(15, 55 - this.wave * 4)) {
+            this.levelTimer += speedMult;
+            this.spawnTimer += speedMult;
+            if (this.spawnTimer > Math.max(15, 65 - this.level * 2)) {
                 this.spawnTimer = 0;
                 this.spawnEnemy();
             }
 
-            if (this.waveTimer >= this.waveDuration) {
-                this.endWave();
+            if (this.levelTimer >= this.levelDuration) {
+                this.endLevel();
                 return;
             }
 
             for (let i = this.enemies.length - 1; i >= 0; i--) {
                 let en = this.enemies[i];
                 let angle = Math.atan2(this.player.y - en.y, this.player.x - en.x);
-                en.x += Math.cos(angle) * en.speed;
-                en.y += Math.sin(angle) * en.speed;
+                en.x += Math.cos(angle) * en.speed * speedMult;
+                en.y += Math.sin(angle) * en.speed * speedMult;
 
                 if (Math.hypot(this.player.x - en.x, this.player.y - en.y) < this.player.radius + en.radius) {
-                    this.player.hp -= en.damage;
+                    this.player.hp -= en.damage * speedMult;
                     AudioSys.hit();
                     if (this.player.hp <= 0) { this.gameOver(); return; }
                 }
@@ -663,7 +738,12 @@
                         en.hp -= b.damage;
                         this.bullets.splice(j, 1);
                         if (en.hp <= 0) {
+                            Storage.data.totalKills++;
                             Storage.unlock('first_blood', AchievementsDef.first_blood.title, AchievementsDef.first_blood.desc);
+                            if (Storage.data.totalKills >= 10) Storage.unlock('survivor_1', AchievementsDef.survivor_1.title, AchievementsDef.survivor_1.desc);
+                            if (Storage.data.totalKills >= 25) Storage.unlock('survivor_2', AchievementsDef.survivor_2.title, AchievementsDef.survivor_2.desc);
+                            if (Storage.data.totalKills >= 50) Storage.unlock('survivor_3', AchievementsDef.survivor_3.title, AchievementsDef.survivor_3.desc);
+
                             this.scrap += en.scrapValue;
                             this.enemies.splice(i, 1);
                             break;
@@ -674,13 +754,14 @@
         },
 
         spawnEnemy() {
+            // Враги тепер значно повільніші (менша швидкість), щоб збалансувати 25 рівнів
             let types = [
-                { radius: 10, speed: 2.2, hp: 20, damage: 0.6, color: '#b54a2b', scrapValue: 2 },
-                { radius: 14, speed: 1.3, hp: 55, damage: 1.2, color: '#505060', scrapValue: 4 },
-                { radius: 8, speed: 3.2, hp: 12, damage: 0.4, color: '#8b0000', scrapValue: 1 },
-                { radius: 18, speed: 0.9, hp: 110, damage: 2.2, color: '#2b2b36', scrapValue: 7 }
+                { radius: 10, speed: 1.1 + (this.chapter * 0.1), hp: 20 + (this.level * 3), damage: 0.4, color: '#b54a2b', scrapValue: 2 },
+                { radius: 14, speed: 0.7 + (this.chapter * 0.1), hp: 55 + (this.level * 4), damage: 0.8, color: '#505060', scrapValue: 4 },
+                { radius: 8, speed: 1.6 + (this.chapter * 0.1), hp: 12 + (this.level * 2), damage: 0.3, color: '#8b0000', scrapValue: 1 },
+                { radius: 18, speed: 0.4 + (this.chapter * 0.05), hp: 110 + (this.level * 6), damage: 1.5, color: '#2b2b36', scrapValue: 7 }
             ];
-            let type = types[Math.floor(Math.random() * Math.min(types.length, 1 + Math.floor(this.wave / 2)))];
+            let type = types[Math.floor(Math.random() * Math.min(types.length, 1 + Math.floor(this.level / 6)))];
             let edge = Math.floor(Math.random() * 4);
             let x, y;
             if (edge === 0) { x = Math.random() * 1100; y = -20; }
@@ -722,8 +803,8 @@
             this.ctx.font = '14px "Courier New"';
             this.ctx.fillText(`ЗДОРОВ'Я: ${Math.ceil(this.player.hp)}/${this.player.maxHp}`, 25, 30);
             this.ctx.fillText(`БРУХТ: ${this.scrap}`, 25, 55);
-            this.ctx.fillText(`ХВИЛЯ: ${this.wave}`, 970, 30);
-            this.ctx.fillText(`ЧАС: ${Math.ceil((this.waveDuration - this.waveTimer) / 60)}с`, 970, 55);
+            this.ctx.fillText(`ГЛАВА: ${this.chapter} | РІВЕНЬ: ${this.level}/25`, 880, 30);
+            this.ctx.fillText(`ЧАС: ${Math.ceil((this.levelDuration - this.levelTimer) / 60)}с`, 970, 55);
 
             this.ctx.fillStyle = '#2b2b36';
             this.ctx.fillRect(25, 70, 180, 8);
