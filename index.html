@@ -44,7 +44,6 @@
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.95);
         }
 
-        /* Ефекти екрана можна вимкнути через налаштування */
         #game-container.crt-enabled::before {
             content: " ";
             display: block;
@@ -162,11 +161,6 @@
             text-align: left;
         }
 
-        .card-item span {
-            font-size: 12px;
-            color: var(--accent-rust);
-        }
-
         .chapters-wrapper {
             width: 100%;
             max-width: 900px;
@@ -264,49 +258,57 @@
         #achievement-popup p { margin: 0; color: var(--text-main); font-size: 11px; text-align: left; }
     </style>
 </head>
-<body class="crt-enabled" id="body-container">
+<body class="crt-enabled">
 
-<div id="game-container" class="crt-enabled" id="container-element">
+<div id="game-container" class="crt-enabled">
     <!-- ГОЛОВНЕ МЕНЮ -->
     <div id="main-menu" class="screen">
         <h1>INDUSTRIAL ANOMALY</h1>
-        <p>SYSTEM PROTOCOL: 0x4E // 25 CHAPTERS & EXPANDED ARSENAL</p>
-        <button class="btn" onclick="UI.showScreen('chapters-screen')">[ ПОЧАТИ ПРОТОКОЛ (ВИБІР ГЛАВ) ]</button>
-        <button class="btn" onclick="UI.showScreen('char-screen')">[ ВИБІР ПЕРСОНАЖА ]</button>
+        <p>BRAWL SYSTEM: ПРОКАЧУВАННЯ, СКІНИ ТА БОЙОВИЙ ПРОПУСК</p>
+        <button class="btn" onclick="UI.showScreen('chapters-screen')">[ ПОЧАТИ ГРУ (ВИБІР РІВНЯ) ]</button>
+        <button class="btn" onclick="UI.showScreen('char-screen')">[ ОПЕРАТИВНИКИ ТА СКІНИ ]</button>
+        <button class="btn" onclick="UI.showScreen('quests-screen')">[ ЗАВДАННЯ ТА ЖЕТОНИ ]</button>
+        <button class="btn" onclick="UI.showScreen('bp-screen')">[ БОЙОВИЙ ПРОПУСК (PASS) ]</button>
         <button class="btn" onclick="UI.showScreen('inventory-screen')">[ ІНВЕНТАР ]</button>
         <button class="btn" onclick="UI.showScreen('cases-screen')">[ КЕЙСИ ]</button>
-        <button class="btn" onclick="UI.showScreen('bp-screen')">[ БОЙОВИЙ ПРОПУСК ]</button>
-        <button class="btn" onclick="UI.showScreen('save-screen')">[ ЗБЕРЕЖЕННЯ / ЗАВАНТАЖЕННЯ ]</button>
-        <button class="btn" onclick="UI.showScreen('achievements-screen')">[ ДОСЯГНЕННЯ ]</button>
+        <button class="btn" onclick="UI.showScreen('save-screen')">[ ЗБЕРЕЖЕННЯ ]</button>
         <button class="btn" onclick="UI.showScreen('settings-screen')">[ НАЛАШТУВАННЯ ]</button>
     </div>
 
-    <!-- МЕНЮ ЗБЕРЕЖЕННЯ ТА ЗАВАНТАЖЕННЯ -->
+    <!-- МЕНЮ ЗАВДАНЬ -->
+    <div id="quests-screen" class="screen hidden">
+        <h2>ЖУРНАЛ БОЙОВИХ ЗАВДАНЬ</h2>
+        <p>Виконуйте місії, щоб отримувати жетони Бойового Пропуску.</p>
+        <div class="bp-container" id="quests-list"></div>
+        <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
+    </div>
+
+    <!-- ЗБЕРЕЖЕННЯ -->
     <div id="save-screen" class="screen hidden">
-        <h2>КЕРУВАННЯ ДАНИМИ ПРОТОКОЛУ</h2>
-        <p>Зберігайте прогрес вручну або завантажуйте попередній стан.</p>
+        <h2>КЕРУВАННЯ ДАНИМИ</h2>
+        <p>Зберігайте прогрес у пам'яті браузера.</p>
         <div style="background:var(--panel-color); border:1px solid var(--border-color); padding:25px; width:100%; max-width:550px; text-align:center; margin-bottom:20px;">
-            <p id="save-info-status" style="color:var(--glow-green); margin-bottom:15px;">ДАНІ ГОТОВІ ДО СИНХРОНІЗАЦІЇ</p>
-            <button class="btn" onclick="Storage.manualSave()">[ ЗБЕРЕГТИ ГРУ ВРУЧНУ ]</button>
-            <button class="btn" onclick="Storage.manualLoad()">[ ЗАВАНТАЖИТИ ОСТАННІЙ ЗУПИНЕНИЙ ПРОГРЕС ]</button>
-            <button class="btn" style="border-color:var(--accent-red); color:var(--accent-red);" onclick="Storage.hardReset()">[ СКИДАТИ ВЕСЬ ПРОГРЕС ]</button>
+            <p id="save-info-status" style="color:var(--glow-green); margin-bottom:15px;">ДАНІ ГОТОВІ</p>
+            <button class="btn" onclick="Storage.manualSave()">[ ЗБЕРЕГТИ ВРУЧНУ ]</button>
+            <button class="btn" onclick="Storage.manualLoad()">[ ЗАВАНТАЖИТИ ПРОГРЕС ]</button>
+            <button class="btn" style="border-color:var(--accent-red); color:var(--accent-red);" onclick="Storage.hardReset()">[ СКИДАТИ ПРОГРЕС ]</button>
         </div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
-    <!-- МЕНЮ ПАУЗИ ПІД ЧАС ГРИ -->
+    <!-- МЕНЮ ПАУЗИ -->
     <div id="pause-screen" class="screen hidden">
         <h2>ПРОТОКОЛ НА ПАУЗІ</h2>
-        <p>Гру зупинено. Ви можете продовжити або повернутися в головне меню.</p>
-        <button class="btn" onclick="Game.resumeGame()">[ ПРОДОВЖИТИ ГРУ ]</button>
-        <button class="btn" onclick="Storage.manualSave(); alert('Гру успішно збережено!');">[ ШВИДКЕ ЗБЕРЕЖЕННЯ ]</button>
-        <button class="btn" onclick="UI.showScreen('main-menu'); Game.running=false;">[ ВИХІД У ГОЛОВНЕ МЕНЮ ]</button>
+        <p>Гру зупинено.</p>
+        <button class="btn" onclick="Game.resumeGame()">[ ПРОДОВЖИТИ ]</button>
+        <button class="btn" onclick="Storage.manualSave(); alert('Збережено!');">[ ШВИДКЕ ЗБЕРЕЖЕННЯ ]</button>
+        <button class="btn" onclick="UI.showScreen('main-menu'); Game.running=false;">[ ВИХІД У МЕНЮ ]</button>
     </div>
 
-    <!-- ВИБІР ГЛАВ ТА РІВНІВ (ПАНЕЛІ) -->
+    <!-- ВИБІР ГЛАВ -->
     <div id="chapters-screen" class="screen hidden">
         <h2>ВИБІР СЕКТОРУ ТА ГЛАВИ</h2>
-        <p>Оберіть главу та доступний рівень протоколу.</p>
+        <p>Оберіть рівень протоколу.</p>
         <div class="chapters-wrapper" id="chapters-wrapper"></div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
@@ -314,36 +316,36 @@
     <!-- ІНВЕНТАР -->
     <div id="inventory-screen" class="screen hidden">
         <h2>ІНВЕНТАР ОПЕРАТИВНИКА</h2>
-        <p>Зібраний брухт, розблокована зброя та модифікації.</p>
+        <p>Ваші ресурси та розблокована зброя.</p>
         <div class="grid-container" id="inventory-grid"></div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
     <!-- КЕЙСИ -->
     <div id="cases-screen" class="screen hidden">
-        <h2>ІНДУСТРІАЛЬНІ КОНТЕЙНЕРИ (КЕЙСИ)</h2>
-        <p>Витрачайте брухт для отримання випадкової зброї або бонусів. Брухт: <span id="cases-scrap" style="color:var(--glow-green)">0</span></p>
+        <h2>ІНДУСТРІАЛЬНІ КОНТЕЙНЕРИ</h2>
+        <p>Витрачайте брухт. Брухт: <span id="cases-scrap" style="color:var(--glow-green)">0</span></p>
         <div style="background:var(--panel-color); border:1px solid var(--border-color); padding:20px; width:100%; max-width:500px; text-align:center; margin-bottom:20px;">
             <h3>ТЕХНІЧНИЙ КЕЙС</h3>
-            <p>Вартість відкриття: 40 брухту</p>
-            <div id="case-result" style="color: var(--bp-gold); min-height: 30px; margin-bottom: 15px; font-weight: bold;">[ ОЧІКУВАННЯ ЗАПУСКУ ]</div>
-            <button class="btn" onclick="Game.openCase()">ВІДКРИТИ КЕЙС</button>
+            <p>Вартість: 40 брухту</p>
+            <div id="case-result" style="color: var(--bp-gold); min-height: 30px; margin-bottom: 15px; font-weight: bold;">[ ОЧІКУВАННЯ ]</div>
+            <button class="btn" onclick="Game.openCase()">ВІДКРИТИ</button>
         </div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
-    <!-- ВИБІР ПЕРСОНАЖА -->
+    <!-- ВИБІР ПЕРСОНАЖА ТА СКІНІВ -->
     <div id="char-screen" class="screen hidden">
-        <h2>ВИБІР ОПЕРАТИВНИКА</h2>
-        <p>Кожен робітник має унікальну модифікацію корпусу.</p>
+        <h2>ОПЕРАТИВНИКИ ТА СКІНИ</h2>
+        <p>Підвищуйте рівень сили за брухт (+10% статів за рівень) та обирайте скін!</p>
         <div class="grid-container" id="char-grid"></div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
     <!-- БОЙОВИЙ ПРОПУСК -->
     <div id="bp-screen" class="screen hidden">
-        <h2>ПРОМИСЛОВИЙ БОЙОВИЙ ПРОПУСК</h2>
-        <p>Заробляйте брухт у боях, щоб розблокувати унікальну зброю та ресурси.</p>
+        <h2>БОЙОВИЙ ПРОПУСК (PASS)</h2>
+        <p>Ваші жетони: <span id="bp-tokens-count" style="color:var(--bp-gold)">0</span></p>
         <div class="bp-container" id="bp-list"></div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
@@ -352,33 +354,26 @@
     <div id="settings-screen" class="screen hidden">
         <h2>НАЛАШТУВАННЯ</h2>
         <p>РЕЖИМ СТРІЛЬБИ: <span id="setting-fire-mode">АВТОМАТИЧНИЙ</span></p>
-        <button class="btn" onclick="Settings.toggleFireMode()">ЗМІНИТИ РЕЖИМ СТРІЛЬБИ</button>
+        <button class="btn" onclick="Settings.toggleFireMode()">ЗМІНИТИ РЕЖИМ</button>
         
         <p>ШВИДКІСТЬ ГРИ: <span id="setting-speed-label">НОРМАЛЬНА (1.0x)</span></p>
         <button class="btn" onclick="Settings.toggleGameSpeed()">ЗМІНИТИ ШВИДКІСТЬ</button>
         
-        <p>ГУЧНІСТЬ ЗВУКУ (SFX): <span id="setting-sfx-vol">50%</span></p>
+        <p>ГУЧНІСТЬ ЗВУКУ: <span id="setting-sfx-vol">50%</span></p>
         <button class="btn" onclick="Settings.cycleSfxVolume()">ЗМІНИТИ ГУЧНІСТЬ</button>
 
-        <p>ВІЗУАЛЬНИЙ ЕФЕКТ ЕКРАНА (CRT): <span id="setting-crt-label">УВІМКНЕНО</span></p>
-        <button class="btn" onclick="Settings.toggleCrt()">ПЕРЕКЛЮЧИТИ CRT ЕФЕКТ</button>
+        <p>CRT ЕФЕКТ: <span id="setting-crt-label">УВІМКНЕНО</span></p>
+        <button class="btn" onclick="Settings.toggleCrt()">ПЕРЕКЛЮЧИТИ CRT</button>
 
-        <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
-    </div>
-
-    <!-- ДОСЯГНЕННЯ -->
-    <div id="achievements-screen" class="screen hidden">
-        <h2>ЖУРНАЛ ДОСЯГНЕНЬ (<span id="ach-count">0</span>/25)</h2>
-        <div class="grid-container" id="achievements-container" style="max-height: 350px; overflow-y: auto;"></div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
     <!-- МАГАЗИН МІЖ ХВИЛЯМИ -->
     <div id="shop-screen" class="screen hidden">
-        <h2 id="shop-title">СЕКТОР ОЧИЩЕНО // АРСЕНАЛ ТА АПГРЕЙДИ</h2>
-        <p>ФРАГМЕНТИ РЕСУРСІВ: <span id="shop-scrap" style="color:var(--glow-green)">0</span></p>
+        <h2 id="shop-title">СЕКТОР ОЧИЩЕНО // АРСЕНАЛ</h2>
+        <p>БРУХТ: <span id="shop-scrap" style="color:var(--glow-green)">0</span></p>
         <div class="grid-container" id="shop-items-container"></div>
-        <button class="btn" onclick="Game.nextWave()">[ ПОЧАТИ НАСТУПНИЙ РІВЕНЬ ]</button>
+        <button class="btn" onclick="Game.nextWave()">[ НАСТУПНИЙ РІВЕНЬ ]</button>
     </div>
 
     <!-- ЕКРАН СМЕРТІ -->
@@ -389,7 +384,7 @@
         <button class="btn" onclick="UI.showScreen('main-menu')">[ ГОЛОВНЕ МЕНЮ ]</button>
     </div>
 
-    <!-- ІГРОВИЙ CANVAS -->
+    <!-- CANVAS -->
     <canvas id="canvas" width="1100" height="700" class="hidden"></canvas>
 
     <!-- Спливаюче вікно -->
@@ -431,9 +426,40 @@
     };
 
     const Characters = [
-        { id: 'worker', name: "Звичайний робітник", desc: "Базовий стан корпусу. Стандартні характеристики.", speed: 3.2, maxHp: 100, damageMult: 1.0 },
-        { id: 'cyborg', name: "Кібер-інженер", desc: "Збільшена швидкість пересування, менше здоров'я.", speed: 4.0, maxHp: 75, damageMult: 1.1 },
-        { id: 'tank', name: "Важкий оператор", desc: "Посилена броня та запас здоров'я, знижена швидкість.", speed: 2.5, maxHp: 150, damageMult: 0.9 }
+        { 
+            id: 'worker', 
+            name: "Звичайний робітник", 
+            desc: "Базовий стан корпусу.", 
+            baseSpeed: 3.2, 
+            baseHp: 100, 
+            skins: [
+                { id: 'default', name: 'Стандарт (Іржа)', color: '#a0a0b0', accent: '#b54a2b' },
+                { id: 'gold', name: 'Золотий Робітник', color: '#ffaa00', accent: '#ff4400' },
+                { id: 'shadow', name: 'Тіньовий Робітник', color: '#222228', accent: '#fc0303' }
+            ]
+        },
+        { 
+            id: 'cyborg', 
+            name: "Кібер-інженер", 
+            desc: "Швидкий та маневрений.", 
+            baseSpeed: 4.0, 
+            baseHp: 75, 
+            skins: [
+                { id: 'default', name: 'Стандарт (Неон)', color: '#33ff66', accent: '#00aa33' },
+                { id: 'cyber_punk', name: 'Кібер-панк', color: '#00ffff', accent: '#ff00ff' }
+            ]
+        },
+        { 
+            id: 'tank', 
+            name: "Важкий оператор", 
+            desc: "Високий запас здоров'я.", 
+            baseSpeed: 2.5, 
+            baseHp: 150, 
+            skins: [
+                { id: 'default', name: 'Стандарт (Броня)', color: '#505060', accent: '#8b0000' },
+                { id: 'magma', name: 'Магматичний Танк', color: '#ff3300', accent: '#ffff00' }
+            ]
+        }
     ];
 
     const WeaponsDef = [
@@ -445,86 +471,92 @@
     ];
 
     const BattlePassLevels = [
-        { level: 1, cost: 30, rewardType: 'weapon', rewardId: 'saw', desc: "Розблокувати зброю: Циркулярна пилка" },
-        { level: 2, cost: 70, rewardType: 'scrap', rewardValue: 50, desc: "Бонус: +50 одиниць брухту" },
-        { level: 3, cost: 120, rewardType: 'weapon', rewardId: 'shotgun', desc: "Розблокувати зброю: Тяжкий дробовик" },
-        { level: 4, cost: 180, rewardType: 'weapon', rewardId: 'laser', desc: "Розблокувати зброю: Експериментальний лазер" },
-        { level: 5, cost: 250, rewardType: 'weapon', rewardId: 'minigun', desc: "Розблокувати зброю: Індустріальний кулемет" }
+        { level: 1, costTokens: 10, rewardType: 'weapon', rewardId: 'saw', desc: "Розблокувати зброю: Циркулярна пилка" },
+        { level: 2, costTokens: 25, rewardType: 'scrap', rewardValue: 60, desc: "Бонус: +60 брухту" },
+        { level: 3, costTokens: 45, rewardType: 'weapon', rewardId: 'shotgun', desc: "Розблокувати зброю: Тяжкий дробовик" },
+        { level: 4, costTokens: 70, rewardType: 'weapon', rewardId: 'laser', desc: "Розблокувати зброю: Експериментальний лазер" },
+        { level: 5, costTokens: 100, rewardType: 'weapon', rewardId: 'minigun', desc: "Розблокувати зброю: Індустріальний кулемет" }
     ];
 
-    const AchievementsDef = {
-        first_blood: { title: "ПЕРША КРОВ", desc: "Знищіть першу аномалію." },
-        level_3: { title: "ІНДУСТРІАЛЬНИЙ ЖАХ", desc: "Доживіть до 3-го рівня." },
-        level_5: { title: "ГЛИБОКИЙ ШАТХАУТ", desc: "Доживіть до 5-го рівня." },
-        level_10: { title: "КОМАНДИР СЕКТОРУ", desc: "Досягніть кінця Глави 1 (Рівень 10)." },
-        level_15: { title: "ПЕРЕГРІВ СИСТЕМИ", desc: "Досягніть 15-го рівня." },
-        level_20: { title: "МЕХАНІЧНИЙ АПОКАЛІПСИС", desc: "Досягніть 20-го рівня." },
-        level_25: { title: "ВОЛОДАР ЗАВОДУ", desc: "Пройдіть усі 25 рівнів і всі Глави!" },
-        rich_1: { title: "МАРОДЕР", desc: "Накопичте 150 одиниць металобрухту загалом." },
-        rich_2: { title: "ІНВЕСТОР", desc: "Накопичте 300 одиниць металобрухту." },
-        rich_3: { title: "ОЛІГАРХ ЗВАРИХ", desc: "Накопичте 600 одиниць металобрухту." },
-        speed_demon: { title: "ПРИШВИДШЕНИЙ", desc: "Увімкніть підвищену швидкість гри в налаштуваннях." },
-        manual_sniper: { title: "СНАЙПЕР-РОБІТНИК", desc: "Грайте у ручному режимі стрільби." },
-        cyborg_user: { title: "КІБОРГІЗАЦІЯ", desc: "Виберіть оператора Кібер-інженер." },
-        tank_user: { title: "НЕПРОБИВНИЙ", desc: "Виберіть оператора Важкий оператор." },
-        survivor_1: { title: "СТІЙКІСТЬ", desc: "Знищіть 10 аномалій." },
-        survivor_2: { title: "МБОРЕЦЬ З ВІРУСАМИ", desc: "Знищіть 25 аномалій." },
-        survivor_3: { title: "ЧИСТИЛЬНИК", desc: "Знищіть 50 аномалій." },
-        weapon_saw: { title: "ПИЛЯЙ", desc: "Використайте циркулярну пилку." },
-        weapon_shotgun: { title: "ДРОБОВИК І СЕРЦЕ", desc: "Використайте тяжкий дробовик." },
-        weapon_laser: { title: "ПЛАЗМОВИЙ ПРОМІНЬ", desc: "Використайте експериментальний лазер." },
-        weapon_minigun: { title: "КУЛЕМЕТНИЙ ВОГОНЬ", desc: "Використайте індустріальний кулемет." },
-        shop_aholic: { title: "ШОПИНГ НА ЗАВОДІ", desc: "Придбайте аварійний ремонт у магазині." },
-        speed_upgrade: { title: "ПІДСИЛЕНИЙ НОГИ", desc: "Придбайте покращення швидкості у магазині." },
-        chapter_2: { title: "ПОЧАТОК ГЛАВИ 2", desc: "Розпочніть 11-й рівень." },
-        chapter_3: { title: "ПОЧАТОК ГЛАВИ 3", desc: "Розпочніть 21-й рівень." }
-    };
+    const QuestsDef = [
+        { id: 'q_kills_10', title: "ЛК-1: Зачистка", desc: "Знищити загалом 10 аномалій", target: 10, progressKey: 'totalKills', rewardTokens: 15, claimed: false },
+        { id: 'q_scrap_100', title: "ІК-2: Збір ресурсів", desc: "Зібрати 100 одиниць брухту", target: 100, progressKey: 'totalScrapEarned', rewardTokens: 20, claimed: false },
+        { id: 'q_level_5', title: "ПР-3: Промисловий тиск", desc: "Досягти 5-го рівня гри", target: 5, progressKey: 'bestLevel', rewardTokens: 25, claimed: false }
+    ];
 
     const Storage = {
         data: {
             bestLevel: 1,
-            scrap: 0,
+            scrap: 100,
+            tokens: 0,
             selectedChar: 'worker',
+            charLevels: { worker: 1, cyborg: 1, tank: 1 },
+            charSkins: { worker: 'default', cyborg: 'default', tank: 'default' },
             unlockedWeapons: { pistol: true },
-            unlockedChars: { worker: true, cyborg: true, tank: true },
             bpClaimed: {},
+            questsProgress: {},
+            questsClaimed: {},
             achievements: {},
-            totalKills: 0
+            totalKills: 0,
+            totalScrapEarned: 0
         },
         load() {
-            let saved = localStorage.getItem('IND_ANOMALY_SAVE_V5');
+            let saved = localStorage.getItem('IND_ANOMALY_SAVE_V6');
             if (saved) {
-                try { this.data = JSON.parse(saved); } catch(e) {}
+                try { 
+                    let parsed = JSON.parse(saved);
+                    this.data = { ...this.data, ...parsed };
+                } catch(e) {}
             }
         },
         save() {
-            localStorage.setItem('IND_ANOMALY_SAVE_V5', JSON.stringify(this.data));
+            localStorage.setItem('IND_ANOMALY_SAVE_V6', JSON.stringify(this.data));
         },
         manualSave() {
             this.save();
-            document.getElementById('save-info-status').innerText = "ПРОГРЕС УСПІШНО ЗБЕРЕЖЕНО В ПАМ'ЯТЬ БРАУЗЕРА!";
+            document.getElementById('save-info-status').innerText = "УСПІШНО ЗБЕРЕЖЕНО!";
             setTimeout(() => {
                 let el = document.getElementById('save-info-status');
-                if(el) el.innerText = "ДАНІ ГОТОВІ ДО СИНХРОНІЗАЦІЇ";
+                if(el) el.innerText = "ДАНІ ГОТОВІ";
             }, 3000);
         },
         manualLoad() {
             this.load();
-            alert("Прогрес успішно завантажено! Найвищий рівень: " + this.data.bestLevel);
+            alert("Прогрес завантажено!");
         },
         hardReset() {
-            if (confirm("Ви впевнені, що хочете видалити весь збережений прогрес?")) {
-                localStorage.removeItem('IND_ANOMALY_SAVE_V5');
+            if (confirm("Скинути весь прогрес?")) {
+                localStorage.removeItem('IND_ANOMALY_SAVE_V6');
                 location.reload();
             }
         },
-        unlock(id, title, desc) {
+        addScrap(amount) {
+            this.data.scrap += amount;
+            this.data.totalScrapEarned += amount;
+            this.checkQuests();
+            this.save();
+        },
+        addKill() {
+            this.data.totalKills++;
+            this.checkQuests();
+            this.save();
+        },
+        checkQuests() {
+            QuestsDef.forEach(q => {
+                if (!this.data.questsClaimed[q.id]) {
+                    let current = this.data[q.progressKey] || 0;
+                    if (current >= q.target) {
+                        // автоматично зараховуємо жетони або даємо можливість забрати
+                    }
+                }
+            });
+        },
+        unlockAchievement(id, title, desc) {
             if (!this.data.achievements[id]) {
                 this.data.achievements[id] = true;
                 this.save();
                 AudioSys.achievement();
                 UI.showAchievementPopup(title, desc);
-                UI.updateAchievements();
             }
         }
     };
@@ -532,21 +564,16 @@
     const Settings = {
         autoFire: true,
         gameSpeedMultiplier: 1.0,
-        sfxVolume: 50, // від 0 до 100
+        sfxVolume: 50,
         crtEnabled: true,
         toggleFireMode() {
             this.autoFire = !this.autoFire;
-            document.getElementById('setting-fire-mode').innerText = this.autoFire ? "АВТОМАТИЧНИЙ" : "РУЧНИЙ (КЛІК)";
-            if (!this.autoFire) Storage.unlock('manual_sniper', AchievementsDef.manual_sniper.title, AchievementsDef.manual_sniper.desc);
+            document.getElementById('setting-fire-mode').innerText = this.autoFire ? "АВТОМАТИЧНИЙ" : "РУЧНИЙ";
         },
         toggleGameSpeed() {
             if (this.gameSpeedMultiplier === 1.0) {
                 this.gameSpeedMultiplier = 1.3;
                 document.getElementById('setting-speed-label').innerText = "ПРИШВИДШЕНА (1.3x)";
-                Storage.unlock('speed_demon', AchievementsDef.speed_demon.title, AchievementsDef.speed_demon.desc);
-            } else if (this.gameSpeedMultiplier === 1.3) {
-                this.gameSpeedMultiplier = 1.6;
-                document.getElementById('setting-speed-label').innerText = "ТУРБО (1.6x)";
             } else {
                 this.gameSpeedMultiplier = 1.0;
                 document.getElementById('setting-speed-label').innerText = "НОРМАЛЬНА (1.0x)";
@@ -562,11 +589,8 @@
             this.crtEnabled = !this.crtEnabled;
             document.getElementById('setting-crt-label').innerText = this.crtEnabled ? "УВІМКНЕНО" : "ВИМКНЕНО";
             let container = document.getElementById('game-container');
-            if (this.crtEnabled) {
-                container.classList.add('crt-enabled');
-            } else {
-                container.classList.remove('crt-enabled');
-            }
+            if (this.crtEnabled) container.classList.add('crt-enabled');
+            else container.classList.remove('crt-enabled');
         }
     };
 
@@ -580,7 +604,7 @@
                 document.getElementById(id).classList.remove('hidden');
                 if(id === 'char-screen') this.updateCharScreen();
                 if(id === 'bp-screen') this.updateBP();
-                if(id === 'achievements-screen') this.updateAchievements();
+                if(id === 'quests-screen') this.updateQuests();
                 if(id === 'chapters-screen') this.updateChaptersScreen();
                 if(id === 'inventory-screen') this.updateInventory();
                 if(id === 'cases-screen') document.getElementById('cases-scrap').innerText = Storage.data.scrap;
@@ -596,21 +620,17 @@
         updateChaptersScreen() {
             let wrapper = document.getElementById('chapters-wrapper');
             wrapper.innerHTML = '';
-            
             let chaptersData = [
                 { title: "ГЛАВА 1: ПЕРВИННИЙ СЕКТОР", start: 1, end: 10 },
                 { title: "ГЛАВА 2: ГЛИБОКИЙ КОНВЕЄР", start: 11, end: 20 },
                 { title: "ГЛАВА 3: ЯДРО АНОМАЛІЇ", start: 21, end: 25 }
             ];
-
             chaptersData.forEach(ch => {
                 let panel = document.createElement('div');
                 panel.className = 'chapter-panel';
                 panel.innerHTML = `<h3>${ch.title}</h3>`;
-                
                 let grid = document.createElement('div');
                 grid.className = 'levels-grid';
-
                 for (let i = ch.start; i <= ch.end; i++) {
                     let unlocked = i <= Storage.data.bestLevel;
                     let btn = document.createElement('button');
@@ -620,7 +640,6 @@
                     btn.onclick = () => Game.startLevel(i);
                     grid.appendChild(btn);
                 }
-
                 panel.appendChild(grid);
                 wrapper.appendChild(panel);
             });
@@ -628,27 +647,18 @@
         updateInventory() {
             let grid = document.getElementById('inventory-grid');
             grid.innerHTML = '';
-            
             let scrapDiv = document.createElement('div');
             scrapDiv.className = 'card-item';
-            scrapDiv.innerHTML = `<h3>МЕТАЛОБРУХТ</h3><p>Загалом ресурсів: ${Storage.data.scrap}</p><span>ВАЛЮТА ЗАВОДУ</span>`;
+            scrapDiv.innerHTML = `<h3>МЕТАЛОБРУХТ</h3><p>Ресурсів: ${Storage.data.scrap}</p><span>ВАЛЮТА</span>`;
             grid.appendChild(scrapDiv);
 
             WeaponsDef.forEach(w => {
-                let unlocked = Storage.data.unlockedWeapons[w.id];
-                if (unlocked) {
+                if (Storage.data.unlockedWeapons[w.id]) {
                     let div = document.createElement('div');
                     div.className = 'card-item';
                     div.innerHTML = `<h3>${w.name}</h3><p>Шкода: ${w.damage} | Скорострільність: ${w.fireRate}</p><span style="color:var(--glow-green)">[ РОЗБЛОКОВАНО ]</span>`;
                     grid.appendChild(div);
                 }
-            });
-
-            Characters.forEach(c => {
-                let div = document.createElement('div');
-                div.className = 'card-item';
-                div.innerHTML = `<h3>ОПЕРАТИВНИК: ${c.name}</h3><p>${c.desc}</p><span style="color:var(--glow-green)">[ ДОСТУПНИЙ ]</span>`;
-                grid.appendChild(div);
             });
         },
         updateCharScreen() {
@@ -656,46 +666,56 @@
             grid.innerHTML = '';
             Characters.forEach(c => {
                 let selected = Storage.data.selectedChar === c.id;
+                let charLvl = Storage.data.charLevels[c.id] || 1;
+                let upgradeCost = charLvl * 30;
+                let currentSkin = Storage.data.charSkins[c.id] || 'default';
+
                 let div = document.createElement('div');
                 div.className = `card-item ${selected ? 'selected' : ''}`;
-                div.innerHTML = `<h3>${c.name}</h3><p>${c.desc}</p><span>${selected ? '[ ВИБРАНО ]' : 'КЛІКНУТИ ДЛЯ ВИБОРУ'}</span>`;
-                div.onclick = () => {
-                    Storage.data.selectedChar = c.id;
-                    Storage.save();
-                    if (c.id === 'cyborg') Storage.unlock('cyborg_user', AchievementsDef.cyborg_user.title, AchievementsDef.cyborg_user.desc);
-                    if (c.id === 'tank') Storage.unlock('tank_user', AchievementsDef.tank_user.title, AchievementsDef.tank_user.desc);
-                    this.updateCharScreen();
-                };
+                
+                let skinsHtml = `<p>СКІН:</p><div style="display:flex; gap:5px; margin-bottom:8px;">`;
+                c.skins.forEach(s => {
+                    let activeSkin = currentSkin === s.id;
+                    skinsHtml += `<button class="btn" style="padding:4px 8px; font-size:10px; ${activeSkin ? 'border-color:var(--glow-green); color:var(--glow-green);' : ''}" onclick="Game.setSkin('${c.id}', '${s.id}')">${s.name}</button>`;
+                });
+                skinsHtml += `</div>`;
+
+                div.innerHTML = `
+                    <h3>${c.name} [РІВЕНЬ СИЛИ: ${charLvl}]</h3>
+                    <p>${c.desc}<br>Здоров'я: ${Math.floor(c.baseHp * (1 + (charLvl-1)*0.1))} | Шкода: +${Math.round((charLvl-1)*10)}%</p>
+                    ${skinsHtml}
+                    <button class="btn" onclick="Game.upgradeChar('${c.id}')">ПРОКАЧАТИ (${upgradeCost} БРУХТУ)</button>
+                    <br><button class="btn" style="margin-top:5px;" onclick="Game.selectChar('${c.id}')">${selected ? '[ ОБРАНО ]' : 'ВИБРАТИ БІЙЦЯ'}</button>
+                `;
                 grid.appendChild(div);
             });
         },
+        updateQuests() {
+            let list = document.getElementById('quests-list');
+            list.innerHTML = '';
+            QuestsDef.forEach(q => {
+                let current = Storage.data[q.progressKey] || 0;
+                let completed = current >= q.target;
+                let claimed = Storage.data.questsClaimed[q.id];
+
+                let div = document.createElement('div');
+                div.className = `bp-level-row ${claimed ? 'claimed' : (completed ? 'ready' : '')}`;
+                div.innerHTML = `<span>${q.title}: ${q.desc} (${Math.min(current, q.target)}/${q.target})</span> <span>Нагорода: ${q.rewardTokens} жетонів</span> <span>${claimed ? '[ ВИКОНАНО ]' : (completed ? '<button class="btn" onclick="Game.claimQuest(\'' + q.id + '\')">ЗАБРАТИ</button></i>' : '[ В ПРОЦЕСІ ]')}</span>`;
+                list.appendChild(div);
+            });
+        },
         updateBP() {
+            document.getElementById('bp-tokens-count').innerText = Storage.data.tokens;
             let list = document.getElementById('bp-list');
             list.innerHTML = '';
             BattlePassLevels.forEach(bp => {
                 let claimed = Storage.data.bpClaimed[bp.level];
-                let canClaim = Storage.data.scrap >= bp.cost && !claimed;
+                let canClaim = Storage.data.tokens >= bp.costTokens && !claimed;
                 let div = document.createElement('div');
                 div.className = `bp-level-row ${claimed ? 'claimed' : (canClaim ? 'ready' : '')}`;
-                div.innerHTML = `<span>РІВЕНЬ ${bp.level} (ВАРТІСТЬ: ${bp.cost} БРУХТУ)</span> <span>${bp.desc}</span> <span>${claimed ? '[ ОТРИМАНО ]' : (canClaim ? '<button class="btn" onclick="Game.claimBP(' + bp.level + ')">ЗАБРАТИ</button>' : '[ НЕОБХІДНО БРУХТУ ]')}</span>`;
+                div.innerHTML = `<span>ТИР ${bp.level} (ВАРТІСТЬ: ${bp.costTokens} ЖЕТОНІВ)</span> <span>${bp.desc}</span> <span>${claimed ? '[ ОТРИМАНО ]' : (canClaim ? '<button class="btn" onclick="Game.claimBP(' + bp.level + ')">ЗАБРАТИ</button>' : '[ ПОТРІБНО ЖЕТОНИ ]')}</span>`;
                 list.appendChild(div);
             });
-        },
-        updateAchievements() {
-            let container = document.getElementById('achievements-container');
-            container.innerHTML = '';
-            let count = 0;
-            for (let id in AchievementsDef) {
-                let unlocked = Storage.data.achievements[id];
-                if (unlocked) count++;
-                let def = AchievementsDef[id];
-                let div = document.createElement('div');
-                div.className = `card-item`;
-                div.style.borderColor = unlocked ? 'var(--glow-green)' : 'var(--border-color)';
-                div.innerHTML = `<h3>[${unlocked ? 'АКТИВНО' : 'ЗАБЛОКОВАНО'}] ${def.title}</h3><p>${def.desc}</p>`;
-                container.appendChild(div);
-            }
-            document.getElementById('ach-count').innerText = count;
         }
     };
 
@@ -718,25 +738,22 @@
         paused: false,
         lastShot: 0,
 
-        start() {
-            AudioSys.init();
-            Storage.load();
-            this.startLevel(1);
-        },
-
         startLevel(lvl) {
             AudioSys.init();
             Storage.load();
-            this.scrap = Storage.data.scrap;
+            this.scrap = 0;
             this.level = lvl;
-            this.updateChapterInfo();
+            this.chapter = Math.floor((this.level - 1) / 10) + 1;
             this.paused = false;
 
             let char = Characters.find(c => c.id === Storage.data.selectedChar) || Characters[0];
-            this.player.maxHp = char.maxHp;
-            this.player.hp = char.maxHp;
-            this.player.speed = char.speed;
-            this.player.damageMult = char.damageMult;
+            let charLvl = Storage.data.charLevels[char.id] || 1;
+            let statMult = 1 + (charLvl - 1) * 0.1;
+
+            this.player.maxHp = Math.floor(char.baseHp * statMult);
+            this.player.hp = this.player.maxHp;
+            this.player.speed = char.baseSpeed;
+            this.player.damageMult = statMult;
             this.player.x = 550;
             this.player.y = 350;
 
@@ -753,10 +770,6 @@
         },
 
         restart() { this.startLevel(this.level); },
-
-        updateChapterInfo() {
-            this.chapter = Math.floor((this.level - 1) / 10) + 1;
-        },
 
         setupListeners() {
             window.onkeydown = e => {
@@ -794,9 +807,46 @@
             this.loop();
         },
 
+        selectChar(id) {
+            Storage.data.selectedChar = id;
+            Storage.save();
+            UI.updateCharScreen();
+        },
+
+        setSkin(charId, skinId) {
+            Storage.data.charSkins[charId] = skinId;
+            Storage.save();
+            UI.updateCharScreen();
+        },
+
+        upgradeChar(id) {
+            let charLvl = Storage.data.charLevels[id] || 1;
+            let cost = charLvl * 30;
+            if (Storage.data.scrap >= cost) {
+                Storage.data.scrap -= cost;
+                Storage.data.charLevels[id] = charLvl + 1;
+                Storage.save();
+                AudioSys.buy();
+                UI.updateCharScreen();
+            } else {
+                alert("Недостатньо брухту для прокачування!");
+            }
+        },
+
+        claimQuest(qId) {
+            let q = QuestsDef.find(item => item.id === qId);
+            if (q && !Storage.data.questsClaimed[qId]) {
+                Storage.data.questsClaimed[qId] = true;
+                Storage.data.tokens += q.rewardTokens;
+                Storage.save();
+                AudioSys.buy();
+                UI.updateQuests();
+            }
+        },
+
         openCase() {
             if (Storage.data.scrap < 40) {
-                document.getElementById('case-result').innerText = "[ НЕДОСТАТНЬО БРУХТУ (ТРЕБА 40) ]";
+                document.getElementById('case-result').innerText = "[ НЕДОСТАТНЬО БРУХТУ ]";
                 return;
             }
             Storage.data.scrap -= 40;
@@ -804,43 +854,34 @@
             document.getElementById('cases-scrap').innerText = Storage.data.scrap;
 
             let rand = Math.random();
-            if (rand < 0.4) {
-                let bonus = 30;
-                Storage.data.scrap += bonus;
-                Storage.save();
-                AudioSys.buy();
-                document.getElementById('case-result').innerText = `ВИ ВИГРАЛИ БОНУС: +${bonus} БРУХТУ!`;
-            } else if (rand < 0.7) {
+            if (rand < 0.5) {
+                let bonus = 45;
+                Storage.addScrap(bonus);
+                document.getElementById('case-result').innerText = `ВИ ВИГРАЛИ БРУХТ: +${bonus}!`;
+            } else {
                 let lockedWeapons = WeaponsDef.filter(w => !Storage.data.unlockedWeapons[w.id]);
                 if (lockedWeapons.length > 0) {
                     let w = lockedWeapons[Math.floor(Math.random() * lockedWeapons.length)];
                     Storage.data.unlockedWeapons[w.id] = true;
                     Storage.save();
-                    AudioSys.buy();
-                    document.getElementById('case-result').innerText = `ЗБРОЯ З КЕЙСУ: ${w.name}!`;
+                    document.getElementById('case-result').innerText = `НОВА ЗБРОЯ: ${w.name}!`;
                 } else {
-                    Storage.data.scrap += 60;
+                    Storage.data.tokens += 15;
                     Storage.save();
-                    document.getElementById('case-result').innerText = `ВСЯ ЗБРОЯ Є: +60 БРУХТУ!`;
+                    document.getElementById('case-result').innerText = `БОНУС БОЙОВОГО ПРОПУСКУ: +15 ЖЕТОНІВ!`;
                 }
-            } else {
-                let bonus = 80;
-                Storage.data.scrap += bonus;
-                Storage.save();
-                AudioSys.buy();
-                document.getElementById('case-result').innerText = `РІДКІСНИЙ ДЕРЖАВНИЙ ПАКЕТ: +${bonus} БРУХТУ!`;
             }
         },
 
         claimBP(lvl) {
             let bp = BattlePassLevels.find(b => b.level === lvl);
-            if (bp && Storage.data.scrap >= bp.cost && !Storage.data.bpClaimed[lvl]) {
-                Storage.data.scrap -= bp.cost;
+            if (bp && Storage.data.tokens >= bp.costTokens && !Storage.data.bpClaimed[lvl]) {
+                Storage.data.tokens -= bp.costTokens;
                 Storage.data.bpClaimed[lvl] = true;
                 if (bp.rewardType === 'weapon') {
                     Storage.data.unlockedWeapons[bp.rewardId] = true;
                 } else if (bp.rewardType === 'scrap') {
-                    Storage.data.scrap += bp.rewardValue;
+                    Storage.addScrap(bp.rewardValue);
                 }
                 Storage.save();
                 AudioSys.buy();
@@ -854,7 +895,7 @@
                 Storage.data.bestLevel = this.level;
                 Storage.save();
             }
-            this.updateChapterInfo();
+            this.chapter = Math.floor((this.level - 1) / 10) + 1;
             this.levelTimer = 0;
             UI.showScreen('canvas');
             this.running = true;
@@ -863,26 +904,11 @@
 
         endLevel() {
             this.running = false;
-            Storage.data.scrap += this.scrap;
+            Storage.addScrap(this.scrap);
             if (this.level >= Storage.data.bestLevel) {
                 Storage.data.bestLevel = Math.min(25, this.level + 1);
             }
             Storage.save();
-            
-            if (this.level >= 3) Storage.unlock('level_3', AchievementsDef.level_3.title, AchievementsDef.level_3.desc);
-            if (this.level >= 5) Storage.unlock('level_5', AchievementsDef.level_5.title, AchievementsDef.level_5.desc);
-            if (this.level >= 10) Storage.unlock('level_10', AchievementsDef.level_10.title, AchievementsDef.level_10.desc);
-            if (this.level >= 15) Storage.unlock('level_15', AchievementsDef.level_15.title, AchievementsDef.level_15.desc);
-            if (this.level >= 20) Storage.unlock('level_20', AchievementsDef.level_20.title, AchievementsDef.level_20.desc);
-            if (this.level >= 25) Storage.unlock('level_25', AchievementsDef.level_25.title, AchievementsDef.level_25.desc);
-
-            if (this.level === 11) Storage.unlock('chapter_2', AchievementsDef.chapter_2.title, AchievementsDef.chapter_2.desc);
-            if (this.level === 21) Storage.unlock('chapter_3', AchievementsDef.chapter_3.title, AchievementsDef.chapter_3.desc);
-
-            if (Storage.data.scrap >= 150) Storage.unlock('rich_1', AchievementsDef.rich_1.title, AchievementsDef.rich_1.desc);
-            if (Storage.data.scrap >= 300) Storage.unlock('rich_2', AchievementsDef.rich_2.title, AchievementsDef.rich_2.desc);
-            if (Storage.data.scrap >= 600) Storage.unlock('rich_3', AchievementsDef.rich_3.title, AchievementsDef.rich_3.desc);
-
             this.openShop();
         },
 
@@ -893,18 +919,9 @@
             let container = document.getElementById('shop-items-container');
             container.innerHTML = '';
 
-            WeaponsDef.forEach(w => {
-                let unlocked = Storage.data.unlockedWeapons[w.id];
-                let equipped = this.currentWeapon === w.id;
-                let div = document.createElement('div');
-                div.className = `card-item ${equipped ? 'selected' : ''}`;
-                div.innerHTML = `<h3>${w.name}</h3><p>Шкода: ${w.damage} | Скорострільність: ${w.fireRate}</p><span>${equipped ? '[ ВИКОРИСТОВУЄТЬСЯ ]' : (unlocked ? '<button class="btn" onclick="Game.equipWeapon(\'' + w.id + '\')">ВИБРАТИ</button>' : 'ЗАБЛОКОВАНО')}</span>`;
-                container.appendChild(div);
-            });
-
             let upgrades = [
                 { id: 'heal', name: 'Аварійний ремонт', desc: 'Відновити 50 HP', cost: 10 },
-                { id: 'speed', name: 'Іржавий протез', desc: '+0.4 до швидкості', cost: 15 }
+                { id: 'speed', name: 'Іржавий протез', desc: '+0.3 до швидкості', cost: 15 }
             ];
             upgrades.forEach(u => {
                 let div = document.createElement('div');
@@ -914,37 +931,25 @@
             });
         },
 
-        equipWeapon(id) {
-            this.currentWeapon = id;
-            if (id === 'saw') Storage.unlock('weapon_saw', AchievementsDef.weapon_saw.title, AchievementsDef.weapon_saw.desc);
-            if (id === 'shotgun') Storage.unlock('weapon_shotgun', AchievementsDef.weapon_shotgun.title, AchievementsDef.weapon_shotgun.desc);
-            if (id === 'laser') Storage.unlock('weapon_laser', AchievementsDef.weapon_laser.title, AchievementsDef.weapon_laser.desc);
-            if (id === 'minigun') Storage.unlock('weapon_minigun', AchievementsDef.weapon_minigun.title, AchievementsDef.weapon_minigun.desc);
-            this.openShop();
-        },
-
         shopAction(id) {
             if(id === 'heal' && this.scrap >= 10) {
                 this.scrap -= 10;
                 this.player.hp = Math.min(this.player.maxHp, this.player.hp + 50);
                 AudioSys.buy();
-                Storage.unlock('shop_aholic', AchievementsDef.shop_aholic.title, AchievementsDef.shop_aholic.desc);
                 this.openShop();
             } else if(id === 'speed' && this.scrap >= 15) {
                 this.scrap -= 15;
-                this.player.speed += 0.4;
+                this.player.speed += 0.3;
                 AudioSys.buy();
-                Storage.unlock('speed_upgrade', AchievementsDef.speed_upgrade.title, AchievementsDef.speed_upgrade.desc);
                 this.openShop();
             }
         },
 
         gameOver() {
             this.running = false;
-            Storage.data.scrap += this.scrap;
-            Storage.save();
+            Storage.addScrap(this.scrap);
             UI.showScreen('gameover-screen');
-            document.getElementById('gameover-stats').innerText = `ВИ ПРОТРИМАЛИСЬ РІВНІВ: ${this.level} (ГЛАВА ${this.chapter})`;
+            document.getElementById('gameover-stats').innerText = `ВИ ПРОТРИМАЛИСЬ РІВНІВ: ${this.level}`;
         },
 
         update() {
@@ -1019,12 +1024,7 @@
                         en.hp -= b.damage;
                         this.bullets.splice(j, 1);
                         if (en.hp <= 0) {
-                            Storage.data.totalKills++;
-                            Storage.unlock('first_blood', AchievementsDef.first_blood.title, AchievementsDef.first_blood.desc);
-                            if (Storage.data.totalKills >= 10) Storage.unlock('survivor_1', AchievementsDef.survivor_1.title, AchievementsDef.survivor_1.desc);
-                            if (Storage.data.totalKills >= 25) Storage.unlock('survivor_2', AchievementsDef.survivor_2.title, AchievementsDef.survivor_2.desc);
-                            if (Storage.data.totalKills >= 50) Storage.unlock('survivor_3', AchievementsDef.survivor_3.title, AchievementsDef.survivor_3.desc);
-
+                            Storage.addKill();
                             this.scrap += en.scrapValue;
                             this.enemies.splice(i, 1);
                             break;
@@ -1075,9 +1075,14 @@
                 this.ctx.fillRect(b.x - 2, b.y - 2, 4, 4);
             }
 
-            this.ctx.fillStyle = '#a0a0b0';
+            // Рендер персонажа з урахуванням обраного скіна
+            let char = Characters.find(c => c.id === Storage.data.selectedChar) || Characters[0];
+            let skinId = Storage.data.charSkins[char.id] || 'default';
+            let skin = char.skins.find(s => s.id === skinId) || char.skins[0];
+
+            this.ctx.fillStyle = skin.color;
             this.ctx.beginPath(); this.ctx.arc(this.player.x, this.player.y, this.player.radius, 0, Math.PI * 2); this.ctx.fill();
-            this.ctx.strokeStyle = '#b54a2b'; this.ctx.lineWidth = 2; this.ctx.stroke();
+            this.ctx.strokeStyle = skin.accent; this.ctx.lineWidth = 2; this.ctx.stroke();
 
             this.ctx.fillStyle = '#a0a0b0';
             this.ctx.font = '14px "Courier New"';
@@ -1101,7 +1106,6 @@
     };
 
     Storage.load();
-    UI.updateAchievements();
 </script>
 
 </body>
