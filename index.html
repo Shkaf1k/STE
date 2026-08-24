@@ -128,14 +128,16 @@
             gap: 15px;
         }
 
-        /* Вибір персонажів та магазину */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             width: 100%;
             max-width: 850px;
+            max-height: 350px;
+            overflow-y: auto;
             margin-bottom: 20px;
+            padding: 5px;
         }
 
         .card-item {
@@ -169,7 +171,6 @@
             color: var(--accent-rust);
         }
 
-        /* Бойовий пропуск */
         .bp-container {
             width: 100%;
             max-width: 850px;
@@ -193,7 +194,6 @@
         .bp-level-row.claimed { color: var(--text-dim); }
         .bp-level-row.ready { color: var(--bp-gold); border-color: var(--bp-gold); }
 
-        /* Термінал сповіщень */
         #achievement-popup {
             position: absolute;
             bottom: 20px;
@@ -219,11 +219,42 @@
     <div id="main-menu" class="screen">
         <h1>INDUSTRIAL ANOMALY</h1>
         <p>SYSTEM PROTOCOL: 0x4E // 25 CHAPTERS & EXPANDED ARSENAL</p>
-        <button class="btn" onclick="Game.start()">[ ПОЧАТИ ПРОТОКОЛ ]</button>
+        <button class="btn" onclick="UI.showScreen('chapters-screen')">[ ПОЧАТИ ПРОТОКОЛ (ВИБІР ГЛАВИ) ]</button>
         <button class="btn" onclick="UI.showScreen('char-screen')">[ ВИБІР ПЕРСОНАЖА ]</button>
+        <button class="btn" onclick="UI.showScreen('inventory-screen')">[ ІНВЕНТАР ]</button>
+        <button class="btn" onclick="UI.showScreen('cases-screen')">[ КЕЙСИ ]</button>
         <button class="btn" onclick="UI.showScreen('bp-screen')">[ БОЙОВИЙ ПРОПУСК ]</button>
         <button class="btn" onclick="UI.showScreen('achievements-screen')">[ ДОСЯГНЕННЯ ]</button>
         <button class="btn" onclick="UI.showScreen('settings-screen')">[ НАЛАШТУВАННЯ ]</button>
+    </div>
+
+    <!-- ВИБІР ГЛАВ ТА РІВНІВ -->
+    <div id="chapters-screen" class="screen hidden">
+        <h2>ВИБІР СЕКТОРУ ТА ГЛАВИ</h2>
+        <p>Оберіть рівень (доступно до досягнутого максимального рівня).</p>
+        <div class="grid-container" id="chapters-grid"></div>
+        <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
+    </div>
+
+    <!-- ІНВЕНТАР -->
+    <div id="inventory-screen" class="screen hidden">
+        <h2>ІНВЕНТАР ОПЕРАТИВНИКА</h2>
+        <p>Зібраний брухт, розблокована зброя та модифікації.</p>
+        <div class="grid-container" id="inventory-grid"></div>
+        <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
+    </div>
+
+    <!-- КЕЙСИ -->
+    <div id="cases-screen" class="screen hidden">
+        <h2>ІНДУСТРІАЛЬНІ КОНТЕЙНЕРИ (КЕЙСИ)</h2>
+        <p>Витрачайте брухт для отримання випадкової зброї або бонусів. Брухт: <span id="cases-scrap" style="color:var(--glow-green)">0</span></p>
+        <div style="background:var(--panel-color); border:1px solid var(--border-color); padding:20px; width:100%; max-width:500px; text-align:center; margin-bottom:20px;">
+            <h3>ТЕХНІЧНИЙ КЕЙС</h3>
+            <p>Вартість відкриття: 40 брухту</p>
+            <div id="case-result" style="color: var(--bp-gold); min-height: 30px; margin-bottom: 15px; font-weight: bold;">[ ОЧІКУВАННЯ ЗАПУСКУ ]</div>
+            <button class="btn" onclick="Game.openCase()">ВІДКРИТИ КЕЙС</button>
+        </div>
+        <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
     <!-- ВИБІР ПЕРСОНАЖА -->
@@ -369,7 +400,7 @@
 
     const Storage = {
         data: {
-            bestLevel: 0,
+            bestLevel: 1,
             scrap: 0,
             selectedChar: 'worker',
             unlockedWeapons: { pistol: true },
@@ -379,13 +410,13 @@
             totalKills: 0
         },
         load() {
-            let saved = localStorage.getItem('IND_ANOMALY_SAVE_V3');
+            let saved = localStorage.getItem('IND_ANOMALY_SAVE_V4');
             if (saved) {
                 try { this.data = JSON.parse(saved); } catch(e) {}
             }
         },
         save() {
-            localStorage.setItem('IND_ANOMALY_SAVE_V3', JSON.stringify(this.data));
+            localStorage.setItem('IND_ANOMALY_SAVE_V4', JSON.stringify(this.data));
         },
         unlock(id, title, desc) {
             if (!this.data.achievements[id]) {
@@ -437,6 +468,9 @@
                 if(id === 'char-screen') this.updateCharScreen();
                 if(id === 'bp-screen') this.updateBP();
                 if(id === 'achievements-screen') this.updateAchievements();
+                if(id === 'chapters-screen') this.updateChaptersScreen();
+                if(id === 'inventory-screen') this.updateInventory();
+                if(id === 'cases-screen') document.getElementById('cases-scrap').innerText = Storage.data.scrap;
             }
         },
         showAchievementPopup(title, desc) {
@@ -445,6 +479,45 @@
             let pop = document.getElementById('achievement-popup');
             pop.classList.add('show');
             setTimeout(() => pop.classList.remove('show'), 3500);
+        },
+        updateChaptersScreen() {
+            let grid = document.getElementById('chapters-grid');
+            grid.innerHTML = '';
+            for (let i = 1; i <= 25; i++) {
+                let unlocked = i <= Storage.data.bestLevel;
+                let chapterNum = Math.floor((i - 1) / 10) + 1;
+                let div = document.createElement('div');
+                div.className = `card-item`;
+                div.style.borderColor = unlocked ? 'var(--border-color)' : '#1a1a22';
+                div.innerHTML = `<h3>РІВЕНЬ ${i}</h3><p>Глава ${chapterNum}</p><span>${unlocked ? '<button class="btn" onclick="Game.startLevel(' + i + ')">ГРАТИ</button>' : 'ЗАБЛОКОВАНО'}</span>`;
+                grid.appendChild(div);
+            }
+        },
+        updateInventory() {
+            let grid = document.getElementById('inventory-grid');
+            grid.innerHTML = '';
+            
+            let scrapDiv = document.createElement('div');
+            scrapDiv.className = 'card-item';
+            scrapDiv.innerHTML = `<h3>МЕТАЛОБРУХТ</h3><p>Загалом ресурсів: ${Storage.data.scrap}</p><span>ВАЛЮТА ЗАВОДУ</span>`;
+            grid.appendChild(scrapDiv);
+
+            WeaponsDef.forEach(w => {
+                let unlocked = Storage.data.unlockedWeapons[w.id];
+                if (unlocked) {
+                    let div = document.createElement('div');
+                    div.className = 'card-item';
+                    div.innerHTML = `<h3>${w.name}</h3><p>Шкода: ${w.damage} | Скорострільність: ${w.fireRate}</p><span style="color:var(--glow-green)">[ РОЗБЛОКОВАНО ]</span>`;
+                    grid.appendChild(div);
+                }
+            });
+
+            Characters.forEach(c => {
+                let div = document.createElement('div');
+                div.className = 'card-item';
+                div.innerHTML = `<h3>ОПЕРАТИВНИК: ${c.name}</h3><p>${c.desc}</p><span style="color:var(--glow-green)">[ ДОСТУПНИЙ ]</span>`;
+                grid.appendChild(div);
+            });
         },
         updateCharScreen() {
             let grid = document.getElementById('char-grid');
@@ -480,7 +553,6 @@
             let container = document.getElementById('achievements-container');
             container.innerHTML = '';
             let count = 0;
-            let total = Object.keys(AchievementsDef).length;
             for (let id in AchievementsDef) {
                 let unlocked = Storage.data.achievements[id];
                 if (unlocked) count++;
@@ -516,8 +588,14 @@
         start() {
             AudioSys.init();
             Storage.load();
+            this.startLevel(1);
+        },
+
+        startLevel(lvl) {
+            AudioSys.init();
+            Storage.load();
             this.scrap = Storage.data.scrap;
-            this.level = 1;
+            this.level = lvl;
             this.updateChapterInfo();
 
             let char = Characters.find(c => c.id === Storage.data.selectedChar) || Characters[0];
@@ -540,7 +618,7 @@
             this.loop();
         },
 
-        restart() { this.start(); },
+        restart() { this.startLevel(this.level); },
 
         updateChapterInfo() {
             this.chapter = Math.floor((this.level - 1) / 10) + 1;
@@ -549,13 +627,53 @@
         setupListeners() {
             window.onkeydown = e => this.keys[e.key.toLowerCase()] = true;
             window.onkeyup = e => this.keys[e.key.toLowerCase()] = false;
-            this.canvas.onmousemove = e => {
-                let rect = this.canvas.getBoundingClientRect();
-                this.mouse.x = e.clientX - rect.left;
-                this.mouse.y = e.clientY - rect.top;
-            };
-            this.canvas.onmousedown = () => this.mouse.down = true;
-            this.canvas.onmouseup = () => this.mouse.down = false;
+            if (this.canvas) {
+                this.canvas.onmousemove = e => {
+                    let rect = this.canvas.getBoundingClientRect();
+                    this.mouse.x = e.clientX - rect.left;
+                    this.mouse.y = e.clientY - rect.top;
+                };
+                this.canvas.onmousedown = () => this.mouse.down = true;
+                this.canvas.onmouseup = () => this.mouse.down = false;
+            }
+        },
+
+        openCase() {
+            if (Storage.data.scrap < 40) {
+                document.getElementById('case-result').innerText = "[ НЕДОСТАТНЬО БРУХТУ (ТРЕБА 40) ]";
+                return;
+            }
+            Storage.data.scrap -= 40;
+            Storage.save();
+            document.getElementById('cases-scrap').innerText = Storage.data.scrap;
+
+            let rand = Math.random();
+            if (rand < 0.4) {
+                let bonus = 30;
+                Storage.data.scrap += bonus;
+                Storage.save();
+                AudioSys.buy();
+                document.getElementById('case-result').innerText = `ВИ ВИГРАЛИ БОНУС: +${bonus} БРУХТУ!`;
+            } else if (rand < 0.7) {
+                let lockedWeapons = WeaponsDef.filter(w => !Storage.data.unlockedWeapons[w.id]);
+                if (lockedWeapons.length > 0) {
+                    let w = lockedWeapons[Math.floor(Math.random() * lockedWeapons.length)];
+                    Storage.data.unlockedWeapons[w.id] = true;
+                    Storage.save();
+                    AudioSys.buy();
+                    document.getElementById('case-result').innerText = `ЗБРОЯ З КЕЙСУ: ${w.name}!`;
+                } else {
+                    Storage.data.scrap += 60;
+                    Storage.save();
+                    document.getElementById('case-result').innerText = `ВСЯ ЗБРОЯ Є: +60 БРУХТУ!`;
+                }
+            } else {
+                let bonus = 80;
+                Storage.data.scrap += bonus;
+                Storage.save();
+                AudioSys.buy();
+                document.getElementById('case-result').innerText = `РКІСНИЙ ДЕРЖАВНИЙ ПАКЕТ: +${bonus} БРУХТУ!`;
+            }
         },
 
         claimBP(lvl) {
@@ -576,6 +694,10 @@
 
         nextWave() {
             this.level++;
+            if (this.level > Storage.data.bestLevel) {
+                Storage.data.bestLevel = this.level;
+                Storage.save();
+            }
             this.updateChapterInfo();
             this.levelTimer = 0;
             UI.showScreen('canvas');
@@ -586,6 +708,9 @@
         endLevel() {
             this.running = false;
             Storage.data.scrap += this.scrap;
+            if (this.level >= Storage.data.bestLevel) {
+                Storage.data.bestLevel = Math.min(25, this.level + 1);
+            }
             Storage.save();
             
             if (this.level >= 3) Storage.unlock('level_3', AchievementsDef.level_3.title, AchievementsDef.level_3.desc);
@@ -617,13 +742,13 @@
                 let equipped = this.currentWeapon === w.id;
                 let div = document.createElement('div');
                 div.className = `card-item ${equipped ? 'selected' : ''}`;
-                div.innerHTML = `<h3>${w.name}</h3><p>Шкода: ${w.damage} | Скорострільність: ${w.fireRate}</p><span>${equipped ? '[ ВИКОРИСТОВУЄТЬСЯ ]' : (unlocked ? '<button class="btn" onclick="Game.equipWeapon(\'' + w.id + '\')">ВИБРАТИ</button>' : 'ЗАБЛОКОВАНО В БОЙОВОМУ ПРОПУСКУ')}</span>`;
+                div.innerHTML = `<h3>${w.name}</h3><p>Шкода: ${w.damage} | Скорострільність: ${w.fireRate}</p><span>${equipped ? '[ ВИКОРИСТОВУЄТЬСЯ ]' : (unlocked ? '<button class="btn" onclick="Game.equipWeapon(\'' + w.id + '\')">ВИБРАТИ</button>' : 'ЗАБЛОКОВАНО')}</span>`;
                 container.appendChild(div);
             });
 
             let upgrades = [
-                { id: 'heal', name: 'Аварійний ремонт', desc: 'Відновити 50 HP', cost: 10, action: () => { if(this.scrap>=10){this.scrap-=10; this.player.hp=Math.min(this.player.maxHp, this.player.hp+50); AudioSys.buy(); Storage.unlock('shop_aholic', AchievementsDef.shop_aholic.title, AchievementsDef.shop_aholic.desc); this.openShop();}} },
-                { id: 'speed', name: 'Іржавий протез', desc: '+0.4 до швидкості', cost: 15, action: () => { if(this.scrap>=15){this.scrap-=15; this.player.speed+=0.4; AudioSys.buy(); Storage.unlock('speed_upgrade', AchievementsDef.speed_upgrade.title, AchievementsDef.speed_upgrade.desc); this.openShop();}} }
+                { id: 'heal', name: 'Аварійний ремонт', desc: 'Відновити 50 HP', cost: 10 },
+                { id: 'speed', name: 'Іржавий протез', desc: '+0.4 до швидкості', cost: 15 }
             ];
             upgrades.forEach(u => {
                 let div = document.createElement('div');
@@ -754,7 +879,6 @@
         },
 
         spawnEnemy() {
-            // Враги тепер значно повільніші (менша швидкість), щоб збалансувати 25 рівнів
             let types = [
                 { radius: 10, speed: 1.1 + (this.chapter * 0.1), hp: 20 + (this.level * 3), damage: 0.4, color: '#b54a2b', scrapValue: 2 },
                 { radius: 14, speed: 0.7 + (this.chapter * 0.1), hp: 55 + (this.level * 4), damage: 0.8, color: '#505060', scrapValue: 4 },
