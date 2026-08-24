@@ -44,7 +44,8 @@
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.95);
         }
 
-        #game-container::before {
+        /* Ефекти екрана можна вимкнути через налаштування */
+        #game-container.crt-enabled::before {
             content: " ";
             display: block;
             position: absolute;
@@ -55,7 +56,7 @@
             pointer-events: none;
         }
 
-        #game-container::after {
+        #game-container.crt-enabled::after {
             content: "";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -166,7 +167,6 @@
             color: var(--accent-rust);
         }
 
-        /* Стилі для панелей глав у виборі рівнів */
         .chapters-wrapper {
             width: 100%;
             max-width: 900px;
@@ -264,9 +264,9 @@
         #achievement-popup p { margin: 0; color: var(--text-main); font-size: 11px; text-align: left; }
     </style>
 </head>
-<body>
+<body class="crt-enabled" id="body-container">
 
-<div id="game-container">
+<div id="game-container" class="crt-enabled" id="container-element">
     <!-- ГОЛОВНЕ МЕНЮ -->
     <div id="main-menu" class="screen">
         <h1>INDUSTRIAL ANOMALY</h1>
@@ -276,8 +276,31 @@
         <button class="btn" onclick="UI.showScreen('inventory-screen')">[ ІНВЕНТАР ]</button>
         <button class="btn" onclick="UI.showScreen('cases-screen')">[ КЕЙСИ ]</button>
         <button class="btn" onclick="UI.showScreen('bp-screen')">[ БОЙОВИЙ ПРОПУСК ]</button>
+        <button class="btn" onclick="UI.showScreen('save-screen')">[ ЗБЕРЕЖЕННЯ / ЗАВАНТАЖЕННЯ ]</button>
         <button class="btn" onclick="UI.showScreen('achievements-screen')">[ ДОСЯГНЕННЯ ]</button>
         <button class="btn" onclick="UI.showScreen('settings-screen')">[ НАЛАШТУВАННЯ ]</button>
+    </div>
+
+    <!-- МЕНЮ ЗБЕРЕЖЕННЯ ТА ЗАВАНТАЖЕННЯ -->
+    <div id="save-screen" class="screen hidden">
+        <h2>КЕРУВАННЯ ДАНИМИ ПРОТОКОЛУ</h2>
+        <p>Зберігайте прогрес вручну або завантажуйте попередній стан.</p>
+        <div style="background:var(--panel-color); border:1px solid var(--border-color); padding:25px; width:100%; max-width:550px; text-align:center; margin-bottom:20px;">
+            <p id="save-info-status" style="color:var(--glow-green); margin-bottom:15px;">ДАНІ ГОТОВІ ДО СИНХРОНІЗАЦІЇ</p>
+            <button class="btn" onclick="Storage.manualSave()">[ ЗБЕРЕГТИ ГРУ ВРУЧНУ ]</button>
+            <button class="btn" onclick="Storage.manualLoad()">[ ЗАВАНТАЖИТИ ОСТАННІЙ ЗУПИНЕНИЙ ПРОГРЕС ]</button>
+            <button class="btn" style="border-color:var(--accent-red); color:var(--accent-red);" onclick="Storage.hardReset()">[ СКИДАТИ ВЕСЬ ПРОГРЕС ]</button>
+        </div>
+        <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
+    </div>
+
+    <!-- МЕНЮ ПАУЗИ ПІД ЧАС ГРИ -->
+    <div id="pause-screen" class="screen hidden">
+        <h2>ПРОТОКОЛ НА ПАУЗІ</h2>
+        <p>Гру зупинено. Ви можете продовжити або повернутися в головне меню.</p>
+        <button class="btn" onclick="Game.resumeGame()">[ ПРОДОВЖИТИ ГРУ ]</button>
+        <button class="btn" onclick="Storage.manualSave(); alert('Гру успішно збережено!');">[ ШВИДКЕ ЗБЕРЕЖЕННЯ ]</button>
+        <button class="btn" onclick="UI.showScreen('main-menu'); Game.running=false;">[ ВИХІД У ГОЛОВНЕ МЕНЮ ]</button>
     </div>
 
     <!-- ВИБІР ГЛАВ ТА РІВНІВ (ПАНЕЛІ) -->
@@ -330,10 +353,16 @@
         <h2>НАЛАШТУВАННЯ</h2>
         <p>РЕЖИМ СТРІЛЬБИ: <span id="setting-fire-mode">АВТОМАТИЧНИЙ</span></p>
         <button class="btn" onclick="Settings.toggleFireMode()">ЗМІНИТИ РЕЖИМ СТРІЛЬБИ</button>
-        <p>ШВИДКІСТЬ ГРИ (ПІДСИЛЕННЯ ВОРКЕРІВ): <span id="setting-speed-label">НОРМАЛЬНА (1.0x)</span></p>
+        
+        <p>ШВИДКІСТЬ ГРИ: <span id="setting-speed-label">НОРМАЛЬНА (1.0x)</span></p>
         <button class="btn" onclick="Settings.toggleGameSpeed()">ЗМІНИТИ ШВИДКІСТЬ</button>
-        <p>ЗВУКОВІ ЕФЕКТИ (SFX): <span id="setting-sfx-label">УВІМКНЕНО</span></p>
-        <button class="btn" onclick="Settings.toggleSfx()">ПЕРЕКЛЮЧИТИ ЗВУК</button>
+        
+        <p>ГУЧНІСТЬ ЗВУКУ (SFX): <span id="setting-sfx-vol">50%</span></p>
+        <button class="btn" onclick="Settings.cycleSfxVolume()">ЗМІНИТИ ГУЧНІСТЬ</button>
+
+        <p>ВІЗУАЛЬНИЙ ЕФЕКТ ЕКРАНА (CRT): <span id="setting-crt-label">УВІМКНЕНО</span></p>
+        <button class="btn" onclick="Settings.toggleCrt()">ПЕРЕКЛЮЧИТИ CRT ЕФЕКТ</button>
+
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
@@ -377,13 +406,14 @@
             if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         },
         playTone(freq, type, duration, vol = 0.1) {
-            if (!Settings.sfxEnabled || !this.ctx) return;
+            if (Settings.sfxVolume === 0 || !this.ctx) return;
             try {
+                let actualVol = vol * (Settings.sfxVolume / 100);
                 let osc = this.ctx.createOscillator();
                 let gain = this.ctx.createGain();
                 osc.type = type;
                 osc.frequency.value = freq;
-                gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                gain.gain.setValueAtTime(actualVol, this.ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
@@ -462,13 +492,31 @@
             totalKills: 0
         },
         load() {
-            let saved = localStorage.getItem('IND_ANOMALY_SAVE_V4');
+            let saved = localStorage.getItem('IND_ANOMALY_SAVE_V5');
             if (saved) {
                 try { this.data = JSON.parse(saved); } catch(e) {}
             }
         },
         save() {
-            localStorage.setItem('IND_ANOMALY_SAVE_V4', JSON.stringify(this.data));
+            localStorage.setItem('IND_ANOMALY_SAVE_V5', JSON.stringify(this.data));
+        },
+        manualSave() {
+            this.save();
+            document.getElementById('save-info-status').innerText = "ПРОГРЕС УСПІШНО ЗБЕРЕЖЕНО В ПАМ'ЯТЬ БРАУЗЕРА!";
+            setTimeout(() => {
+                let el = document.getElementById('save-info-status');
+                if(el) el.innerText = "ДАНІ ГОТОВІ ДО СИНХРОНІЗАЦІЇ";
+            }, 3000);
+        },
+        manualLoad() {
+            this.load();
+            alert("Прогрес успішно завантажено! Найвищий рівень: " + this.data.bestLevel);
+        },
+        hardReset() {
+            if (confirm("Ви впевнені, що хочете видалити весь збережений прогрес?")) {
+                localStorage.removeItem('IND_ANOMALY_SAVE_V5');
+                location.reload();
+            }
         },
         unlock(id, title, desc) {
             if (!this.data.achievements[id]) {
@@ -484,7 +532,8 @@
     const Settings = {
         autoFire: true,
         gameSpeedMultiplier: 1.0,
-        sfxEnabled: true,
+        sfxVolume: 50, // від 0 до 100
+        crtEnabled: true,
         toggleFireMode() {
             this.autoFire = !this.autoFire;
             document.getElementById('setting-fire-mode').innerText = this.autoFire ? "АВТОМАТИЧНИЙ" : "РУЧНИЙ (КЛІК)";
@@ -503,9 +552,21 @@
                 document.getElementById('setting-speed-label').innerText = "НОРМАЛЬНА (1.0x)";
             }
         },
-        toggleSfx() {
-            this.sfxEnabled = !this.sfxEnabled;
-            document.getElementById('setting-sfx-label').innerText = this.sfxEnabled ? "УВІМКНЕНО" : "ВИМКНЕНО";
+        cycleSfxVolume() {
+            if (this.sfxVolume === 50) this.sfxVolume = 100;
+            else if (this.sfxVolume === 100) this.sfxVolume = 0;
+            else this.sfxVolume = 50;
+            document.getElementById('setting-sfx-vol').innerText = this.sfxVolume + "%";
+        },
+        toggleCrt() {
+            this.crtEnabled = !this.crtEnabled;
+            document.getElementById('setting-crt-label').innerText = this.crtEnabled ? "УВІМКНЕНО" : "ВИМКНЕНО";
+            let container = document.getElementById('game-container');
+            if (this.crtEnabled) {
+                container.classList.add('crt-enabled');
+            } else {
+                container.classList.remove('crt-enabled');
+            }
         }
     };
 
@@ -536,7 +597,6 @@
             let wrapper = document.getElementById('chapters-wrapper');
             wrapper.innerHTML = '';
             
-            // Розбиваємо 25 рівнів на 3 глави: Глава 1 (1-10), Глава 2 (11-20), Глава 3 (21-25)
             let chaptersData = [
                 { title: "ГЛАВА 1: ПЕРВИННИЙ СЕКТОР", start: 1, end: 10 },
                 { title: "ГЛАВА 2: ГЛИБОКИЙ КОНВЕЄР", start: 11, end: 20 },
@@ -655,6 +715,7 @@
         spawnTimer: 0,
         scrap: 0,
         running: false,
+        paused: false,
         lastShot: 0,
 
         start() {
@@ -669,6 +730,7 @@
             this.scrap = Storage.data.scrap;
             this.level = lvl;
             this.updateChapterInfo();
+            this.paused = false;
 
             let char = Characters.find(c => c.id === Storage.data.selectedChar) || Characters[0];
             this.player.maxHp = char.maxHp;
@@ -697,8 +759,14 @@
         },
 
         setupListeners() {
-            window.onkeydown = e => this.keys[e.key.toLowerCase()] = true;
+            window.onkeydown = e => {
+                this.keys[e.key.toLowerCase()] = true;
+                if (e.key === 'Escape' && this.running) {
+                    this.togglePause();
+                }
+            };
             window.onkeyup = e => this.keys[e.key.toLowerCase()] = false;
+            
             if (this.canvas) {
                 this.canvas.onmousemove = e => {
                     let rect = this.canvas.getBoundingClientRect();
@@ -708,6 +776,22 @@
                 this.canvas.onmousedown = () => this.mouse.down = true;
                 this.canvas.onmouseup = () => this.mouse.down = false;
             }
+        },
+
+        togglePause() {
+            this.paused = !this.paused;
+            if (this.paused) {
+                document.getElementById('pause-screen').classList.remove('hidden');
+            } else {
+                document.getElementById('pause-screen').classList.add('hidden');
+                this.loop();
+            }
+        },
+
+        resumeGame() {
+            this.paused = false;
+            document.getElementById('pause-screen').classList.add('hidden');
+            this.loop();
         },
 
         openCase() {
@@ -1009,7 +1093,7 @@
         },
 
         loop() {
-            if (!this.running) return;
+            if (!this.running || this.paused) return;
             this.update();
             this.render();
             requestAnimationFrame(() => this.loop());
