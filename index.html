@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INDUSTRIAL_ANOMALY // 0x4E</title>
+    <title>INDUSTRIAL_ANOMALY // ULTRA BRAWL EXPANDED</title>
     <style>
         :root {
             --bg-color: #0c0c0e;
@@ -106,13 +106,13 @@
             background: var(--panel-color);
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 12px 24px;
+            padding: 10px 20px;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin: 6px;
+            margin: 5px;
             transition: all 0.2s ease;
         }
 
@@ -128,8 +128,8 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             width: 100%;
-            max-width: 850px;
-            max-height: 350px;
+            max-width: 900px;
+            max-height: 380px;
             overflow-y: auto;
             margin-bottom: 20px;
             padding: 5px;
@@ -163,8 +163,8 @@
 
         .chapters-wrapper {
             width: 100%;
-            max-width: 900px;
-            max-height: 400px;
+            max-width: 950px;
+            max-height: 420px;
             overflow-y: auto;
             margin-bottom: 20px;
             padding-right: 10px;
@@ -182,14 +182,14 @@
             margin-top: 0;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 8px;
-            font-size: 16px;
+            font-size: 15px;
             letter-spacing: 2px;
         }
 
         .levels-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            gap: 8px;
             margin-top: 10px;
         }
 
@@ -197,9 +197,9 @@
             background: #0c0c0e;
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 10px;
+            padding: 8px;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
             text-align: center;
             transition: 0.2s;
@@ -219,8 +219,8 @@
 
         .bp-container {
             width: 100%;
-            max-width: 850px;
-            max-height: 350px;
+            max-width: 900px;
+            max-height: 380px;
             overflow-y: auto;
             border: 1px solid var(--border-color);
             background: rgba(0,0,0,0.5);
@@ -234,7 +234,7 @@
             align-items: center;
             padding: 10px;
             border-bottom: 1px dashed var(--border-color);
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .bp-level-row.claimed { color: var(--text-dim); }
@@ -264,13 +264,13 @@
     <!-- ГОЛОВНЕ МЕНЮ -->
     <div id="main-menu" class="screen">
         <h1>INDUSTRIAL ANOMALY</h1>
-        <p>BRAWL SYSTEM: ПРОКАЧУВАННЯ, СКІНИ ТА БОЙОВИЙ ПРОПУСК</p>
-        <button class="btn" onclick="UI.showScreen('chapters-screen')">[ ПОЧАТИ ГРУ (ВИБІР РІВНЯ) ]</button>
+        <p>ULTRA BRAWL EDITION: 15 ГЛАВ, КЕЙСИ ТА МІСІЇ</p>
+        <button class="btn" onclick="UI.showScreen('chapters-screen')">[ ПОЧАТИ ГРУ (15 ГЛАВ) ]</button>
         <button class="btn" onclick="UI.showScreen('char-screen')">[ ОПЕРАТИВНИКИ ТА СКІНИ ]</button>
         <button class="btn" onclick="UI.showScreen('quests-screen')">[ ЗАВДАННЯ ТА ЖЕТОНИ ]</button>
         <button class="btn" onclick="UI.showScreen('bp-screen')">[ БОЙОВИЙ ПРОПУСК (PASS) ]</button>
+        <button class="btn" onclick="UI.showScreen('cases-screen')">[ ІНДУСТРІАЛЬНІ КЕЙСИ ]</button>
         <button class="btn" onclick="UI.showScreen('inventory-screen')">[ ІНВЕНТАР ]</button>
-        <button class="btn" onclick="UI.showScreen('cases-screen')">[ КЕЙСИ ]</button>
         <button class="btn" onclick="UI.showScreen('save-screen')">[ ЗБЕРЕЖЕННЯ ]</button>
         <button class="btn" onclick="UI.showScreen('settings-screen')">[ НАЛАШТУВАННЯ ]</button>
     </div>
@@ -278,9 +278,30 @@
     <!-- МЕНЮ ЗАВДАНЬ -->
     <div id="quests-screen" class="screen hidden">
         <h2>ЖУРНАЛ БОЙОВИХ ЗАВДАНЬ</h2>
-        <p>Виконуйте місії, щоб отримувати жетони Бойового Пропуску.</p>
+        <p>Виконуйте місії, щоб заробляти жетони Бойового Пропуску.</p>
         <div class="bp-container" id="quests-list"></div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
+    </div>
+
+    <!-- КЕЙСИ -->
+    <div id="cases-screen" class="screen hidden">
+        <h2>КОНТЕЙНЕРИ З ВИПРОБУВАННЯМИ</h2>
+        <p>Витрачайте брухт. Брухт: <span id="cases-scrap" style="color:var(--glow-green)">0</span></p>
+        <div style="display:flex; gap:20px; width:100%; max-width:900px; justify-content:center;">
+            <div class="card-item" style="flex:1; text-align:center;">
+                <h3>ТЕХНІЧНИЙ КЕЙС</h3>
+                <p>Вартість: 30 брухту<br>Містить зброю, жетони або брухт.</p>
+                <div id="case-result-1" style="color: var(--bp-gold); min-height: 25px; margin-bottom: 10px; font-size:12px;">[ ГОТОВО ]</div>
+                <button class="btn" onclick="Game.openCase(1)">ВІДКРИТИ (30)</button>
+            </div>
+            <div class="card-item" style="flex:1; text-align:center;">
+                <h3>МЕГА-КОНТЕЙНЕР АНОМАЛІЇ</h3>
+                <p>Вартість: 80 брухту<br>Підвищений шанс на рідкісну зброю.</p>
+                <div id="case-result-2" style="color: var(--bp-gold); min-height: 25px; margin-bottom: 10px; font-size:12px;">[ ГОТОВО ]</div>
+                <button class="btn" onclick="Game.openCase(2)">ВІДКРИТИ (80)</button>
+            </div>
+        </div>
+        <button class="btn" style="margin-top:20px;" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
     <!-- ЗБЕРЕЖЕННЯ -->
@@ -305,10 +326,10 @@
         <button class="btn" onclick="UI.showScreen('main-menu'); Game.running=false;">[ ВИХІД У МЕНЮ ]</button>
     </div>
 
-    <!-- ВИБІР ГЛАВ -->
+    <!-- ВИБІР ГЛАВ (15 глав) -->
     <div id="chapters-screen" class="screen hidden">
-        <h2>ВИБІР СЕКТОРУ ТА ГЛАВИ</h2>
-        <p>Оберіть рівень протоколу.</p>
+        <h2>ВИБІР СЕКТОРУ (15 ГЛАВ)</h2>
+        <p>Оберіть рівень протоколу (всього 75 рівнів очищення).</p>
         <div class="chapters-wrapper" id="chapters-wrapper"></div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
@@ -321,23 +342,10 @@
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
-    <!-- КЕЙСИ -->
-    <div id="cases-screen" class="screen hidden">
-        <h2>ІНДУСТРІАЛЬНІ КОНТЕЙНЕРИ</h2>
-        <p>Витрачайте брухт. Брухт: <span id="cases-scrap" style="color:var(--glow-green)">0</span></p>
-        <div style="background:var(--panel-color); border:1px solid var(--border-color); padding:20px; width:100%; max-width:500px; text-align:center; margin-bottom:20px;">
-            <h3>ТЕХНІЧНИЙ КЕЙС</h3>
-            <p>Вартість: 40 брухту</p>
-            <div id="case-result" style="color: var(--bp-gold); min-height: 30px; margin-bottom: 15px; font-weight: bold;">[ ОЧІКУВАННЯ ]</div>
-            <button class="btn" onclick="Game.openCase()">ВІДКРИТИ</button>
-        </div>
-        <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
-    </div>
-
     <!-- ВИБІР ПЕРСОНАЖА ТА СКІНІВ -->
     <div id="char-screen" class="screen hidden">
         <h2>ОПЕРАТИВНИКИ ТА СКІНИ</h2>
-        <p>Підвищуйте рівень сили за брухт (+10% статів за рівень) та обирайте скін!</p>
+        <p>Підвищуйте рівень сили за брухт та обирайте скін!</p>
         <div class="grid-container" id="char-grid"></div>
         <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
@@ -352,20 +360,40 @@
 
     <!-- НАЛАШТУВАННЯ -->
     <div id="settings-screen" class="screen hidden">
-        <h2>НАЛАШТУВАННЯ</h2>
-        <p>РЕЖИМ СТРІЛЬБИ: <span id="setting-fire-mode">АВТОМАТИЧНИЙ</span></p>
-        <button class="btn" onclick="Settings.toggleFireMode()">ЗМІНИТИ РЕЖИМ</button>
-        
-        <p>ШВИДКІСТЬ ГРИ: <span id="setting-speed-label">НОРМАЛЬНА (1.0x)</span></p>
-        <button class="btn" onclick="Settings.toggleGameSpeed()">ЗМІНИТИ ШВИДКІСТЬ</button>
-        
-        <p>ГУЧНІСТЬ ЗВУКУ: <span id="setting-sfx-vol">50%</span></p>
-        <button class="btn" onclick="Settings.cycleSfxVolume()">ЗМІНИТИ ГУЧНІСТЬ</button>
-
-        <p>CRT ЕФЕКТ: <span id="setting-crt-label">УВІМКНЕНО</span></p>
-        <button class="btn" onclick="Settings.toggleCrt()">ПЕРЕКЛЮЧИТИ CRT</button>
-
-        <button class="btn" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
+        <h2>РОЗШИРЕНІ НАЛАШТУВАННЯ</h2>
+        <div class="grid-container" style="max-height: 420px; grid-template-columns: repeat(2, 1fr);">
+            <div class="card-item">
+                <h3>РЕЖИМ СТРІЛЬБИ</h3>
+                <p id="setting-fire-mode" style="color:var(--glow-green)">АВТОМАТИЧНИЙ</p>
+                <button class="btn" onclick="Settings.toggleFireMode()">ЗМІНИТИ</button>
+            </div>
+            <div class="card-item">
+                <h3>ТЕМП / ШВИДКІСТЬ ГРИ</h3>
+                <p id="setting-speed-label" style="color:var(--glow-green)">НОРМАЛЬНА (1.0x)</p>
+                <button class="btn" onclick="Settings.toggleGameSpeed()">ЗМІНИТИ</button>
+            </div>
+            <div class="card-item">
+                <h3>ГУЧНІСТЬ ЗВУКУ (SFX)</h3>
+                <p id="setting-sfx-vol" style="color:var(--glow-green)">50%</p>
+                <button class="btn" onclick="Settings.cycleSfxVolume()">ЗМІНИТИ</button>
+            </div>
+            <div class="card-item">
+                <h3>РЕЖИМ ЕКРАНУ (CRT)</h3>
+                <p id="setting-crt-label" style="color:var(--glow-green)">УВІМКНЕНО</p>
+                <button class="btn" onclick="Settings.toggleCrt()">ПЕРЕКЛЮЧИТИ</button>
+            </div>
+            <div class="card-item">
+                <h3>КОМПЕНСАЦІЯ КАДРІВ</h3>
+                <p id="setting-fps-label" style="color:var(--glow-green)">СТАБІЛЬНІ 60 FPS</p>
+                <button class="btn" onclick="Settings.toggleFps()">ПЕРЕКЛЮЧИТИ</button>
+            </div>
+            <div class="card-item">
+                <h3>СТИЛЬ ІНТЕРФЕЙСУ</h3>
+                <p id="setting-theme-label" style="color:var(--glow-green)">ІНДУСТРІАЛЬНИЙ ТЕМНИЙ</p>
+                <button class="btn" onclick="Settings.toggleTheme()">ЗМІНИТИ</button>
+            </div>
+        </div>
+        <button class="btn" style="margin-top:10px;" onclick="UI.showScreen('main-menu')">[ НАЗАД ]</button>
     </div>
 
     <!-- МАГАЗИН МІЖ ХВИЛЯМИ -->
@@ -467,27 +495,38 @@
         { id: 'saw', name: "Циркулярна пилка", fireRate: 6, damage: 7, bulletSpeed: 11, range: 250, spread: 0.2, count: 1, unlocked: false },
         { id: 'shotgun', name: "Тяжкий дробовик", fireRate: 40, damage: 22, bulletSpeed: 8, range: 350, spread: 0.35, count: 5, unlocked: false },
         { id: 'laser', name: "Експериментальний лазер", fireRate: 3, damage: 5, bulletSpeed: 16, range: 600, spread: 0, count: 1, unlocked: false },
-        { id: 'minigun', name: "Індустріальний кулемет", fireRate: 4, damage: 10, bulletSpeed: 12, range: 500, spread: 0.1, count: 1, unlocked: false }
+        { id: 'minigun', name: "Індустріальний кулемет", fireRate: 4, damage: 10, bulletSpeed: 12, range: 500, spread: 0.1, count: 1, unlocked: false },
+        { id: 'plasma', name: "Плазмовий випромінювач", fireRate: 25, damage: 45, bulletSpeed: 7, range: 500, spread: 0.05, count: 1, unlocked: false }
     ];
 
     const BattlePassLevels = [
         { level: 1, costTokens: 10, rewardType: 'weapon', rewardId: 'saw', desc: "Розблокувати зброю: Циркулярна пилка" },
-        { level: 2, costTokens: 25, rewardType: 'scrap', rewardValue: 60, desc: "Бонус: +60 брухту" },
-        { level: 3, costTokens: 45, rewardType: 'weapon', rewardId: 'shotgun', desc: "Розблокувати зброю: Тяжкий дробовик" },
-        { level: 4, costTokens: 70, rewardType: 'weapon', rewardId: 'laser', desc: "Розблокувати зброю: Експериментальний лазер" },
-        { level: 5, costTokens: 100, rewardType: 'weapon', rewardId: 'minigun', desc: "Розблокувати зброю: Індустріальний кулемет" }
+        { level: 2, costTokens: 20, rewardType: 'scrap', rewardValue: 50, desc: "Бонус: +50 брухту" },
+        { level: 3, costTokens: 35, rewardType: 'weapon', rewardId: 'shotgun', desc: "Розблокувати зброю: Тяжкий дробовик" },
+        { level: 4, costTokens: 55, rewardType: 'scrap', rewardValue: 100, desc: "Бонус: +100 брухту" },
+        { level: 5, costTokens: 80, rewardType: 'weapon', rewardId: 'laser', desc: "Розблокувати зброю: Експериментальний лазер" },
+        { level: 6, costTokens: 110, rewardType: 'scrap', rewardValue: 150, desc: "Бонус: +150 брухту" },
+        { level: 7, costTokens: 145, rewardType: 'weapon', rewardId: 'minigun', desc: "Розблокувати зброю: Індустріальний кулемет" },
+        { level: 8, costTokens: 185, rewardType: 'scrap', rewardValue: 200, desc: "Бонус: +200 брухту" },
+        { level: 9, costTokens: 230, rewardType: 'weapon', rewardId: 'plasma', desc: "Розблокувати зброю: Плазмовий випромінювач" },
+        { level: 10, costTokens: 300, rewardType: 'scrap', rewardValue: 500, desc: "Головна нагорода: +500 брухту та статус Експерта" }
     ];
 
     const QuestsDef = [
-        { id: 'q_kills_10', title: "ЛК-1: Зачистка", desc: "Знищити загалом 10 аномалій", target: 10, progressKey: 'totalKills', rewardTokens: 15, claimed: false },
-        { id: 'q_scrap_100', title: "ІК-2: Збір ресурсів", desc: "Зібрати 100 одиниць брухту", target: 100, progressKey: 'totalScrapEarned', rewardTokens: 20, claimed: false },
-        { id: 'q_level_5', title: "ПР-3: Промисловий тиск", desc: "Досягти 5-го рівня гри", target: 5, progressKey: 'bestLevel', rewardTokens: 25, claimed: false }
+        { id: 'q_kills_10', title: "ЛК-1: Зачистка", desc: "Знищити загалом 10 аномалій", target: 10, progressKey: 'totalKills', rewardTokens: 10, claimed: false },
+        { id: 'q_kills_50', title: "ЛК-2: Знищення хвиль", desc: "Знищити загалом 50 аномалій", target: 50, progressKey: 'totalKills', rewardTokens: 25, claimed: false },
+        { id: 'q_kills_150', title: "ЛК-3: Екстермінація", desc: "Знищити загалом 150 аномалій", target: 150, progressKey: 'totalKills', rewardTokens: 50, claimed: false },
+        { id: 'q_scrap_100', title: "ІК-1: Збір ресурсів", desc: "Зібрати 100 одиниць брухту", target: 100, progressKey: 'totalScrapEarned', rewardTokens: 15, claimed: false },
+        { id: 'q_scrap_500', title: "ІК-2: Сховище заводу", desc: "Зібрати 500 одиниць брухту", target: 500, progressKey: 'totalScrapEarned', rewardTokens: 40, claimed: false },
+        { id: 'q_level_5', title: "ПР-1: Промисловий тиск", desc: "Досягти 5-го рівня гри", target: 5, progressKey: 'bestLevel', rewardTokens: 20, claimed: false },
+        { id: 'q_level_15', title: "ПР-2: Середній конвеєр", desc: "Досягти 15-го рівня гри", target: 15, progressKey: 'bestLevel', rewardTokens: 45, claimed: false },
+        { id: 'q_level_30', title: "ПР-3: Глибоке ядро", desc: "Досягти 30-го рівня гри", target: 30, progressKey: 'bestLevel', rewardTokens: 80, claimed: false }
     ];
 
     const Storage = {
         data: {
             bestLevel: 1,
-            scrap: 100,
+            scrap: 150,
             tokens: 0,
             selectedChar: 'worker',
             charLevels: { worker: 1, cyborg: 1, tank: 1 },
@@ -501,7 +540,7 @@
             totalScrapEarned: 0
         },
         load() {
-            let saved = localStorage.getItem('IND_ANOMALY_SAVE_V6');
+            let saved = localStorage.getItem('IND_ANOMALY_SAVE_V7');
             if (saved) {
                 try { 
                     let parsed = JSON.parse(saved);
@@ -510,7 +549,7 @@
             }
         },
         save() {
-            localStorage.setItem('IND_ANOMALY_SAVE_V6', JSON.stringify(this.data));
+            localStorage.setItem('IND_ANOMALY_SAVE_V7', JSON.stringify(this.data));
         },
         manualSave() {
             this.save();
@@ -526,30 +565,18 @@
         },
         hardReset() {
             if (confirm("Скинути весь прогрес?")) {
-                localStorage.removeItem('IND_ANOMALY_SAVE_V6');
+                localStorage.removeItem('IND_ANOMALY_SAVE_V7');
                 location.reload();
             }
         },
         addScrap(amount) {
             this.data.scrap += amount;
             this.data.totalScrapEarned += amount;
-            this.checkQuests();
             this.save();
         },
         addKill() {
             this.data.totalKills++;
-            this.checkQuests();
             this.save();
-        },
-        checkQuests() {
-            QuestsDef.forEach(q => {
-                if (!this.data.questsClaimed[q.id]) {
-                    let current = this.data[q.progressKey] || 0;
-                    if (current >= q.target) {
-                        // автоматично зараховуємо жетони або даємо можливість забрати
-                    }
-                }
-            });
         },
         unlockAchievement(id, title, desc) {
             if (!this.data.achievements[id]) {
@@ -566,6 +593,8 @@
         gameSpeedMultiplier: 1.0,
         sfxVolume: 50,
         crtEnabled: true,
+        fpsMode: true,
+        themeDark: true,
         toggleFireMode() {
             this.autoFire = !this.autoFire;
             document.getElementById('setting-fire-mode').innerText = this.autoFire ? "АВТОМАТИЧНИЙ" : "РУЧНИЙ";
@@ -591,6 +620,14 @@
             let container = document.getElementById('game-container');
             if (this.crtEnabled) container.classList.add('crt-enabled');
             else container.classList.remove('crt-enabled');
+        },
+        toggleFps() {
+            this.fpsMode = !this.fpsMode;
+            document.getElementById('setting-fps-label').innerText = this.fpsMode ? "СТАБІЛЬНІ 60 FPS" : "ПЛІВКОВИЙ ЛІМІТ";
+        },
+        toggleTheme() {
+            this.themeDark = !this.themeDark;
+            document.getElementById('setting-theme-label').innerText = this.themeDark ? "ІНДУСТРІАЛЬНИЙ ТЕМНИЙ" : "КОНТРАСТНИЙ МІЛІТАРІ";
         }
     };
 
@@ -620,11 +657,11 @@
         updateChaptersScreen() {
             let wrapper = document.getElementById('chapters-wrapper');
             wrapper.innerHTML = '';
-            let chaptersData = [
-                { title: "ГЛАВА 1: ПЕРВИННИЙ СЕКТОР", start: 1, end: 10 },
-                { title: "ГЛАВА 2: ГЛИБОКИЙ КОНВЕЄР", start: 11, end: 20 },
-                { title: "ГЛАВА 3: ЯДРО АНОМАЛІЇ", start: 21, end: 25 }
-            ];
+            // 15 глав замість 3 (по 5 рівнів у кожній = 75 рівнів загалом)
+            let chaptersData = [];
+            for (let i = 1; i <= 15; i++) {
+                chaptersData.push({ title: `ГЛАВА ${i}: СЕКТОР ОБРОБКИ ${i}`, start: (i-1)*5 + 1, end: i*5 });
+            }
             chaptersData.forEach(ch => {
                 let panel = document.createElement('div');
                 panel.className = 'chapter-panel';
@@ -652,6 +689,11 @@
             scrapDiv.innerHTML = `<h3>МЕТАЛОБРУХТ</h3><p>Ресурсів: ${Storage.data.scrap}</p><span>ВАЛЮТА</span>`;
             grid.appendChild(scrapDiv);
 
+            let tokensDiv = document.createElement('div');
+            tokensDiv.className = 'card-item';
+            tokensDiv.innerHTML = `<h3>ЖЕТОНИ БОЙОВОГО ПРОПУСКУ</h3><p>Кількість: ${Storage.data.tokens}</p><span>ПРОГРЕС</span>`;
+            grid.appendChild(tokensDiv);
+
             WeaponsDef.forEach(w => {
                 if (Storage.data.unlockedWeapons[w.id]) {
                     let div = document.createElement('div');
@@ -673,7 +715,7 @@
                 let div = document.createElement('div');
                 div.className = `card-item ${selected ? 'selected' : ''}`;
                 
-                let skinsHtml = `<p>СКІН:</p><div style="display:flex; gap:5px; margin-bottom:8px;">`;
+                let skinsHtml = `<p>СКІН:</p><div style="display:flex; gap:5px; margin-bottom:8px; flex-wrap:wrap;">`;
                 c.skins.forEach(s => {
                     let activeSkin = currentSkin === s.id;
                     skinsHtml += `<button class="btn" style="padding:4px 8px; font-size:10px; ${activeSkin ? 'border-color:var(--glow-green); color:var(--glow-green);' : ''}" onclick="Game.setSkin('${c.id}', '${s.id}')">${s.name}</button>`;
@@ -700,7 +742,7 @@
 
                 let div = document.createElement('div');
                 div.className = `bp-level-row ${claimed ? 'claimed' : (completed ? 'ready' : '')}`;
-                div.innerHTML = `<span>${q.title}: ${q.desc} (${Math.min(current, q.target)}/${q.target})</span> <span>Нагорода: ${q.rewardTokens} жетонів</span> <span>${claimed ? '[ ВИКОНАНО ]' : (completed ? '<button class="btn" onclick="Game.claimQuest(\'' + q.id + '\')">ЗАБРАТИ</button></i>' : '[ В ПРОЦЕСІ ]')}</span>`;
+                div.innerHTML = `<span><b>${q.title}</b>: ${q.desc} (${Math.min(current, q.target)}/${q.target})</span> <span>Нагорода: ${q.rewardTokens} жетонів</span> <span>${claimed ? '[ ВИКОНАНО ]' : (completed ? '<button class="btn" onclick="Game.claimQuest(\'' + q.id + '\')">ЗАБРАТИ</button>' : '[ В ПРОЦЕСІ ]')}</span>`;
                 list.appendChild(div);
             });
         },
@@ -743,7 +785,7 @@
             Storage.load();
             this.scrap = 0;
             this.level = lvl;
-            this.chapter = Math.floor((this.level - 1) / 10) + 1;
+            this.chapter = Math.floor((this.level - 1) / 5) + 1;
             this.paused = false;
 
             let char = Characters.find(c => c.id === Storage.data.selectedChar) || Characters[0];
@@ -844,32 +886,41 @@
             }
         },
 
-        openCase() {
-            if (Storage.data.scrap < 40) {
-                document.getElementById('case-result').innerText = "[ НЕДОСТАТНЬО БРУХТУ ]";
+        openCase(type) {
+            let cost = type === 1 ? 30 : 80;
+            let resultElId = type === 1 ? 'case-result-1' : 'case-result-2';
+
+            if (Storage.data.scrap < cost) {
+                document.getElementById(resultElId).innerText = "[ НЕДОСТАТНЬО БРУХТУ ]";
                 return;
             }
-            Storage.data.scrap -= 40;
+            Storage.data.scrap -= cost;
             Storage.save();
             document.getElementById('cases-scrap').innerText = Storage.data.scrap;
 
             let rand = Math.random();
-            if (rand < 0.5) {
-                let bonus = 45;
+            if (rand < 0.45) {
+                let bonus = type === 1 ? 35 : 100;
                 Storage.addScrap(bonus);
-                document.getElementById('case-result').innerText = `ВИ ВИГРАЛИ БРУХТ: +${bonus}!`;
-            } else {
+                document.getElementById(resultElId).innerText = `ВИГРАШ БРУХТУ: +${bonus}!`;
+            } else if (rand < 0.8 || type === 2) {
                 let lockedWeapons = WeaponsDef.filter(w => !Storage.data.unlockedWeapons[w.id]);
                 if (lockedWeapons.length > 0) {
                     let w = lockedWeapons[Math.floor(Math.random() * lockedWeapons.length)];
                     Storage.data.unlockedWeapons[w.id] = true;
                     Storage.save();
-                    document.getElementById('case-result').innerText = `НОВА ЗБРОЯ: ${w.name}!`;
+                    document.getElementById(resultElId).innerText = `НОВА ЗБРОЯ: ${w.name}!`;
                 } else {
-                    Storage.data.tokens += 15;
+                    let bonusTokens = type === 1 ? 15 : 40;
+                    Storage.data.tokens += bonusTokens;
                     Storage.save();
-                    document.getElementById('case-result').innerText = `БОНУС БОЙОВОГО ПРОПУСКУ: +15 ЖЕТОНІВ!`;
+                    document.getElementById(resultElId).innerText = `БОНУС ЖЕТОНІВ: +${bonusTokens}!`;
                 }
+            } else {
+                let bonusTokens = type === 1 ? 20 : 50;
+                Storage.data.tokens += bonusTokens;
+                Storage.save();
+                document.getElementById(resultElId).innerText = `ЖЕТОНИ БП: +${bonusTokens}!`;
             }
         },
 
@@ -895,7 +946,7 @@
                 Storage.data.bestLevel = this.level;
                 Storage.save();
             }
-            this.chapter = Math.floor((this.level - 1) / 10) + 1;
+            this.chapter = Math.floor((this.level - 1) / 5) + 1;
             this.levelTimer = 0;
             UI.showScreen('canvas');
             this.running = true;
@@ -906,7 +957,7 @@
             this.running = false;
             Storage.addScrap(this.scrap);
             if (this.level >= Storage.data.bestLevel) {
-                Storage.data.bestLevel = Math.min(25, this.level + 1);
+                Storage.data.bestLevel = Math.min(75, this.level + 1);
             }
             Storage.save();
             this.openShop();
@@ -915,13 +966,14 @@
         openShop() {
             UI.showScreen('shop-screen');
             document.getElementById('shop-scrap').innerText = this.scrap;
-            document.getElementById('shop-title').innerText = `ГЛАВА ${this.chapter} // РІВЕНЬ ${this.level} ПРОЙДЕНО`;
+            document.getElementById('shop-title').innerText = `СЕКТОР ${this.chapter} // РІВЕНЬ ${this.level} ПРОЙДЕНО`;
             let container = document.getElementById('shop-items-container');
             container.innerHTML = '';
 
             let upgrades = [
                 { id: 'heal', name: 'Аварійний ремонт', desc: 'Відновити 50 HP', cost: 10 },
-                { id: 'speed', name: 'Іржавий протез', desc: '+0.3 до швидкості', cost: 15 }
+                { id: 'speed', name: 'Іржавий протез', desc: '+0.3 до швидкості', cost: 15 },
+                { id: 'maxhp', name: 'Зміцнений корпус', desc: '+25 до макс. здоров\'я', cost: 20 }
             ];
             upgrades.forEach(u => {
                 let div = document.createElement('div');
@@ -940,6 +992,12 @@
             } else if(id === 'speed' && this.scrap >= 15) {
                 this.scrap -= 15;
                 this.player.speed += 0.3;
+                AudioSys.buy();
+                this.openShop();
+            } else if(id === 'maxhp' && this.scrap >= 20) {
+                this.scrap -= 20;
+                this.player.maxHp += 25;
+                this.player.hp += 25;
                 AudioSys.buy();
                 this.openShop();
             }
@@ -996,7 +1054,7 @@
 
             this.levelTimer += speedMult;
             this.spawnTimer += speedMult;
-            if (this.spawnTimer > Math.max(15, 65 - this.level * 2)) {
+            if (this.spawnTimer > Math.max(12, 55 - this.level * 1.5)) {
                 this.spawnTimer = 0;
                 this.spawnEnemy();
             }
@@ -1036,12 +1094,12 @@
 
         spawnEnemy() {
             let types = [
-                { radius: 10, speed: 1.1 + (this.chapter * 0.1), hp: 20 + (this.level * 3), damage: 0.4, color: '#b54a2b', scrapValue: 2 },
-                { radius: 14, speed: 0.7 + (this.chapter * 0.1), hp: 55 + (this.level * 4), damage: 0.8, color: '#505060', scrapValue: 4 },
-                { radius: 8, speed: 1.6 + (this.chapter * 0.1), hp: 12 + (this.level * 2), damage: 0.3, color: '#8b0000', scrapValue: 1 },
-                { radius: 18, speed: 0.4 + (this.chapter * 0.05), hp: 110 + (this.level * 6), damage: 1.5, color: '#2b2b36', scrapValue: 7 }
+                { radius: 10, speed: 1.1 + (this.chapter * 0.08), hp: 20 + (this.level * 2.5), damage: 0.4, color: '#b54a2b', scrapValue: 2 },
+                { radius: 14, speed: 0.7 + (this.chapter * 0.08), hp: 55 + (this.level * 3.5), damage: 0.8, color: '#505060', scrapValue: 4 },
+                { radius: 8, speed: 1.6 + (this.chapter * 0.1), hp: 12 + (this.level * 1.8), damage: 0.3, color: '#8b0000', scrapValue: 1 },
+                { radius: 18, speed: 0.4 + (this.chapter * 0.05), hp: 110 + (this.level * 5), damage: 1.5, color: '#2b2b36', scrapValue: 7 }
             ];
-            let type = types[Math.floor(Math.random() * Math.min(types.length, 1 + Math.floor(this.level / 6)))];
+            let type = types[Math.floor(Math.random() * Math.min(types.length, 1 + Math.floor(this.level / 5)))];
             let edge = Math.floor(Math.random() * 4);
             let x, y;
             if (edge === 0) { x = Math.random() * 1100; y = -20; }
@@ -1052,10 +1110,10 @@
         },
 
         render() {
-            this.ctx.fillStyle = '#08080a';
+            this.ctx.fillStyle = Settings.themeDark ? '#08080a' : '#101216';
             this.ctx.fillRect(0, 0, 1100, 700);
 
-            this.ctx.strokeStyle = '#141418';
+            this.ctx.strokeStyle = Settings.themeDark ? '#141418' : '#222630';
             this.ctx.lineWidth = 1;
             for(let x=0; x<1100; x+=50) {
                 this.ctx.beginPath(); this.ctx.moveTo(x, 0); this.ctx.lineTo(x, 700); this.ctx.stroke();
@@ -1075,7 +1133,6 @@
                 this.ctx.fillRect(b.x - 2, b.y - 2, 4, 4);
             }
 
-            // Рендер персонажа з урахуванням обраного скіна
             let char = Characters.find(c => c.id === Storage.data.selectedChar) || Characters[0];
             let skinId = Storage.data.charSkins[char.id] || 'default';
             let skin = char.skins.find(s => s.id === skinId) || char.skins[0];
@@ -1088,7 +1145,7 @@
             this.ctx.font = '14px "Courier New"';
             this.ctx.fillText(`ЗДОРОВ'Я: ${Math.ceil(this.player.hp)}/${this.player.maxHp}`, 25, 30);
             this.ctx.fillText(`БРУХТ: ${this.scrap}`, 25, 55);
-            this.ctx.fillText(`ГЛАВА: ${this.chapter} | РІВЕНЬ: ${this.level}/25`, 880, 30);
+            this.ctx.fillText(`ГЛАВА: ${this.chapter}/15 | РІВЕНЬ: ${this.level}/75`, 810, 30);
             this.ctx.fillText(`ЧАС: ${Math.ceil((this.levelDuration - this.levelTimer) / 60)}с`, 970, 55);
 
             this.ctx.fillStyle = '#2b2b36';
