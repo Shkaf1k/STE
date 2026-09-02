@@ -82,6 +82,16 @@
             text-decoration: none;
         }
 
+        /* Кнопка гамбургера для мобильных */
+        .burger-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
         .hero {
             padding: 100px 0 80px;
             text-align: center;
@@ -132,6 +142,33 @@
             color: #ffffff;
         }
 
+        /* --- НОВОЕ: Секция Статистики --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px 15px;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--button-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #aaa;
+        }
+
         /* Адаптивное видео (16:9) */
         .video-wrapper {
             position: relative;
@@ -151,7 +188,7 @@
             border: 0;
         }
 
-        /* Галерея скриншотов с эффектом */
+        /* Галерея скриншотов */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -198,6 +235,20 @@
             color: #ffffff;
         }
 
+        /* --- НОВОЕ: Карточки новостей --- */
+        .news-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .news-date {
+            font-size: 12px;
+            color: var(--button-color);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
         /* Системные требования */
         .sys-req-grid {
             display: grid;
@@ -227,10 +278,17 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 0, 0, 0.9);
             z-index: 2000;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
         }
 
         .modal img {
@@ -240,12 +298,79 @@
             border: 1px solid var(--border-color);
         }
 
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #ffffff;
+            font-size: 35px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* --- НОВОЕ: Кнопка «Наверх» --- */
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .scroll-top-btn.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top-btn:hover {
+            background-color: var(--button-color);
+            color: #ffffff;
+            border-color: var(--button-color);
+        }
+
         footer {
             margin-top: auto;
             padding: 30px 0;
             text-align: center;
             font-size: 14px;
             color: #777777;
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            .burger-btn {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--bg-color);
+                border-bottom: 1px solid var(--border-color);
+                padding: 20px 0;
+                gap: 15px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
         }
     </style>
 </head>
@@ -255,12 +380,14 @@
         <div class="container">
             <nav>
                 <a href="#" class="logo">НазваниеИгры</a>
-                <div class="nav-links">
-                    <a href="#trailer">Трейлер</a>
-                    <a href="#screenshots">Скриншоты</a>
-                    <a href="#features">Особенности</a>
-                    <a href="#sys-req">Требования</a>
-                    <a href="#download" class="btn" style="padding: 8px 18px; font-size: 14px;">Скачать</a>
+                <button class="burger-btn" onclick="toggleMenu()" aria-label="Открыть меню">☰</button>
+                <div class="nav-links" id="navLinks">
+                    <a href="#trailer" onclick="closeMenu()">Трейлер</a>
+                    <a href="#news" onclick="closeMenu()">Новости</a>
+                    <a href="#screenshots" onclick="closeMenu()">Скриншоты</a>
+                    <a href="#features" onclick="closeMenu()">Особенности</a>
+                    <a href="#sys-req" onclick="closeMenu()">Требования</a>
+                    <a href="#download" class="btn" style="padding: 8px 18px; font-size: 14px;" onclick="closeMenu()">Скачать</a>
                 </div>
             </nav>
         </div>
@@ -278,6 +405,26 @@
             </div>
         </section>
 
+        <!-- НОВОЕ: Секция с цифрами / статистикой -->
+        <section id="stats">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="15000">0</div>
+                        <div class="stat-label">Скачиваний</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="98">0</div>
+                        <div class="stat-label">% Положительных отзывов</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="1200">0</div>
+                        <div class="stat-label">Игроков онлайн</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Секция с Трейлером -->
         <section id="trailer">
             <div class="container">
@@ -288,30 +435,53 @@
             </div>
         </section>
 
-<!-- Секция со Скриншотами -->
-<section id="screenshots">
-    <div class="container">
-        <h2>Скриншоты</h2>
-        <div class="gallery-grid">
-            
-            <!-- Первый скриншот -->
-            <div class="gallery-item" onclick="openModal('images/screen1.jpg')">
-                <img src="images/screen1.jpg" alt="Скриншот 1">
+        <!-- НОВОЕ: Секция с Новостями -->
+        <section id="news">
+            <div class="container">
+                <h2>Последние обновления</h2>
+                <div class="grid">
+                    <div class="card news-card">
+                        <div>
+                            <div class="news-date">15 СЕНТЯБРЯ 2026</div>
+                            <h3>Патч 1.2 — Новые локации</h3>
+                            <p>Добавлена новая снежная зона, улучшена оптимизация и исправлены мелкие баги с текстурами.</p>
+                        </div>
+                    </div>
+                    <div class="card news-card">
+                        <div>
+                            <div class="news-date">01 АВГУСТА 2026</div>
+                            <h3>Летний ивент стартовал!</h3>
+                            <p>Участвуйте во временных испытаниях, выполняйте ежедневные задания и получайте уникальные скины.</p>
+                        </div>
+                    </div>
+                    <div class="card news-card">
+                        <div>
+                            <div class="news-date">10 ИЮНЯ 2026</div>
+                            <h3>Релиз игры v1.0</h3>
+                            <p>Состоялся долгожданный официальный релиз! Спасибо всем, кто поддерживал нас на этапе бета-теста.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <!-- Второй скриншот -->
-            <div class="gallery-item" onclick="openModal('images/screen2.jpg')">
-                <img src="images/screen2.jpg" alt="Скриншот 2">
+        <!-- Секция со Скриншотами -->
+        <section id="screenshots">
+            <div class="container">
+                <h2>Скриншоты</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item" onclick="openModal('images/screen1.jpg')">
+                        <img src="images/screen1.jpg" alt="Скриншот 1">
+                    </div>
+                    <div class="gallery-item" onclick="openModal('images/screen2.jpg')">
+                        <img src="images/screen2.jpg" alt="Скриншот 2">
+                    </div>
+                    <div class="gallery-item" onclick="openModal('images/screen3.jpg')">
+                        <img src="images/screen3.jpg" alt="Скриншот 3">
+                    </div>
+                </div>
             </div>
-
-            <!-- Третий скриншот -->
-            <div class="gallery-item" onclick="openModal('images/screen3.jpg')">
-                <img src="images/screen3.jpg" alt="Скриншот 3">
-            </div>
-
-        </div>
-    </div>
-</section>
+        </section>
 
         <!-- Особенности -->
         <section id="features">
@@ -364,10 +534,14 @@
         </section>
     </main>
 
-    <!-- Модальное окно для просмотра картинок -->
+    <!-- Улучшенное модальное окно -->
     <div id="modal" class="modal" onclick="closeModal()">
-        <img id="modal-img" src="" alt="Увеличенное изображение">
+        <span class="close-modal">&times;</span>
+        <img id="modal-img" src="" alt="Увеличенное изображение" onclick="event.stopPropagation()">
     </div>
+
+    <!-- НОВОЕ: Плавающая кнопка Наверх -->
+    <div class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">▲</div>
 
     <footer>
         <div class="container">
@@ -376,14 +550,74 @@
     </footer>
 
     <script>
+        // Мобильное меню
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+
+        function closeMenu() {
+            document.getElementById('navLinks').classList.remove('active');
+        }
+
+        // Модальное окно для галереи
         function openModal(src) {
+            const modal = document.getElementById('modal');
             document.getElementById('modal-img').src = src;
-            document.getElementById('modal').style.display = 'flex';
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('show'), 10);
         }
 
         function closeModal() {
-            document.getElementById('modal').style.display = 'none';
+            const modal = document.getElementById('modal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
         }
+
+        // Кнопка Наверх
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Анимация чисел статистики при прокрутке
+        let statsAnimated = false;
+        const statNumbers = document.querySelectorAll('.stat-number');
+
+        function animateStats() {
+            const statsSection = document.getElementById('stats');
+            const sectionPos = statsSection.getBoundingClientRect().top;
+            const screenPos = window.innerHeight;
+
+            if (sectionPos < screenPos && !statsAnimated) {
+                statsAnimated = true;
+                statNumbers.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    const speed = 200; // Скорость анимации
+                    const updateCount = () => {
+                        const count = +counter.innerText.replace('+', '');
+                        const inc = target / speed;
+
+                        if (count < target) {
+                            counter.innerText = Math.ceil(count + inc);
+                            setTimeout(updateCount, 15);
+                        } else {
+                            counter.innerText = target.toLocaleString() + (target === 98 ? '%' : '+');
+                        }
+                    };
+                    updateCount();
+                });
+            }
+        }
+
+        window.addEventListener('scroll', animateStats);
     </script>
 </body>
 </html>
