@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моя Игра — Скачать</title>
+    <style>
+        /* Цветовая палитра со скриншота */
+        :root {
+            --bg-color: #ffffff;      /* Background color: #fff */
+            --text-color: #222222;    /* Text color: #222 */
+            --button-color: #fa5c5c;  /* Button color: #fa5c5c */
+            --border-color: #dadada;  /* Border color: #dadada */
+            --button-hover: #e04b4b;  /* Темный оттенок для эффекта наведения */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero h1 {
+            font-size: 44px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #555555;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--button-color);
+            color: #ffffff;
+            padding: 15px 35px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 12px rgba(250, 92, 92, 0.25);
+        }
+
+        .btn:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        .features {
+            padding: 60px 0;
+        }
+
+        .features h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 28px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            background-color: #fafafa;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 25px 0;
+            text-align: center;
+            font-size: 14px;
+            color: #777777;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">НазваниеИгры</a>
+                <a href="#download" class="btn" style="padding: 8px 18px; font-size: 14px;">Скачать</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Название Вашей Игры</h1>
+                <p>Увлекательный геймплей, красивая графика и захватывающий сюжет.</p>
+                <a href="https://github.com/ВАШ_НИК/ВАШ_РЕПОЗИТОРИЙ/releases/download/v1.0/game.zip" class="btn" id="download">
+                    Скачать игру (.zip)
+                </a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>Особенности</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Сюжет</h3>
+                        <p>Увлекательная история с интересными персонажами.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Графика</h3>
+                        <p>Приятное визуальное оформление и стильный дизайн.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Доступность</h3>
+                        <p>Полностью бесплатно для ПК и без рекламы.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 НазваниеИгры. Сайт создан для GitHub Pages.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
