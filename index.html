@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Моя Игра — Скачать</title>
     <style>
-        /* Цветовая палитра со скриншота */
         :root {
-            --bg-color: #ffffff;      /* Background color: #fff */
-            --text-color: #222222;    /* Text color: #222 */
-            --button-color: #fa5c5c;  /* Button color: #fa5c5c */
-            --border-color: #dadada;  /* Border color: #dadada */
-            --button-hover: #e04b4b;  /* Темный оттенок для эффекта наведения */
+            --bg-color: #121212;      /* Темный фон */
+            --card-bg: #1e1e1e;       /* Фон блоков/карточек */
+            --text-color: #e0e0e0;    /* Светлый текст */
+            --button-color: #fa5c5c;  /* Кораллово-красный */
+            --border-color: #2c2c2c;  /* Темная рамка */
+            --button-hover: #e04b4b;
         }
 
         * {
@@ -64,12 +64,13 @@
         .hero h1 {
             font-size: 44px;
             margin-bottom: 20px;
+            color: #ffffff;
         }
 
         .hero p {
             font-size: 18px;
             margin-bottom: 30px;
-            color: #555555;
+            color: #aaa;
         }
 
         .btn {
@@ -91,16 +92,63 @@
             transform: translateY(-2px);
         }
 
-        .features {
+        section {
             padding: 60px 0;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .features h2 {
+        section h2 {
             text-align: center;
             margin-bottom: 40px;
             font-size: 28px;
+            color: #ffffff;
         }
 
+        /* Адаптивное видео (16:9) */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Галерея скриншотов */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--card-bg);
+            transition: transform 0.2s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Особенности */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -111,12 +159,13 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 25px;
-            background-color: #fafafa;
+            background-color: var(--card-bg);
         }
 
         .card h3 {
             margin-bottom: 10px;
             font-size: 20px;
+            color: #ffffff;
         }
 
         footer {
@@ -125,7 +174,6 @@
             text-align: center;
             font-size: 14px;
             color: #777777;
-            border-top: 1px solid var(--border-color);
         }
     </style>
 </head>
@@ -141,6 +189,7 @@
     </header>
 
     <main>
+        <!-- Главный баннер -->
         <section class="hero">
             <div class="container">
                 <h1>Название Вашей Игры</h1>
@@ -151,6 +200,37 @@
             </div>
         </section>
 
+        <!-- Секция с Трейлером -->
+        <section class="trailer">
+            <div class="container">
+                <h2>Трейлер игры</h2>
+                <div class="video-wrapper">
+                    <!-- Замените ссылку в src на ссылку встроенного видео с YouTube -->
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Трейлер игры" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция со Скриншотами -->
+        <section class="screenshots">
+            <div class="container">
+                <h2>Скриншоты</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <!-- Замените src на пути к вашим изображениям (например, img/screenshot1.png) -->
+                        <img src="https://via.placeholder.com/600x337/1e1e1e/fa5c5c?text=Скриншот+1" alt="Скриншот 1">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x337/1e1e1e/fa5c5c?text=Скриншот+2" alt="Скриншот 2">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/600x337/1e1e1e/fa5c5c?text=Скриншот+3" alt="Скриншот 3">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Особенности -->
         <section class="features">
             <div class="container">
                 <h2>Особенности</h2>
