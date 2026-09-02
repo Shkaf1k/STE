@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Моя Игра — Скачать</title>
+    <title>Моя Игра — Официальный сайт</title>
     <style>
         :root {
             --bg-color: #121212;      /* Темный фон */
@@ -20,6 +20,10 @@
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -30,9 +34,15 @@
             min-height: 100vh;
         }
 
+        /* Зафиксированная шапка */
         header {
+            position: sticky;
+            top: 0;
+            background-color: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(5px);
             border-bottom: 1px solid var(--border-color);
-            padding: 20px 0;
+            padding: 15px 0;
+            z-index: 1000;
         }
 
         .container {
@@ -48,27 +58,44 @@
             align-items: center;
         }
 
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--button-color);
+        }
+
         .logo {
             font-size: 24px;
             font-weight: bold;
-            color: var(--text-color);
+            color: #ffffff;
             text-decoration: none;
         }
 
         .hero {
-            padding: 80px 0 60px;
+            padding: 100px 0 80px;
             text-align: center;
             border-bottom: 1px solid var(--border-color);
         }
 
         .hero h1 {
-            font-size: 44px;
+            font-size: 48px;
             margin-bottom: 20px;
             color: #ffffff;
         }
 
         .hero p {
-            font-size: 18px;
+            font-size: 20px;
             margin-bottom: 30px;
             color: #aaa;
         }
@@ -85,6 +112,7 @@
             border: 2px solid transparent;
             transition: background-color 0.2s ease, transform 0.1s ease;
             box-shadow: 0 4px 12px rgba(250, 92, 92, 0.25);
+            cursor: pointer;
         }
 
         .btn:hover {
@@ -123,7 +151,7 @@
             border: 0;
         }
 
-        /* Галерея скриншотов */
+        /* Галерея скриншотов с эффектом */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -135,11 +163,13 @@
             border-radius: 8px;
             overflow: hidden;
             background-color: var(--card-bg);
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
         }
 
         .gallery-item:hover {
             transform: scale(1.02);
+            border-color: var(--button-color);
         }
 
         .gallery-item img {
@@ -148,7 +178,7 @@
             display: block;
         }
 
-        /* Особенности */
+        /* Сетка особенностей и системных требований */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -163,14 +193,56 @@
         }
 
         .card h3 {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 20px;
             color: #ffffff;
         }
 
+        /* Системные требования */
+        .sys-req-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .sys-req-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sys-req-card li {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .sys-req-card strong {
+            color: #ffffff;
+        }
+
+        /* Модальное окно (Lightbox) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 85%;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
         footer {
             margin-top: auto;
-            padding: 25px 0;
+            padding: 30px 0;
             text-align: center;
             font-size: 14px;
             color: #777777;
@@ -183,7 +255,13 @@
         <div class="container">
             <nav>
                 <a href="#" class="logo">НазваниеИгры</a>
-                <a href="#download" class="btn" style="padding: 8px 18px; font-size: 14px;">Скачать</a>
+                <div class="nav-links">
+                    <a href="#trailer">Трейлер</a>
+                    <a href="#screenshots">Скриншоты</a>
+                    <a href="#features">Особенности</a>
+                    <a href="#sys-req">Требования</a>
+                    <a href="#download" class="btn" style="padding: 8px 18px; font-size: 14px;">Скачать</a>
+                </div>
             </nav>
         </div>
     </header>
@@ -201,29 +279,27 @@
         </section>
 
         <!-- Секция с Трейлером -->
-        <section class="trailer">
+        <section id="trailer">
             <div class="container">
                 <h2>Трейлер игры</h2>
                 <div class="video-wrapper">
-                    <!-- Замените ссылку в src на ссылку встроенного видео с YouTube -->
                     <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Трейлер игры" allowfullscreen></iframe>
                 </div>
             </div>
         </section>
 
         <!-- Секция со Скриншотами -->
-        <section class="screenshots">
+        <section id="screenshots">
             <div class="container">
                 <h2>Скриншоты</h2>
                 <div class="gallery-grid">
-                    <div class="gallery-item">
-                        <!-- Замените src на пути к вашим изображениям (например, img/screenshot1.png) -->
+                    <div class="gallery-item" onclick="openModal('https://via.placeholder.com/1200x675/1e1e1e/fa5c5c?text=Скриншот+1')">
                         <img src="https://via.placeholder.com/600x337/1e1e1e/fa5c5c?text=Скриншот+1" alt="Скриншот 1">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item" onclick="openModal('https://via.placeholder.com/1200x675/1e1e1e/fa5c5c?text=Скриншот+2')">
                         <img src="https://via.placeholder.com/600x337/1e1e1e/fa5c5c?text=Скриншот+2" alt="Скриншот 2">
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item" onclick="openModal('https://via.placeholder.com/1200x675/1e1e1e/fa5c5c?text=Скриншот+3')">
                         <img src="https://via.placeholder.com/600x337/1e1e1e/fa5c5c?text=Скриншот+3" alt="Скриншот 3">
                     </div>
                 </div>
@@ -231,32 +307,76 @@
         </section>
 
         <!-- Особенности -->
-        <section class="features">
+        <section id="features">
             <div class="container">
                 <h2>Особенности</h2>
                 <div class="grid">
                     <div class="card">
                         <h3>Сюжет</h3>
-                        <p>Увлекательная история с интересными персонажами.</p>
+                        <p>Увлекательная история с интересными персонажами и неожиданными поворотами.</p>
                     </div>
                     <div class="card">
                         <h3>Графика</h3>
-                        <p>Приятное визуальное оформление и стильный дизайн.</p>
+                        <p>Приятное визуальное оформление, создающее уникальную атмосферу.</p>
                     </div>
                     <div class="card">
                         <h3>Доступность</h3>
-                        <p>Полностью бесплатно для ПК и без рекламы.</p>
+                        <p>Полностью бесплатно для ПК, без подписок и встроенной рекламы.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Системные требования -->
+        <section id="sys-req">
+            <div class="container">
+                <h2>Системные требования</h2>
+                <div class="sys-req-grid">
+                    <div class="card sys-req-card">
+                        <h3>Минимальные</h3>
+                        <ul>
+                            <li><strong>ОС:</strong> Windows 10 (64-bit)</li>
+                            <li><strong>Процессор:</strong> Intel Core i3 / AMD FX-6300</li>
+                            <li><strong>Оперативная память:</strong> 4 GB ОЗУ</li>
+                            <li><strong>Видеокарта:</strong> NVIDIA GTX 660 / AMD Radeon HD 7870</li>
+                            <li><strong>Место на диске:</strong> 2 GB</li>
+                        </ul>
+                    </div>
+                    <div class="card sys-req-card">
+                        <h3>Рекомендуемые</h3>
+                        <ul>
+                            <li><strong>ОС:</strong> Windows 10 / 11 (64-bit)</li>
+                            <li><strong>Процессор:</strong> Intel Core i5 / AMD Ryzen 5</li>
+                            <li><strong>Оперативная память:</strong> 8 GB ОЗУ</li>
+                            <li><strong>Видеокарта:</strong> NVIDIA GTX 1060 / AMD Radeon RX 580</li>
+                            <li><strong>Место на диске:</strong> 2 GB (SSD)</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
+    <!-- Модальное окно для просмотра картинок -->
+    <div id="modal" class="modal" onclick="closeModal()">
+        <img id="modal-img" src="" alt="Увеличенное изображение">
+    </div>
+
     <footer>
         <div class="container">
-            <p>© 2026 НазваниеИгры. Сайт создан для GitHub Pages.</p>
+            <p>© 2026 НазваниеИгры. Сайт создан для публикации на GitHub Pages.</p>
         </div>
     </footer>
 
+    <script>
+        function openModal(src) {
+            document.getElementById('modal-img').src = src;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
