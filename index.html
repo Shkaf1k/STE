@@ -2,157 +2,581 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TTK - Tactical Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameClips — Хайлайты и Моменты</title>
+    <!-- Иконки FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; overflow: hidden; background: #08080a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; color: #fff; }
-        
-        /* 3D Фон */
-        #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-
-        /* Оверлей меню */
-        #menu-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;
-            display: flex; flex-direction: column; justify-content: space-between; padding: 40px;
-            background: linear-gradient(90deg, rgba(8,8,10,0.85) 0%, rgba(8,8,10,0.3) 50%, rgba(8,8,10,0.7) 100%);
+        :root {
+            --bg-color: #0b0c10;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-hover: rgba(255, 255, 255, 0.1);
+            --accent-color: #66fcf1;
+            --accent-glow: rgba(102, 252, 241, 0.4);
+            --accent-pink: #ff007f;
+            --text-main: #ffffff;
+            --text-muted: #a0a5b5;
         }
 
-        /* Шапка */
-        .header { display: flex; justify-content: space-between; align-items: center; }
-        .title-group h1 { margin: 0; font-size: 32px; letter-spacing: 2px; text-transform: uppercase; font-weight: 900; }
-        .title-group .badge { background: #0066ff; color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 2px; font-weight: bold; }
-
-        /* Панель профиля */
-        .profile { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
-        .avatar { width: 36px; height: 36px; background: #333; border-radius: 50%; border: 2px solid #0066ff; }
-
-        /* Навигация (Кнопки слева) */
-        .nav-menu { display: flex; flex-direction: column; gap: 12px; width: 260px; margin-top: auto; margin-bottom: auto; }
-        .menu-btn {
-            background: rgba(20, 20, 25, 0.6); border: 1px solid rgba(255,255,255,0.1); color: #ccc;
-            padding: 14px 20px; font-size: 16px; font-weight: 600; text-align: left; cursor: pointer;
-            transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 1px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
-        .menu-btn:hover { background: rgba(255,255,255,0.1); color: #fff; border-left: 4px solid #0066ff; padding-left: 24px; }
-        .menu-btn.primary { background: #0066ff; color: #fff; border: none; text-align: center; font-size: 18px; margin-top: 10px; }
-        .menu-btn.primary:hover { background: #0055cc; padding-left: 20px; box-shadow: 0 0 15px rgba(0,102,255,0.5); }
 
-        /* Футер */
-        .footer { display: flex; justify-content: space-between; font-size: 12px; color: #666; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            /* Фон с неоновыми пятнами для демонстрации размытия стекла */
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(102, 252, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 127, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        /* --- Стеклянный Шапка (Navbar) --- */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: rgba(11, 12, 16, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, var(--accent-color), #45a29e);
+            color: #0b0c10;
+            border: none;
+            padding: 10px 22px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--accent-glow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px var(--accent-glow);
+        }
+
+        /* --- Контейнер страницы --- */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* --- Фильтры по тегам --- */
+        .tags-nav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .tag-pill {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tag-pill:hover, .tag-pill.active {
+            background: var(--glass-hover);
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(102, 252, 241, 0.2);
+        }
+
+        /* --- Сетка клипов --- */
+        .clips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        /* --- Стеклянная карточка клипа --- */
+        .clip-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .clip-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 133%; /* Соотношение сторон 3:4 (для вертикальных клипов) */
+            background: #000;
+        }
+
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            color: rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+            transition: opacity 0.2s;
+            opacity: 0;
+        }
+
+        .video-wrapper:hover .play-overlay {
+            opacity: 1;
+        }
+
+        /* Информация о клипе внутри карточки */
+        .clip-info {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .clip-title {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .clip-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-color), var(--accent-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .action-btn:hover {
+            color: var(--text-main);
+        }
+
+        .action-btn.liked {
+            color: var(--accent-pink);
+        }
+
+        .action-btn.liked i {
+            animation: pulse 0.3s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- Модальное окно загрузки (Glass Modal) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(20, 22, 30, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            width: 90%;
+            max-width: 450px;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--accent-color);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--accent-color), #45a29e);
+            border: none;
+            border-radius: 12px;
+            color: #0b0c10;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
 
-    <div id="canvas-container"></div>
+    <!-- Шапка -->
+    <header>
+        <a href="#" class="logo">
+            <i class="fa-solid fa-gamepad"></i> GAME<span>CLIPS</span>
+        </a>
+        <button class="upload-btn" onclick="openModal()">
+            <i class="fa-solid fa-plus"></i> Загрузить клип
+        </button>
+    </header>
 
-    <div id="menu-overlay">
-        <!-- Верхняя часть -->
-        <div class="header">
-            <div class="title-group">
-                <span class="badge">HARDPOINT</span>
-                <h1>Тестирование TTK</h1>
-            </div>
-            <div class="profile">
-                <div class="avatar"></div>
-                <div>
-                    <div style="font-weight: bold; font-size: 14px;">Оперативник</div>
-                    <div style="font-size: 11px; color: #aaa;">Уровень 1</div>
-                </div>
-            </div>
+    <!-- Основной контент -->
+    <div class="container">
+        
+        <!-- Фильтры по категории -->
+        <div class="tags-nav">
+            <div class="tag-pill active" onclick="filterClips('all', this)">Все клипы</div>
+            <div class="tag-pill" onclick="filterClips('эпик', this)">🔥 #эпик</div>
+            <div class="tag-pill" onclick="filterClips('баги', this)">😂 #баги</div>
+            <div class="tag-pill" onclick="filterClips('соло', this)">⚔️ #соло</div>
+            <div class="tag-pill" onclick="filterClips('скилл', this)">🎯 #скилл</div>
         </div>
 
-        <!-- Кнопки выбора -->
-        <div class="nav-menu">
-            <button class="menu-btn primary" onclick="alert('Запуск боя...')">В БОЙ [DEPLOY]</button>
-            <button class="menu-btn">Оружие / Экипировка</button>
-            <button class="menu-btn">Операторы</button>
-            <button class="menu-btn">Настройки</button>
-        </div>
-
-        <!-- Нижняя часть -->
-        <div class="footer">
-            <div>Версия: 0.4.2 | Sable Digital Studio</div>
-            <div>[P] Камера шлема | [C] Приседание</div>
+        <!-- Лента карточек -->
+        <div class="clips-grid" id="clipsContainer">
+            <!-- Клипы создаются динамически через JS -->
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Модальное окно загрузки -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h2>Опубликовать момент</h2>
+            <form id="uploadForm" onsubmit="handleUpload(event)">
+                <div class="form-group">
+                    <label>Выберите видеофайл (.mp4)</label>
+                    <input type="file" id="videoFile" accept="video/*" required>
+                </div>
+                <div class="form-group">
+                    <label>Название видео</label>
+                    <input type="text" id="videoTitle" placeholder="Например: Минус 5 на точке B!" required>
+                </div>
+                <div class="form-group">
+                    <label>Категория / Тег</label>
+                    <select id="videoTag">
+                        <option value="эпик">🔥 #эпик</option>
+                        <option value="баги">😂 #баги</option>
+                        <option value="соло">⚔️ #соло</option>
+                        <option value="скилл">🎯 #скилл</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Опубликовать</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Логика интерактивности -->
     <script>
-        // 3D Анимированный фон (Оружие на стойке в стиле TTK)
-        let scene, camera, renderer, weaponGroup;
-
-        function initMenuBackground() {
-            const container = document.getElementById('canvas-container');
-            
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x08080a);
-            scene.fog = new THREE.FogExp2(0x08080a, 0.05);
-
-            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-            camera.position.set(0, 0, 3);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            container.appendChild(renderer.domElement);
-
-            // Освещение (Студийный свет для оружия)
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-            scene.add(ambientLight);
-
-            const blueLight = new THREE.PointLight(0x0066ff, 2, 10);
-            blueLight.position.set(-2, 1, 2);
-            scene.add(blueLight);
-
-            const topLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            topLight.position.set(0, 5, 2);
-            scene.add(topLight);
-
-            // 3D Модель оружия для фонового меню
-            weaponGroup = new THREE.Group();
-
-            const bodyGeo = new THREE.BoxGeometry(1.5, 0.25, 0.15);
-            const darkMat = new THREE.MeshStandardMaterial({ color: 0x151515, roughness: 0.4, metalness: 0.8 });
-            const body = new THREE.Mesh(bodyGeo, darkMat);
-            weaponGroup.add(body);
-
-            const magGeo = new THREE.BoxGeometry(0.2, 0.6, 0.12);
-            const mag = new THREE.Mesh(magGeo, darkMat);
-            mag.position.set(-0.2, -0.35, 0);
-            mag.rotation.z = -0.2;
-            weaponGroup.add(mag);
-
-            const sightGeo = new THREE.BoxGeometry(0.3, 0.15, 0.1);
-            const sightMat = new THREE.MeshStandardMaterial({ color: 0x050505, roughness: 0.2 });
-            const sight = new THREE.Mesh(sightGeo, sightMat);
-            sight.position.set(0, 0.2, 0);
-            weaponGroup.add(sight);
-
-            weaponGroup.position.set(0.6, -0.1, 0);
-            weaponGroup.rotation.y = -0.5;
-            scene.add(weaponGroup);
-
-            animate();
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            // Медленное вращение оружия в меню
-            if (weaponGroup) {
-                weaponGroup.rotation.y = -0.5 + Math.sin(Date.now() * 0.0008) * 0.08;
-                weaponGroup.position.y = -0.1 + Math.cos(Date.now() * 0.001) * 0.02;
+        // Начальные данные (Демо-клипы)
+        let clips = [
+            {
+                id: 1,
+                title: "Невероятный прострел через всю карту!",
+                author: "ProGamer99",
+                tag: "скилл",
+                likes: 42,
+                isLiked: false,
+                // Используем открытые тестовые видео
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-game-animation-of-a-robot-character-42964-large.mp4"
+            },
+            {
+                id: 2,
+                title: "Физика игры снова сломалась 🤣",
+                author: "BugHunter",
+                tag: "баги",
+                likes: 128,
+                isLiked: false,
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-player-losing-a-video-game-40320-large.mp4"
+            },
+            {
+                id: 3,
+                title: "Соло затащил раунд на последних секундах!",
+                author: "NinjaShadow",
+                tag: "эпик",
+                likes: 89,
+                isLiked: false,
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-controller-while-playing-a-video-game-41553-large.mp4"
             }
+        ];
 
-            renderer.render(scene, camera);
+        let currentFilter = 'all';
+
+        // Функция отрисовки всех клипов
+        function renderClips() {
+            const container = document.getElementById('clipsContainer');
+            container.innerHTML = '';
+
+            const filteredClips = currentFilter === 'all' 
+                ? clips 
+                : clips.filter(c => c.tag === currentFilter);
+
+            filteredClips.forEach(clip => {
+                const card = document.createElement('div');
+                card.className = 'clip-card';
+                card.innerHTML = `
+                    <div class="video-wrapper">
+                        <video loop preload="metadata" onclick="togglePlay(this)">
+                            <source src="${clip.videoUrl}" type="video/mp4">
+                        </video>
+                        <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="clip-info">
+                        <div class="clip-title">${escapeHtml(clip.title)}</div>
+                        <div class="clip-meta">
+                            <div class="author">
+                                <div class="avatar">${clip.author[0].toUpperCase()}</div>
+                                ${escapeHtml(clip.author)}
+                            </div>
+                            <span>#${clip.tag}</span>
+                        </div>
+                        <div class="actions">
+                            <button class="action-btn ${clip.isLiked ? 'liked' : ''}" onclick="toggleLike(${clip.id})">
+                                <i class="${clip.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i> 
+                                <span>${clip.likes}</span>
+                            </button>
+                            <button class="action-btn" onclick="shareClip('${escapeHtml(clip.title)}')">
+                                <i class="fa-regular fa-share-from-square"></i> Поделиться
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
         }
 
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        // Запуск/Пауза видео по клику
+        function togglePlay(video) {
+            const overlay = video.parentElement.querySelector('.play-overlay');
+            if (video.paused) {
+                // Останавливаем все остальные видео перед воспроизведением текущего
+                document.querySelectorAll('video').forEach(v => {
+                    v.pause();
+                    if (v.parentElement.querySelector('.play-overlay')) {
+                        v.parentElement.querySelector('.play-overlay').style.opacity = '1';
+                    }
+                });
+                video.play();
+                overlay.style.opacity = '0';
+            } else {
+                video.pause();
+                overlay.style.opacity = '1';
+            }
+        }
 
-        window.onload = initMenuBackground;
+        // Лайки
+        function toggleLike(id) {
+            const clip = clips.find(c => c.id === id);
+            if (clip) {
+                clip.isLiked = !clip.isLiked;
+                clip.likes += clip.isLiked ? 1 : -1;
+                renderClips();
+            }
+        }
+
+        // Фильтрация
+        function filterClips(tag, element) {
+            currentFilter = tag;
+            document.querySelectorAll('.tag-pill').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            renderClips();
+        }
+
+        // Модальное окно
+        function openModal() {
+            document.getElementById('uploadModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+        }
+
+        // Загрузка нового видео игроком
+        function handleUpload(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('videoFile');
+            const titleInput = document.getElementById('videoTitle');
+            const tagInput = document.getElementById('videoTag');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const videoObjectUrl = URL.createObjectURL(file); // Создаем временную ссылку на файл с компьютера
+
+                const newClip = {
+                    id: Date.now(),
+                    title: titleInput.value,
+                    author: "Ты (Игрок)",
+                    tag: tagInput.value,
+                    likes: 0,
+                    isLiked: false,
+                    videoUrl: videoObjectUrl
+                };
+
+                clips.unshift(newClip); // Добавляем в начало ленты
+                renderClips();
+                closeModal();
+                event.target.reset(); // Очищаем форму
+            }
+        }
+
+        // Поделиться
+        function shareClip(title) {
+            alert(`Ссылка на клип "${title}" скопирована в буфер обмена!`);
+        }
+
+        // Защита от XSS
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // Отрисовка при запуске
+        renderClips();
     </script>
 </body>
 </html>
