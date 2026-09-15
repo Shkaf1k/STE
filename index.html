@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameHub — Платформа хайлайтов и игровых моментов</title>
+    <title>GameHub v2.0 — NextGen Gaming Platform</title>
     <!-- Иконки FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --bg-color: #08090d;
-            --card-bg: rgba(18, 20, 29, 0.75);
+            --card-bg: rgba(18, 20, 29, 0.85);
             --border-color: rgba(0, 240, 255, 0.15);
             --border-hover: rgba(0, 240, 255, 0.5);
-            --accent-cyan: #00f0ff;
+            --accent-primary: #00f0ff;
             --accent-pink: #ff0055;
             --accent-gold: #ffb700;
             --text-main: #f0f3f8;
@@ -20,11 +20,25 @@
             --toast-bg: rgba(12, 14, 22, 0.95);
         }
 
+        /* Темы оформления (Фишка 12) */
+        body.theme-matrix {
+            --bg-color: #030a03;
+            --border-color: rgba(0, 255, 65, 0.2);
+            --border-hover: rgba(0, 255, 65, 0.6);
+            --accent-primary: #00ff41;
+            --accent-pink: #00cc33;
+        }
+
+        body.theme-gold {
+            --bg-color: #0d0b03;
+            --border-color: rgba(255, 183, 0, 0.2);
+            --border-hover: rgba(255, 183, 0, 0.6);
+            --accent-primary: #ffb700;
+        }
+
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             user-select: none;
         }
 
@@ -33,1028 +47,547 @@
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.08) 0%, transparent 45%),
-                radial-gradient(circle at 85% 85%, rgba(255, 0, 85, 0.08) 0%, transparent 45%);
-            background-attachment: fixed;
+            transition: background 0.4s;
         }
 
-        /* Toast Уведомления */
         #toastContainer {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            position: fixed; bottom: 25px; right: 25px;
+            z-index: 9999; display: flex; flex-direction: column; gap: 12px;
         }
 
         .toast {
             background: var(--toast-bg);
-            border: 1px solid var(--accent-cyan);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
-            color: #fff;
-            padding: 14px 22px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            border: 1px solid var(--accent-primary);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+            color: #fff; padding: 14px 22px; border-radius: 12px;
+            font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 12px;
             animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        /* Шапка */
+        /* Header */
         header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 4%;
-            background: rgba(8, 9, 13, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            gap: 20px;
+            position: sticky; top: 0; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 4%; background: rgba(8, 9, 13, 0.9); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color); gap: 15px;
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            text-transform: uppercase;
+            font-size: 24px; font-weight: 900; display: flex; align-items: center; gap: 10px;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
         }
+        .logo span { color: var(--accent-primary); }
 
-        .logo span {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
-        }
-
-        .search-bar {
-            position: relative;
-            flex-grow: 1;
-            max-width: 480px;
-        }
-
+        .search-bar { position: relative; flex-grow: 1; max-width: 420px; }
         .search-bar input {
-            width: 100%;
-            padding: 12px 20px 12px 46px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            color: #fff;
-            outline: none;
-            font-size: 14px;
-            transition: all 0.3s ease;
+            width: 100%; padding: 10px 18px 10px 42px; background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color); border-radius: 20px; color: #fff; outline: none;
+        }
+        .search-bar i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);
+            color: #fff; width: 38px; height: 38px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            position: relative; transition: all 0.2s;
+        }
+        .btn-icon:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+
+        .badge-count {
+            position: absolute; top: -3px; right: -3px; background: var(--accent-pink);
+            color: #fff; font-size: 10px; font-weight: bold; width: 16px; height: 16px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
         }
 
-        .search-bar input:focus {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 18px rgba(0, 240, 255, 0.3);
-            background: rgba(255, 255, 255, 0.06);
+        .btn-main {
+            background: linear-gradient(135deg, var(--accent-primary), #0088ff);
+            color: #000; border: none; padding: 10px 20px; font-weight: 800;
+            border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            font-size: 13px; text-transform: uppercase; transition: all 0.2s;
+        }
+        .btn-main:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        .user-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-pink));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; color: #000; cursor: pointer; position: relative;
         }
 
-        .search-bar i {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
+        /* Выпадающее окно уведомлений (Фишка 2) */
+        .notif-dropdown {
+            display: none; position: absolute; top: 55px; right: 80px; width: 320px;
+            background: var(--toast-bg); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 200;
         }
+        .notif-item { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px; }
 
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
+        /* Feed & Filters */
+        .main-container { max-width: 1400px; margin: 25px auto; padding: 0 20px; }
 
-        .btn-upload, .btn-admin {
-            background: linear-gradient(135deg, var(--accent-cyan), #0088ff);
-            color: #000;
-            border: none;
-            padding: 10px 22px;
-            font-size: 13px;
-            font-weight: 800;
-            border-radius: 20px;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-            transition: all 0.25s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-        }
-
-        .btn-admin {
-            background: linear-gradient(135deg, var(--accent-pink), #b3003b);
-            color: #fff;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
-            display: none;
-        }
-
-        .btn-upload:hover, .btn-admin:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-        }
-
-        .user-chip {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 6px 16px 6px 6px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .user-chip:hover {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
-        }
-
-        .avatar-small {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 13px;
-            color: #000;
-        }
-
-        /* Главный контейнер */
-        .main-wrapper {
-            max-width: 1400px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .category-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .filter-tags {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-        }
-
+        .category-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+        .filter-tags { display: flex; gap: 10px; overflow-x: auto; }
         .tag-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 10px 22px;
-            border-radius: 16px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 13px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+            background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted);
+            padding: 8px 18px; border-radius: 14px; cursor: pointer; font-weight: 700; font-size: 13px;
         }
+        .tag-btn.active, .tag-btn:hover { background: rgba(0, 240, 255, 0.1); color: var(--accent-primary); border-color: var(--accent-primary); }
 
-        .tag-btn:hover, .tag-btn.active {
-            background: rgba(0, 240, 255, 0.1);
-            color: var(--accent-cyan);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
-        }
-
-        /* Сетка клипов */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-            gap: 24px;
-        }
+        /* Grid Cards */
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
 
         .clip-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            position: relative;
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px;
+            overflow: hidden; transition: all 0.3s; display: flex; flex-direction: column; cursor: pointer;
+        }
+        .clip-card:hover { transform: translateY(-5px); border-color: var(--border-hover); box-shadow: 0 10px 25px rgba(0, 240, 255, 0.15); }
+
+        .thumb-container { position: relative; width: 100%; padding-top: 56.25%; background: #000; }
+        .thumb-container video { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; }
+        
+        .play-overlay {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 46px; height: 46px; background: rgba(0,0,0,0.7); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: #fff; border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .clip-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--border-hover);
-            box-shadow: 0 12px 30px rgba(0, 240, 255, 0.15);
+        .clip-info { padding: 16px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
+        .clip-title { font-size: 15px; font-weight: 700; line-height: 1.3; color: #fff; }
+
+        .author-bar { display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--text-main); }
+        .author-left { display: flex; align-items: center; gap: 8px; }
+
+        .card-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; font-size: 12px; }
+        .act-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; }
+        .act-btn.liked { color: var(--accent-pink); }
+        .act-btn.saved { color: var(--accent-gold); }
+
+        /* Watch Overlay */
+        .watch-screen {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 5, 8, 0.96); backdrop-filter: blur(25px); z-index: 300;
+            overflow-y: auto; padding: 30px 4%;
         }
 
-        .thumbnail-box {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%;
-            background: #000;
+        .watch-layout { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: 1fr 360px; gap: 30px; }
+        @media (max-width: 900px) { .watch-layout { grid-template-columns: 1fr; } }
+
+        .video-wrapper { position: relative; padding-top: 56.25%; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color); }
+        .video-wrapper video { position: absolute; top:0; left:0; width:100%; height:100%; }
+
+        /* Опции плеера (Фишки 5, 6, 14, 15) */
+        .player-toolbar { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+        .tool-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: #fff; padding: 8px 14px; border-radius: 10px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .tool-btn:hover { border-color: var(--accent-primary); }
+
+        /* Картинка в картинке / Мини-плеер (Фишка 10) */
+        .mini-player-active {
+            position: fixed !important; bottom: 20px; right: 20px; width: 300px !important;
+            height: 170px !important; z-index: 1000 !important; padding-top: 0 !important;
+            box-shadow: 0 0 30px rgba(0,240,255,0.4); border-radius: 12px !important;
         }
 
-        .thumbnail-box video {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover;
+        /* Profile Modal (Фишка 9) */
+        .dialog-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 600;
+            justify-content: center; align-items: center;
         }
+        .dialog-content { background: #0f111a; border: 1px solid var(--border-color); border-radius: 24px; padding: 30px; width: 90%; max-width: 450px; position: relative; }
 
-        .play-badge {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px; height: 50px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 20px;
-            transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+        .lvl-badge { background: linear-gradient(135deg, var(--accent-gold), #ff5500); color: #000; padding: 3px 8px; border-radius: 6px; font-weight: 900; font-size: 11px; }
 
-        .clip-card:hover .play-badge {
-            background: var(--accent-cyan);
-            color: #000;
-            box-shadow: 0 0 20px var(--accent-cyan);
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-
-        .clip-details {
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            flex-grow: 1;
-        }
-
-        .clip-title-text {
-            font-size: 15px;
-            font-weight: 700;
-            line-height: 1.4;
-            color: #fff;
-        }
-
-        .author-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: var(--text-main);
-            font-weight: 600;
-        }
-
-        .verified-icon {
-            color: var(--accent-cyan);
-            font-size: 12px;
-        }
-
-        .role-badge {
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 6px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-        .role-admin { background: rgba(255, 0, 85, 0.2); color: var(--accent-pink); border: 1px solid var(--accent-pink); }
-        .role-mod { background: rgba(255, 183, 0, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
-
-        .card-actions-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-            padding-top: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 13px;
-        }
-
-        .action-icon-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-
-        .action-icon-btn:hover { color: #fff; }
-        .action-icon-btn.liked { color: var(--accent-pink); }
-        .action-icon-btn.delete-btn { color: #ff4444; }
-        .action-icon-btn.delete-btn:hover { color: #ff6666; }
-
-        /* Плеер (Модалка) */
-        .watch-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 5, 8, 0.96);
-            backdrop-filter: blur(25px);
-            z-index: 300;
-            overflow-y: auto;
-            padding: 40px 4%;
-        }
-
-        .watch-grid {
-            max-width: 1300px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 360px;
-            gap: 30px;
-        }
-
-        @media (max-width: 1024px) { .watch-grid { grid-template-columns: 1fr; } }
-
-        .player-container {
-            width: 100%;
-            padding-top: 56.25%;
-            position: relative;
-            background: #000;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
-        }
-
-        .player-container video {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-        }
-
-        .close-screen-btn {
-            position: fixed;
-            top: 25px; right: 35px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            color: #fff;
-            width: 44px; height: 44px;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 310;
-            transition: all 0.3s;
-        }
-
-        .close-screen-btn:hover {
-            background: var(--accent-pink);
-            border-color: var(--accent-pink);
-        }
-
-        .comments-section {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 24px;
-            margin-top: 20px;
-        }
-
-        .comment-item {
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
-            margin-bottom: 10px;
-            border-left: 3px solid var(--accent-cyan);
-            font-size: 14px;
-        }
-
-        .comment-form {
-            display: flex;
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        .comment-form input {
-            flex-grow: 1;
-            padding: 12px 18px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: #fff;
-            outline: none;
-        }
-
-        .comment-form button {
-            background: var(--accent-cyan);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            color: #000;
-        }
-
-        /* Админ панель */
-        .admin-modal-screen {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 5, 8, 0.96);
-            backdrop-filter: blur(25px);
-            z-index: 500;
-            overflow-y: auto;
-            padding: 40px 4%;
-        }
-
-        .admin-card-container {
-            max-width: 950px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            border: 1px solid var(--accent-pink);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 0 50px rgba(255, 0, 85, 0.2);
-        }
-
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .admin-table th, .admin-table td {
-            padding: 14px 16px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            font-size: 14px;
-        }
-
-        .admin-table th {
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 1px;
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 12px;
-            margin-right: 5px;
-        }
-
-        .btn-cyan { background: var(--accent-cyan); color: #000; }
-        .btn-gold { background: var(--accent-gold); color: #000; }
-        .btn-danger { background: var(--accent-pink); color: #fff; }
-
-        /* Диалоговые модалки */
-        .modal-dialog {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
-            z-index: 600;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .dialog-box {
-            background: #0f111a;
-            border: 1px solid var(--border-color);
-            width: 90%;
-            max-width: 440px;
-            border-radius: 24px;
-            padding: 32px;
-            position: relative;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
-        }
-
-        .form-field { margin-bottom: 18px; }
-        .form-field label { display: block; margin-bottom: 8px; font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-        .form-field input, .form-field select {
-            width: 100%; padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 12px; color: #fff; outline: none;
-        }
-
-        .submit-dialog-btn {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, var(--accent-cyan), #0077ff);
-            border: none; border-radius: 12px; color: #000; font-weight: 800;
-            cursor: pointer; text-transform: uppercase; margin-top: 10px;
-        }
+        .reply-box { margin-left: 20px; padding-left: 10px; border-left: 2px solid var(--border-color); margin-top: 8px; font-size: 12px; }
     </style>
 </head>
-<body>
+<body class="theme-default">
 
     <div id="toastContainer"></div>
 
-    <!-- Шапка -->
+    <!-- Header -->
     <header>
-        <div class="logo" onclick="renderMainFeed()">
-            <i class="fa-solid fa-gamepad" style="color: var(--accent-cyan);"></i> GAME<span>HUB</span>
+        <div class="logo" onclick="renderFeed()">
+            <i class="fa-solid fa-gamepad" style="color: var(--accent-primary);"></i> GAME<span>HUB</span>
         </div>
 
         <div class="search-bar">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="Поиск клипов и игровых моментов..." oninput="handleSearch()">
+            <input type="text" id="searchInput" placeholder="Поиск клипов или авторов..." oninput="renderFeed()">
         </div>
 
-        <div class="header-controls">
-            <button class="btn-admin" id="adminControlBtn" onclick="openAdminModal()">
-                <i class="fa-solid fa-shield-halved"></i> Админка
+        <div class="header-actions">
+            <!-- Переключатель тем (Фишка 12) -->
+            <button class="btn-icon" onclick="toggleTheme()" title="Сменить тему"><i class="fa-solid fa-palette"></i></button>
+            
+            <!-- Центр Уведомлений (Фишка 2) -->
+            <button class="btn-icon" onclick="toggleNotifs()" title="Уведомления">
+                <i class="fa-solid fa-bell"></i>
+                <span class="badge-count" id="notifBadge">2</span>
             </button>
-            <button class="btn-upload" onclick="openUploadDialog()">
-                <i class="fa-solid fa-plus"></i> Загрузить
-            </button>
-            <div class="user-chip" onclick="handleUserProfileClick()">
-                <div class="avatar-small" id="headerAvatar">G</div>
-                <span id="headerUserName" style="font-size: 13px; font-weight: 700;">Войти</span>
+            <div class="notif-dropdown" id="notifDropdown">
+                <h4 style="margin-bottom: 10px;">Уведомления</h4>
+                <div class="notif-item">🔥 Твой клип попал в <b>Тренды</b>!</div>
+                <div class="notif-item">👑 Администратор выдал вам галочку.</div>
             </div>
+
+            <button class="btn-main" onclick="openUploadModal()"><i class="fa-solid fa-plus"></i> Создать</button>
+            <button class="btn-main" id="adminHeaderBtn" style="background: linear-gradient(135deg, var(--accent-pink), #990033); display:none;" onclick="openAdminPanel()"><i class="fa-solid fa-shield"></i></button>
+            
+            <div class="user-avatar" id="userAvatarBtn" onclick="openProfileModal()">G</div>
         </div>
     </header>
 
-    <!-- Главная лента -->
-    <main class="main-wrapper">
+    <!-- Главный экран -->
+    <main class="main-container">
         <div class="category-bar">
             <div class="filter-tags">
-                <div class="tag-btn active" onclick="setCategoryFilter('all', this)">Все моменты</div>
-                <div class="tag-btn" onclick="setCategoryFilter('скилл', this)">🎯 #скилл</div>
-                <div class="tag-btn" onclick="setCategoryFilter('эпик', this)">🔥 #эпик</div>
-                <div class="tag-btn" onclick="setCategoryFilter('баги', this)">😂 #баги</div>
-                <div class="tag-btn" onclick="setCategoryFilter('фан', this)">🎮 #фан</div>
+                <div class="tag-btn active" onclick="setFilter('all', this)">Все</div>
+                <div class="tag-btn" onclick="setFilter('trending', this)">🔥 Тренды</div>
+                <div class="tag-btn" onclick="setFilter('saved', this)">🔖 Закладки</div>
+                <div class="tag-btn" onclick="setFilter('скилл', this)">🎯 #скилл</div>
+                <div class="tag-btn" onclick="setFilter('эпик', this)">🔥 #эпик</div>
             </div>
         </div>
 
         <div class="cards-grid" id="clipsGrid"></div>
     </main>
 
-    <!-- Экран просмотра плеера -->
-    <div class="watch-overlay" id="watchOverlay">
-        <button class="close-screen-btn" onclick="closeWatchOverlay()"><i class="fa-solid fa-xmark"></i></button>
+    <!-- Модалка Плеера Просмотра -->
+    <div class="watch-screen" id="watchScreen">
+        <button style="position:fixed; top:25px; right:35px; background:none; border:none; color:#fff; font-size:24px; cursor:pointer;" onclick="closeWatchScreen()"><i class="fa-solid fa-xmark"></i></button>
         
-        <div class="watch-grid">
+        <div class="watch-layout">
             <div>
-                <div class="player-container">
-                    <video id="mainVideoPlayer" controls controlsList="nodownload"></video>
+                <div class="video-wrapper" id="videoWrapper">
+                    <video id="mainVideo" controls></video>
                 </div>
 
-                <div class="comments-section">
-                    <h3 style="font-size: 18px; margin-bottom: 15px;">Комментарии (<span id="commentsCount">0</span>)</h3>
-                    <div id="commentsList"></div>
-                    <div class="comment-form">
-                        <input type="text" id="commentInput" placeholder="Написать комментарий...">
-                        <button onclick="submitComment()">Отправить</button>
+                <!-- Панель инструментов видео (Фишки 5, 6, 14, 15) -->
+                <div class="player-toolbar">
+                    <button class="tool-btn" onclick="changeSpeed(0.5)">0.5x</button>
+                    <button class="tool-btn" onclick="changeSpeed(1)">1.0x (Норм)</button>
+                    <button class="tool-btn" onclick="changeSpeed(1.5)">1.5x</button>
+                    <button class="tool-btn" onclick="changeSpeed(2)">2.0x</button>
+                    <button class="tool-btn" onclick="togglePiP()"><i class="fa-solid fa-clone"></i> Мини-плеер</button>
+                    <button class="tool-btn" onclick="downloadClip()"><i class="fa-solid fa-download"></i> Скачать</button>
+                    <button class="tool-btn" onclick="shareClip()"><i class="fa-solid fa-share-nodes"></i> Поделиться</button>
+                </div>
+
+                <!-- Комментарии -->
+                <div style="background: var(--card-bg); border-radius: 16px; padding: 20px; margin-top: 20px; border: 1px solid var(--border-color);">
+                    <h3>Комментарии (<span id="commCount">0</span>)</h3>
+                    <div id="commentsContainer" style="margin: 15px 0;"></div>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="newCommInput" placeholder="Оставить комментарий..." style="flex-grow:1; padding:10px 15px; background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:10px; color:#fff;">
+                        <button class="btn-main" onclick="addComment()">Отправить</button>
                     </div>
                 </div>
             </div>
 
             <div>
-                <h2 id="watchClipTitle" style="font-size: 22px; margin-bottom: 12px;">---</h2>
-                <div id="watchAuthorMeta" style="margin-bottom: 20px; color: var(--text-muted); font-size: 14px;">---</div>
+                <h2 id="watchTitle">---</h2>
+                <div id="watchMeta" style="color: var(--text-muted); margin: 10px 0; font-size: 14px;"></div>
                 
-                <div style="display: flex; gap: 15px; margin-bottom: 25px;">
-                    <button class="action-icon-btn" id="watchLikeBtn" onclick="toggleLikeInWatch()" style="font-size: 16px;">
-                        <i class="fa-regular fa-heart"></i> <span id="watchLikesCount">0</span>
-                    </button>
+                <!-- Подписка на автора (Фишка 3) -->
+                <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.03); padding:12px; border-radius:12px; margin-bottom:20px;">
+                    <span id="watchAuthorName" style="font-weight:bold;">---</span>
+                    <button class="tool-btn" id="subscribeBtn" onclick="toggleSubscribe()" style="background:var(--accent-primary); color:#000;">Подписаться</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Модалка Админ-панели -->
-    <div class="admin-modal-screen" id="adminModalScreen">
-        <button class="close-screen-btn" onclick="closeAdminModal()"><i class="fa-solid fa-xmark"></i></button>
-        <div class="admin-card-container">
-            <h2 style="color: var(--accent-pink); display: flex; align-items: center; gap: 10px;">
-                <i class="fa-solid fa-user-shield"></i> Панель управления проектом
-            </h2>
-            <p style="color: var(--text-muted); margin-top: 5px; font-size: 14px;">Выдача галочек, управление ролями участников и блокировка пользователей.</p>
+    <!-- Модалка Профиля Игрока (Фишки 9) -->
+    <div class="dialog-modal" id="profileModal">
+        <div class="dialog-content">
+            <button style="position:absolute; top:15px; right:15px; background:none; border:none; color:#fff; cursor:pointer;" onclick="closeModal('profileModal')"><i class="fa-solid fa-xmark"></i></button>
+            <div style="text-align:center;">
+                <div class="user-avatar" id="profAvatar" style="width:70px; height:70px; font-size:28px; margin: 0 auto 10px;">G</div>
+                <h2 id="profName">Гость</h2>
+                <div style="margin-top: 5px;"><span class="lvl-badge" id="profLvl">LVL 1</span></div>
+                
+                <div style="display:flex; justify-content:space-around; margin: 20px 0; background:rgba(255,255,255,0.03); padding:15px; border-radius:14px;">
+                    <div><b id="profXP">0</b><br><small style="color:var(--text-muted)">XP Опыт</small></div>
+                    <div><b id="profSubs">0</b><br><small style="color:var(--text-muted)">Подписчики</small></div>
+                </div>
 
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Пользователь</th>
-                        <th>Роль</th>
-                        <th>Статус</th>
-                        <th>Действия</th>
-                    </tr>
-                </thead>
-                <tbody id="adminUsersTable"></tbody>
-            </table>
+                <button class="btn-main" style="width:100%;" onclick="loginDemo()">Сменить / Войти в аккаунт</button>
+            </div>
         </div>
     </div>
 
-    <!-- Диалог входа -->
-    <div class="modal-dialog" id="authDialog">
-        <div class="dialog-box">
-            <button style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #fff; cursor: pointer;" onclick="closeAuthDialog()"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="margin-bottom: 20px;">Авторизация</h2>
-            <form onsubmit="handleAuth(event)">
-                <div class="form-field">
-                    <label>Никнейм игрока</label>
-                    <input type="text" id="authUsername" placeholder="Например: admin" required>
-                </div>
-                <button type="submit" class="submit-dialog-btn">Войти</button>
-            </form>
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: 15px; text-align: center;">
-                💡 <b>Тест Разработчика:</b> Введите логин <code>admin</code>
-            </p>
+    <!-- Модалка Панели Админа & Логов (Фишка 11) -->
+    <div class="dialog-modal" id="adminModal">
+        <div class="dialog-content" style="max-width: 700px;">
+            <button style="position:absolute; top:15px; right:15px; background:none; border:none; color:#fff; cursor:pointer;" onclick="closeModal('adminModal')"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="color:var(--accent-pink);"><i class="fa-solid fa-user-shield"></i> Панель модератора</h2>
+            
+            <h4 style="margin-top:20px;">Логи действий (Admin Logs):</h4>
+            <div id="adminLogs" style="height: 150px; overflow-y:auto; background:rgba(0,0,0,0.5); padding:10px; border-radius:10px; font-size:12px; font-family:monospace; margin-top:5px; color:#00ff41;"></div>
         </div>
     </div>
 
-    <!-- Диалог Загрузки -->
-    <div class="modal-dialog" id="uploadDialog">
-        <div class="dialog-box">
-            <button style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #fff; cursor: pointer;" onclick="closeUploadDialog()"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="margin-bottom: 20px;">Опубликовать клип</h2>
-            <form onsubmit="handleVideoUpload(event)">
-                <div class="form-field">
-                    <label>Видеофайл (.mp4)</label>
-                    <input type="file" id="videoFileInput" accept="video/*" required>
-                </div>
-                <div class="form-field">
-                    <label>Название клипа</label>
-                    <input type="text" id="videoTitleInput" placeholder="Невероятный моментальный фраги!" required>
-                </div>
-                <div class="form-field">
-                    <label>Категория</label>
-                    <select id="videoCategorySelect">
-                        <option value="скилл">🎯 #скилл</option>
-                        <option value="эпик">🔥 #эпик</option>
-                        <option value="баги">😂 #баги</option>
-                        <option value="фан">🎮 #фан</option>
-                    </select>
-                </div>
-                <button type="submit" class="submit-dialog-btn">Загрузить</button>
+    <!-- Модалка Загрузки Клипа -->
+    <div class="dialog-modal" id="uploadModal">
+        <div class="dialog-content">
+            <button style="position:absolute; top:15px; right:15px; background:none; border:none; color:#fff; cursor:pointer;" onclick="closeModal('uploadModal')"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="margin-bottom:15px;">Загрузить клип</h2>
+            <form onsubmit="uploadClipSubmit(event)">
+                <input type="file" id="upFile" accept="video/*" required style="margin-bottom:10px; width:100%;">
+                <input type="text" id="upTitle" placeholder="Название..." required style="width:100%; padding:10px; margin-bottom:10px; background:rgba(255,255,255,0.05); border:1px solid var(--border-color); color:#fff; border-radius:8px;">
+                <button type="submit" class="btn-main" style="width:100%;">Опубликовать (+50 XP)</button>
             </form>
         </div>
     </div>
 
     <script>
-        /* База пользователей */
-        let usersDB = JSON.parse(localStorage.getItem('gh_users_db')) || [
-            { username: "admin", role: "admin", isVerified: true, isBanned: false },
-            { username: "CyberPro", role: "user", isVerified: true, isBanned: false },
-            { username: "GameMod", role: "moderator", isVerified: false, isBanned: false }
+        /* Хранилище Данных */
+        let currentUser = JSON.parse(localStorage.getItem('gh_v2_user')) || { username: "CyberKnight", role: "admin", xp: 120, lvl: 2, subs: 14, subscriptions: [], savedClips: [] };
+        let clipsDB = JSON.parse(localStorage.getItem('gh_v2_clips')) || [
+            { id: 1, title: "Эпичный эйс на контрольной точке!", author: "CyberKnight", likes: 142, views: 1200, tag: "скилл", videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-game-animation-of-a-robot-character-42964-large.mp4", comments: [{author: "ProGamer", text: "Мощно!", replies: []}] },
+            { id: 2, title: "Смешной баг с текстурами машины", author: "AlexGame", likes: 98, views: 450, tag: "эпик", videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-player-losing-a-video-game-40320-large.mp4", comments: [] }
         ];
+        let adminLogs = JSON.parse(localStorage.getItem('gh_admin_logs')) || ["Система запущена. Логирование активно."];
 
-        let currentUser = JSON.parse(localStorage.getItem('gh_current_user')) || null;
-
-        /* База клипов */
-        let clipsDB = JSON.parse(localStorage.getItem('gh_clips_db')) || [
-            {
-                id: 101,
-                title: "Эпичный момент на последней секунде матча!",
-                author: "CyberPro",
-                tag: "скилл",
-                likes: 85,
-                views: 540,
-                likedBy: [],
-                comments: [{ author: "GameMod", text: "Отличный тайминг!" }],
-                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-game-animation-of-a-robot-character-42964-large.mp4"
-            },
-            {
-                id: 102,
-                title: "Когда физика просто перестала работать...",
-                author: "GameMod",
-                tag: "баги",
-                likes: 120,
-                views: 920,
-                likedBy: [],
-                comments: [],
-                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-player-losing-a-video-game-40320-large.mp4"
-            }
-        ];
-
-        let currentCategory = 'all';
-        let searchQuery = '';
+        let activeFilter = 'all';
         let activeWatchId = null;
 
-        function showNotification(msg, icon = 'fa-check-circle') {
+        function notify(msg) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fa-solid ${icon}"></i> ${msg}`;
+            toast.className = 'toast'; toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${msg}`;
             container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3200);
+            setTimeout(() => toast.remove(), 3000);
         }
 
         function saveStorage() {
-            localStorage.setItem('gh_clips_db', JSON.stringify(clipsDB));
-            localStorage.setItem('gh_users_db', JSON.stringify(usersDB));
+            localStorage.setItem('gh_v2_clips', JSON.stringify(clipsDB));
+            localStorage.setItem('gh_v2_user', JSON.stringify(currentUser));
+            localStorage.setItem('gh_admin_logs', JSON.stringify(adminLogs));
         }
 
-        function saveCurrentUser() {
-            if (currentUser) localStorage.setItem('gh_current_user', JSON.stringify(currentUser));
-            else localStorage.removeItem('gh_current_user');
-            updateHeaderUI();
-        }
-
-        function getUser(username) {
-            return usersDB.find(u => u.username === username) || { username: username, role: "user", isVerified: false, isBanned: false };
-        }
-
-        function renderMainFeed() {
+        /* Отрисовка ленты */
+        function renderFeed() {
             const grid = document.getElementById('clipsGrid');
+            const search = document.getElementById('searchInput').value.toLowerCase();
             grid.innerHTML = '';
 
-            let filtered = clipsDB.filter(clip => {
-                const matchesCat = currentCategory === 'all' || clip.tag === currentCategory;
-                const matchesSearch = clip.title.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchesCat && matchesSearch;
+            let list = [...clipsDB];
+            if (activeFilter === 'trending') list.sort((a,b) => b.views - a.views);
+            else if (activeFilter === 'saved') list = list.filter(c => currentUser.savedClips.includes(c.id));
+            else if (activeFilter !== 'all') list = list.filter(c => c.tag === activeFilter);
+
+            list.filter(c => c.title.toLowerCase().includes(search) || c.author.toLowerCase().includes(search)).forEach(clip => {
+                const isSaved = currentUser.savedClips.includes(clip.id);
+                const card = document.createElement('div');
+                card.className = 'clip-card';
+                card.onclick = () => openWatch(clip.id);
+                
+                // Фишка 13: Воспроизведение без звука при наведении
+                card.innerHTML = `
+                    <div class="thumb-container">
+                        <video muted loop onmouseover="this.play()" onmouseout="this.pause();this.currentTime=0;"><source src="${clip.videoUrl}"></video>
+                        <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="clip-info">
+                        <div class="clip-title">${clip.title}</div>
+                        <div class="author-bar">
+                            <div class="author-left">
+                                <div class="user-avatar" style="width:22px; height:22px; font-size:10px;">${clip.author[0]}</div>
+                                ${clip.author}
+                            </div>
+                            <span style="font-size:11px; color:var(--text-muted);"><i class="fa-regular fa-eye"></i> ${clip.views}</span>
+                        </div>
+                        <div class="card-actions" onclick="event.stopPropagation()">
+                            <button class="act-btn" onclick="likeClip(${clip.id})"><i class="fa-solid fa-heart"></i> ${clip.likes}</button>
+                            <button class="act-btn ${isSaved ? 'saved' : ''}" onclick="toggleSave(${clip.id})"><i class="fa-solid fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
             });
 
-            filtered.sort((a, b) => b.id - a.id);
-            filtered.forEach(clip => grid.appendChild(buildClipCard(clip)));
+            document.getElementById('userAvatarBtn').textContent = currentUser.username[0].toUpperCase();
+            if (currentUser.role === 'admin') document.getElementById('adminHeaderBtn').style.display = 'block';
         }
 
-        function buildClipCard(clip) {
-            const isLiked = currentUser && clip.likedBy.includes(currentUser.username);
-            const authorData = getUser(clip.author);
-
-            // Права на удаление: Автор ИЛИ Модератор ИЛИ Админ
-            const canDelete = currentUser && (
-                currentUser.username === clip.author || 
-                currentUser.role === 'admin' || 
-                currentUser.role === 'moderator'
-            );
-
-            let roleBadge = '';
-            if (authorData.role === 'admin') roleBadge = `<span class="role-badge role-admin">Админ</span>`;
-            else if (authorData.role === 'moderator') roleBadge = `<span class="role-badge role-mod">Модер</span>`;
-
-            const card = document.createElement('div');
-            card.className = 'clip-card';
-            card.onclick = () => openWatchOverlay(clip.id);
-            card.innerHTML = `
-                <div class="thumbnail-box">
-                    <video preload="metadata" muted><source src="${clip.videoUrl}" type="video/mp4"></video>
-                    <div class="play-badge"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="clip-details">
-                    <div class="clip-title-text">${escapeHTML(clip.title)}</div>
-                    <div class="author-info">
-                        <div class="avatar-small" style="width:24px; height:24px; font-size:11px;">${clip.author[0].toUpperCase()}</div>
-                        ${escapeHTML(clip.author)} 
-                        ${authorData.isVerified ? '<i class="fa-solid fa-circle-check verified-icon" title="Верифицирован"></i>' : ''}
-                        ${roleBadge}
-                    </div>
-                    <div class="card-actions-bar" onclick="event.stopPropagation()">
-                        <button class="action-icon-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${clip.id})">
-                            <i class="${isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i> ${clip.likes}
-                        </button>
-                        <span><i class="fa-regular fa-eye"></i> ${clip.views}</span>
-                        ${canDelete ? `<button class="action-icon-btn delete-btn" onclick="deleteVideoClip(${clip.id})" title="Удалить"><i class="fa-solid fa-trash"></i></button>` : ''}
-                    </div>
-                </div>
-            `;
-            return card;
-        }
-
-        function deleteVideoClip(id) {
-            if (!confirm("Удалить этот клип безвозвратно?")) return;
-            clipsDB = clipsDB.filter(c => c.id !== id);
-            saveStorage();
-            renderMainFeed();
-            showNotification("Видео успешно удалено", "fa-trash");
-        }
-
-        /* Плеер */
-        function openWatchOverlay(id) {
+        /* Фишки просмотра и плеера */
+        function openWatch(id) {
             const clip = clipsDB.find(c => c.id === id);
             if (!clip) return;
+            activeWatchId = id; clip.views++; saveStorage();
 
-            activeWatchId = id;
-            clip.views++;
-            saveStorage();
+            const v = document.getElementById('mainVideo');
+            v.src = clip.videoUrl; v.play();
+            document.getElementById('watchTitle').textContent = clip.title;
+            document.getElementById('watchMeta').textContent = `Автор: ${clip.author} • ${clip.views} просмотров`;
+            document.getElementById('watchAuthorName').textContent = clip.author;
 
-            const player = document.getElementById('mainVideoPlayer');
-            player.src = clip.videoUrl;
-            player.play();
-
-            document.getElementById('watchClipTitle').textContent = clip.title;
-            document.getElementById('watchAuthorMeta').textContent = `Автор: ${clip.author} • #${clip.tag} • ${clip.views} просмотров`;
-            document.getElementById('watchLikesCount').textContent = clip.likes;
+            const isSubbed = currentUser.subscriptions.includes(clip.author);
+            document.getElementById('subscribeBtn').textContent = isSubbed ? 'Вы подписаны' : 'Подписаться';
 
             renderComments();
-            document.getElementById('watchOverlay').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            renderMainFeed();
+            document.getElementById('watchScreen').style.display = 'block';
         }
 
-        function closeWatchOverlay() {
-            const player = document.getElementById('mainVideoPlayer');
-            player.pause(); player.src = '';
-            document.getElementById('watchOverlay').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            activeWatchId = null;
+        function closeWatchScreen() {
+            const v = document.getElementById('mainVideo'); v.pause(); v.src = '';
+            document.getElementById('watchScreen').style.display = 'none';
+            renderFeed();
         }
 
+        // Фишка 6: Скорость
+        function changeSpeed(spd) { document.getElementById('mainVideo').playbackRate = spd; notify(`Скорость: ${spd}x`); }
+
+        // Фишка 10: Мини-плеер (PiP)
+        function togglePiP() {
+            const v = document.getElementById('mainVideo');
+            if (document.pictureInPictureElement) document.exitPictureInPicture();
+            else if (document.pictureInPictureEnabled) v.requestPictureInPicture();
+        }
+
+        // Фишка 14: Скачать
+        function downloadClip() {
+            const clip = clipsDB.find(c => c.id === activeWatchId);
+            const a = document.createElement('a'); a.href = clip.videoUrl; a.download = 'clip.mp4'; a.click();
+            notify('Скачивание начато...');
+        }
+
+        // Фишка 15: Поделиться
+        function shareClip() {
+            navigator.clipboard.writeText(window.location.href);
+            notify('Ссылка скопирована в буфер обмена!');
+        }
+
+        // Фишка 7: Сохраненные видео
+        function toggleSave(id) {
+            const idx = currentUser.savedClips.indexOf(id);
+            if (idx === -1) { currentUser.savedClips.push(id); notify('Сохранено в закладки!'); }
+            else { currentUser.savedClips.splice(idx, 1); notify('Удалено из закладок'); }
+            saveStorage(); renderFeed();
+        }
+
+        // Фишка 3: Подписки
+        function toggleSubscribe() {
+            const clip = clipsDB.find(c => c.id === activeWatchId);
+            const idx = currentUser.subscriptions.indexOf(clip.author);
+            if (idx === -1) { currentUser.subscriptions.push(clip.author); notify(`Вы подписались на ${clip.author}`); }
+            else { currentUser.subscriptions.splice(idx, 1); notify(`Вы отписались от ${clip.author}`); }
+            document.getElementById('subscribeBtn').textContent = currentUser.subscriptions.includes(clip.author) ? 'Вы подписаны' : 'Подписаться';
+            saveStorage();
+        }
+
+        // Фишка 8: Ответы на комментарии
         function renderComments() {
             const clip = clipsDB.find(c => c.id === activeWatchId);
-            if (!clip) return;
-            document.getElementById('commentsCount').textContent = clip.comments.length;
-            document.getElementById('commentsList').innerHTML = clip.comments.map(c => `
-                <div class="comment-item"><b>${escapeHTML(c.author)}:</b> ${escapeHTML(c.text)}</div>
+            document.getElementById('commCount').textContent = clip.comments.length;
+            document.getElementById('commentsContainer').innerHTML = clip.comments.map((c, i) => `
+                <div style="margin-bottom:10px; font-size:13px;">
+                    <b>${c.author}:</b> ${c.text} 
+                    <button style="background:none; border:none; color:var(--accent-primary); cursor:pointer; font-size:11px;" onclick="replyComm(${i})">Ответить</button>
+                    ${(c.replies || []).map(r => `<div class="reply-box"><b>${r.author}:</b> ${r.text}</div>`).join('')}
+                </div>
             `).join('');
         }
 
-        function submitComment() {
-            if (!currentUser) return openAuthDialog();
-            if (currentUser.isBanned) return showNotification("Ваш аккаунт заблокирован!", "fa-ban");
+        function addComment() {
+            const inp = document.getElementById('newCommInput');
+            if (!inp.value.trim()) return;
+            const clip = clipsDB.find(c => c.id === activeWatchId);
+            clip.comments.push({ author: currentUser.username, text: inp.value, replies: [] });
+            inp.value = ''; addXP(10); saveStorage(); renderComments();
+        }
 
-            const input = document.getElementById('commentInput');
-            const text = input.value.trim();
-            if (text && activeWatchId) {
+        function replyComm(idx) {
+            const text = prompt("Ваш ответ:");
+            if (text) {
                 const clip = clipsDB.find(c => c.id === activeWatchId);
-                clip.comments.push({ author: currentUser.username, text: text });
-                saveStorage();
-                input.value = '';
-                renderComments();
+                if (!clip.comments[idx].replies) clip.comments[idx].replies = [];
+                clip.comments[idx].replies.push({ author: currentUser.username, text: text });
+                saveStorage(); renderComments();
             }
         }
 
-        function toggleLike(id) {
-            if (!currentUser) return openAuthDialog();
-            if (currentUser.isBanned) return showNotification("Ваш аккаунт заблокирован!", "fa-ban");
-
-            const clip = clipsDB.find(c => c.id === id);
-            if (clip) {
-                const idx = clip.likedBy.indexOf(currentUser.username);
-                if (idx === -1) {
-                    clip.likedBy.push(currentUser.username); clip.likes++;
-                } else {
-                    clip.likedBy.splice(idx, 1); clip.likes--;
-                }
-                saveStorage();
-                renderMainFeed();
-                if (activeWatchId === id) {
-                    document.getElementById('watchLikesCount').textContent = clip.likes;
-                }
+        // Фишка 9: Система уровней и XP
+        function addXP(amount) {
+            currentUser.xp += amount;
+            if (currentUser.xp >= currentUser.lvl * 100) {
+                currentUser.lvl++;
+                notify(`🎉 НОВЫЙ УРОВЕНЬ! Вы достигли LVL ${currentUser.lvl}!`);
             }
+            saveStorage();
         }
 
-        /* Админка */
-        function openAdminModal() {
-            if (!currentUser || currentUser.role !== 'admin') return;
-            renderAdminUsers();
-            document.getElementById('adminModalScreen').style.display = 'block';
+        /* Диалоги и Модалки */
+        function openProfileModal() {
+            document.getElementById('profAvatar').textContent = currentUser.username[0].toUpperCase();
+            document.getElementById('profName').textContent = currentUser.username;
+            document.getElementById('profLvl').textContent = `LVL ${currentUser.lvl}`;
+            document.getElementById('profXP').textContent = currentUser.xp;
+            document.getElementById('profSubs').textContent = currentUser.subs;
+            document.getElementById('profileModal').style.display = 'flex';
         }
 
-        function closeAdminModal() { document.getElementById('adminModalScreen').style.display = 'none'; }
+        function openAdminPanel() {
+            document.getElementById('adminLogs').innerHTML = adminLogs.map(l => `<div>> ${l}</div>`).join('');
+            document.getElementById('adminModal').style.display = 'flex';
+        }
 
-        function renderAdminUsers() {
-            const tbody = document.getElementById('adminUsersTable');
-            tbody.innerHTML = '';
-            usersDB.forEach(user => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><b>${escapeHTML(user.username)}</b></td>
-                    <td><span style="color:${user.role === 'admin' ? '#ff0055' : user.role === 'moderator' ? '#ffb700' : '#888'}">${user.role.toUpperCase()}</span></td>
-                    <td>${user.isBanned ? '🚫 ЗАБАНЕН' : user.isVerified ? '✔ Верифицирован' : 'Обычный'}</td>
-                    <td>
-                        <button class="btn-small btn-cyan" onclick="adminVerify('${user.username}')">${user.isVerified ? 'Снять ✔' : 'Выдать ✔'}</button>
-                        <button class="btn-small btn-gold" onclick="adminRole('${user.username}')">${user.role === 'moderator' ? 'Снять модера' : 'Выдать модера'}</button>
-                        <button class="btn-small btn-danger" onclick="adminBan('${user.username}')">${user.isBanned ? 'Разбанить' : 'Забанить'}</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+        function openUploadModal() { document.getElementById('uploadModal').style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function uploadClipSubmit(e) {
+            e.preventDefault();
+            const file = document.getElementById('upFile').files[0];
+            const title = document.getElementById('upTitle').value;
+            clipsDB.unshift({
+                id: Date.now(), title: title, author: currentUser.username,
+                likes: 0, views: 1, tag: "скилл", videoUrl: URL.createObjectURL(file), comments: []
             });
+            addXP(50);
+            adminLogs.unshift(`Пользователь ${currentUser.username} загрузил новое видео [${title}]`);
+            saveStorage(); closeModal('uploadModal'); renderFeed(); notify('Клип успешно загружен (+50 XP)!');
         }
 
-        function adminVerify(username) {
-            const u = getUser(username);
-            u.isVerified = !u.isVerified;
-            saveStorage(); renderAdminUsers(); renderMainFeed();
-            showNotification(`Статус верификации ${username} изменен`);
-        }
-
-        function adminRole(username) {
-            const u = getUser(username);
-            if (u.role === 'admin') return alert('Роль админа нельзя изменять');
-            u.role = u.role === 'moderator' ? 'user' : 'moderator';
-            saveStorage(); renderAdminUsers(); renderMainFeed();
-            showNotification(`Роль ${username} изменена`);
-        }
-
-        function adminBan(username) {
-            const u = getUser(username);
-            if (u.role === 'admin') return alert('Нельзя забанить администратора');
-            u.isBanned = !u.isBanned;
-            saveStorage(); renderAdminUsers();
-            showNotification(`Статус блокировки ${username} изменен`);
-        }
-
-        /* Авторизация & Загрузка */
-        function updateHeaderUI() {
-            const avatar = document.getElementById('headerAvatar');
-            const name = document.getElementById('headerUserName');
-            const adminBtn = document.getElementById('adminControlBtn');
-
-            if (currentUser) {
-                avatar.textContent = currentUser.username[0].toUpperCase();
-                name.textContent = currentUser.username;
-                adminBtn.style.display = (currentUser.role === 'admin') ? 'flex' : 'none';
-            } else {
-                avatar.innerHTML = '<i class="fa-solid fa-user"></i>';
-                name.textContent = 'Войти';
-                adminBtn.style.display = 'none';
-            }
-        }
-
-        function handleUserProfileClick() { if (!currentUser) openAuthDialog(); else logout(); }
-
-        function openAuthDialog() { document.getElementById('authDialog').style.display = 'flex'; }
-        function closeAuthDialog() { document.getElementById('authDialog').style.display = 'none'; }
-
-        function handleAuth(e) {
-            e.preventDefault();
-            const username = document.getElementById('authUsername').value.trim();
-            let user = getUser(username);
-
-            if (!usersDB.some(u => u.username === username)) {
-                user = { username: username, role: "user", isVerified: false, isBanned: false };
-                usersDB.push(user);
-            }
-
-            currentUser = user;
-            saveStorage(); saveCurrentUser();
-            closeAuthDialog();
-            showNotification(`Добро пожаловать, ${username}!`);
-            renderMainFeed();
-        }
-
-        function logout() {
-            if (confirm("Выйти из аккаунта?")) {
-                currentUser = null;
-                saveCurrentUser();
-                renderMainFeed();
-                showNotification("Вы вышли из системы");
-            }
-        }
-
-        function openUploadDialog() {
-            if (!currentUser) return openAuthDialog();
-            if (currentUser.isBanned) return showNotification("Забаненные пользователи не могут загружать видео", "fa-ban");
-            document.getElementById('uploadDialog').style.display = 'flex';
-        }
-
-        function closeUploadDialog() { document.getElementById('uploadDialog').style.display = 'none'; }
-
-        function handleVideoUpload(e) {
-            e.preventDefault();
-            const fileInput = document.getElementById('videoFileInput');
-            const titleInput = document.getElementById('videoTitleInput');
-            const categorySelect = document.getElementById('videoCategorySelect');
-
-            if (fileInput.files && fileInput.files[0]) {
-                const newClip = {
-                    id: Date.now(),
-                    title: titleInput.value,
-                    author: currentUser.username,
-                    tag: categorySelect.value,
-                    likes: 0, views: 1,
-                    likedBy: [], comments: [],
-                    videoUrl: URL.createObjectURL(fileInput.files[0])
-                };
-                clipsDB.unshift(newClip);
-                saveStorage(); renderMainFeed();
-                closeUploadDialog(); e.target.reset();
-                showNotification("Клип успешно опубликован!");
-            }
-        }
-
-        function setCategoryFilter(cat, btn) {
-            currentCategory = cat;
+        function setFilter(tag, btn) {
+            activeFilter = tag;
             document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderMainFeed();
+            btn.classList.add('active'); renderFeed();
         }
 
-        function handleSearch() { searchQuery = document.getElementById('searchInput').value; renderMainFeed(); }
-        function escapeHTML(str) { return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+        // Фишка 12: Темы оформления
+        function toggleTheme() {
+            const body = document.body;
+            if (body.classList.contains('theme-matrix')) { body.className = 'theme-gold'; notify('Тема: Gold'); }
+            else if (body.classList.contains('theme-gold')) { body.className = ''; notify('Тема: Cyberpunk Cyan'); }
+            else { body.className = 'theme-matrix'; notify('Тема: Matrix Green'); }
+        }
 
-        updateHeaderUI();
-        renderMainFeed();
+        // Фишка 2: Уведомления
+        function toggleNotifs() {
+            const drop = document.getElementById('notifDropdown');
+            drop.style.display = drop.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function loginDemo() {
+            const name = prompt("Введите имя нового пользователя:", "GamerX");
+            if (name) {
+                currentUser.username = name;
+                saveStorage(); renderFeed(); closeModal('profileModal');
+                notify(`Вы вошли как ${name}`);
+            }
+        }
+
+        function likeClip(id) {
+            const clip = clipsDB.find(c => c.id === id);
+            clip.likes++; addXP(5); saveStorage(); renderFeed();
+        }
+
+        renderFeed();
     </script>
 </body>
 </html>
