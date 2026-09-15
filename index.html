@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameClips ULTRA — Платформа нового поколения</title>
-    <!-- Иконки FontAwesome -->
+    <title>GameHub — Платформа хайлайтов и игровых моментов</title>
+    <!-- Иконки FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #060608;
-            --card-bg: rgba(18, 18, 24, 0.7);
-            --glass-border: rgba(255, 0, 60, 0.25);
-            --glass-hover: rgba(255, 0, 60, 0.15);
-            --accent-color: #ff003c;
-            --accent-glow: rgba(255, 0, 60, 0.6);
-            --accent-secondary: #990024;
-            --text-main: #ffffff;
-            --text-muted: #9a9ab0;
-            --verified-color: #00d2ff;
+            --bg-color: #08090d;
+            --card-bg: rgba(18, 20, 29, 0.75);
+            --border-color: rgba(0, 240, 255, 0.15);
+            --border-hover: rgba(0, 240, 255, 0.5);
+            --accent-cyan: #00f0ff;
+            --accent-pink: #ff0055;
+            --accent-gold: #ffb700;
+            --text-main: #f0f3f8;
+            --text-muted: #8a94a6;
+            --toast-bg: rgba(12, 14, 22, 0.95);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             user-select: none;
         }
 
@@ -34,39 +34,39 @@
             min-height: 100vh;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 10% 10%, rgba(255, 0, 60, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(153, 0, 36, 0.18) 0%, transparent 45%);
+                radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(255, 0, 85, 0.08) 0%, transparent 45%);
             background-attachment: fixed;
         }
 
         /* Toast Уведомления */
         #toastContainer {
             position: fixed;
-            bottom: 30px;
-            left: 30px;
+            bottom: 25px;
+            right: 25px;
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .toast {
-            background: rgba(15, 15, 22, 0.95);
-            border: 1px solid var(--accent-color);
-            box-shadow: 0 0 20px var(--accent-glow);
+            background: var(--toast-bg);
+            border: 1px solid var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
             color: #fff;
-            padding: 12px 20px;
+            padding: 14px 22px;
             border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         @keyframes slideIn {
-            from { transform: translateX(-100%); opacity: 0; }
+            from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
 
@@ -78,193 +78,181 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 5%;
-            background: rgba(6, 6, 8, 0.85);
+            padding: 16px 4%;
+            background: rgba(8, 9, 13, 0.85);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--border-color);
             gap: 20px;
         }
 
         .logo {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 900;
             display: flex;
             align-items: center;
             gap: 10px;
-            color: var(--text-main);
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             cursor: pointer;
+            text-transform: uppercase;
         }
 
         .logo span {
-            color: var(--accent-color);
-            text-shadow: 0 0 15px var(--accent-glow);
+            color: var(--accent-cyan);
+            text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
         }
 
-        .search-box {
+        .search-bar {
             position: relative;
             flex-grow: 1;
-            max-width: 420px;
+            max-width: 480px;
         }
 
-        .search-box input {
+        .search-bar input {
             width: 100%;
-            padding: 12px 18px 12px 42px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--glass-border);
+            padding: 12px 20px 12px 46px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
             border-radius: 24px;
             color: #fff;
             outline: none;
-            transition: all 0.3s;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
 
-        .search-box input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px var(--accent-glow);
-            background: rgba(255, 255, 255, 0.08);
+        .search-bar input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 18px rgba(0, 240, 255, 0.3);
+            background: rgba(255, 255, 255, 0.06);
         }
 
-        .search-box i {
+        .search-bar i {
             position: absolute;
-            left: 16px;
+            left: 18px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
         }
 
-        .header-actions {
+        .header-controls {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
-        .upload-btn, .admin-btn {
-            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
-            color: #ffffff;
+        .btn-upload, .btn-admin {
+            background: linear-gradient(135deg, var(--accent-cyan), #0088ff);
+            color: #000;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 22px;
             font-size: 13px;
             font-weight: 800;
-            border-radius: 30px;
+            border-radius: 20px;
             cursor: pointer;
-            box-shadow: 0 0 20px var(--accent-glow);
-            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            transition: all 0.25s ease;
             display: flex;
             align-items: center;
             gap: 8px;
-            white-space: nowrap;
+            text-transform: uppercase;
         }
 
-        .admin-btn {
-            background: linear-gradient(135deg, #00d2ff, #0055ff);
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+        .btn-admin {
+            background: linear-gradient(135deg, var(--accent-pink), #b3003b);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
             display: none;
         }
 
-        .upload-btn:hover, .admin-btn:hover {
-            transform: translateY(-2px) scale(1.02);
+        .btn-upload:hover, .btn-admin:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
         }
 
-        .user-profile-btn {
+        .user-chip {
             display: flex;
             align-items: center;
             gap: 10px;
             background: var(--card-bg);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border-color);
             padding: 6px 16px 6px 6px;
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .user-profile-btn:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 12px var(--accent-glow);
+        .user-chip:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
         }
 
-        .user-avatar {
-            width: 34px;
-            height: 34px;
+        .avatar-small {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: linear-gradient(45deg, var(--accent-color), #440000);
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-            color: #fff;
-            box-shadow: 0 0 10px var(--accent-glow);
+            font-weight: 800;
+            font-size: 13px;
+            color: #000;
         }
 
-        .container {
-            max-width: 1350px;
+        /* Главный контейнер */
+        .main-wrapper {
+            max-width: 1400px;
             margin: 30px auto;
             padding: 0 20px;
         }
 
-        .top-bar-controls {
+        .category-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 28px;
             flex-wrap: wrap;
             gap: 15px;
         }
 
-        .tags-nav {
+        .filter-tags {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             overflow-x: auto;
-            padding-bottom: 5px;
         }
 
-        .tag-pill {
+        .tag-btn {
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 9px 20px;
-            border-radius: 20px;
+            padding: 10px 22px;
+            border-radius: 16px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 13px;
             transition: all 0.3s ease;
             white-space: nowrap;
         }
 
-        .tag-pill:hover, .tag-pill.active {
-            background: var(--glass-hover);
-            color: #ffffff;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px var(--accent-glow);
+        .tag-btn:hover, .tag-btn.active {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
         }
 
-        .sort-select {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            color: #fff;
-            padding: 10px 18px;
-            border-radius: 20px;
-            outline: none;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .sort-select option { background: #08080a; }
-
-        /* Сетка видео */
-        .clips-grid {
+        /* Сетка клипов */
+        .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 24px;
         }
 
         .clip-card {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             cursor: pointer;
@@ -273,51 +261,47 @@
 
         .clip-card:hover {
             transform: translateY(-6px);
-            border-color: rgba(255, 0, 60, 0.6);
-            box-shadow: 0 12px 35px rgba(255, 0, 60, 0.2);
+            border-color: var(--border-hover);
+            box-shadow: 0 12px 30px rgba(0, 240, 255, 0.15);
         }
 
-        .video-wrapper {
+        .thumbnail-box {
             position: relative;
             width: 100%;
             padding-top: 56.25%;
             background: #000;
         }
 
-        .video-wrapper video {
+        .thumbnail-box video {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover;
         }
 
-        .play-overlay {
+        .play-badge {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 26px;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.6);
-            width: 55px;
-            height: 55px;
+            width: 50px; height: 50px;
+            background: rgba(0, 0, 0, 0.7);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            color: #fff;
+            font-size: 20px;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .clip-card:hover .play-overlay {
-            transform: translate(-50%, -50%) scale(1.15);
-            background: var(--accent-color);
-            box-shadow: 0 0 25px var(--accent-glow);
+        .clip-card:hover .play-badge {
+            background: var(--accent-cyan);
+            color: #000;
+            box-shadow: 0 0 20px var(--accent-cyan);
+            transform: translate(-50%, -50%) scale(1.1);
         }
 
-        .clip-info {
+        .clip-details {
             padding: 18px;
             display: flex;
             flex-direction: column;
@@ -325,198 +309,258 @@
             flex-grow: 1;
         }
 
-        .clip-title { font-size: 16px; font-weight: 700; line-height: 1.4; color: #fff; }
-        .clip-meta { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-muted); }
-        .author { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-main); }
-        .avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(45deg, var(--accent-color), #330000); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
-
-        .verified-badge {
-            color: var(--verified-color);
-            font-size: 13px;
-            margin-left: 2px;
+        .clip-title-text {
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #fff;
         }
 
-        .actions {
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .verified-icon {
+            color: var(--accent-cyan);
+            font-size: 12px;
+        }
+
+        .role-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .role-admin { background: rgba(255, 0, 85, 0.2); color: var(--accent-pink); border: 1px solid var(--accent-pink); }
+        .role-mod { background: rgba(255, 183, 0, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+
+        .card-actions-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: auto;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 13px;
         }
 
-        .action-btn {
-            background: none; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: color 0.2s;
-        }
-        .action-btn:hover { color: var(--text-main); }
-        .action-btn.liked { color: var(--accent-color); text-shadow: 0 0 10px var(--accent-glow); }
-        .action-btn.delete-btn { color: #ff3333; }
-        .action-btn.delete-btn:hover { color: #ff6666; text-shadow: 0 0 10px rgba(255, 0, 0, 0.8); }
-
-        /* Кастомный Видеоплеер */
-        .watch-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 3, 5, 0.96); backdrop-filter: blur(25px); z-index: 300; overflow-y: auto; padding: 40px 5%;
-        }
-        .watch-container { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 360px; gap: 30px; }
-        @media (max-width: 960px) { .watch-container { grid-template-columns: 1fr; } }
-        .main-player-box { display: flex; flex-direction: column; gap: 20px; }
-        
-        .custom-player-wrapper {
-            position: relative;
-            border-radius: 20px;
-            box-shadow: 0 0 50px rgba(255, 0, 60, 0.25);
-            background: #000;
+        .action-icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            transition: color 0.2s;
         }
 
-        .custom-player-container {
+        .action-icon-btn:hover { color: #fff; }
+        .action-icon-btn.liked { color: var(--accent-pink); }
+        .action-icon-btn.delete-btn { color: #ff4444; }
+        .action-icon-btn.delete-btn:hover { color: #ff6666; }
+
+        /* Плеер (Модалка) */
+        .watch-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 5, 8, 0.96);
+            backdrop-filter: blur(25px);
+            z-index: 300;
+            overflow-y: auto;
+            padding: 40px 4%;
+        }
+
+        .watch-grid {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 30px;
+        }
+
+        @media (max-width: 1024px) { .watch-grid { grid-template-columns: 1fr; } }
+
+        .player-container {
             width: 100%;
             padding-top: 56.25%;
             position: relative;
+            background: #000;
             border-radius: 20px;
             overflow: hidden;
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
         }
 
-        .custom-player-container video {
+        .player-container video {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            cursor: pointer;
         }
 
-        .player-controls-overlay {
-            position: absolute;
-            bottom: 0; left: 0; width: 100%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.4) 70%, transparent);
-            padding: 12px 18px 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 10;
-        }
-
-        .custom-player-container:hover .player-controls-overlay { opacity: 1; }
-
-        .progress-bar-container {
-            width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            cursor: pointer;
-            position: relative;
-            transition: height 0.1s;
-        }
-
-        .progress-bar-container:hover { height: 10px; }
-
-        .progress-filled {
-            height: 100%;
-            width: 0%;
-            background: var(--accent-color);
-            border-radius: 10px;
-            box-shadow: 0 0 10px var(--accent-glow);
-            position: relative;
-        }
-
-        .controls-row { display: flex; justify-content: space-between; align-items: center; }
-        .left-controls, .right-controls { display: flex; align-items: center; gap: 16px; }
-        .player-btn { background: none; border: none; color: #fff; font-size: 16px; cursor: pointer; transition: all 0.2s; }
-        .player-btn:hover { color: var(--accent-color); transform: scale(1.15); }
-        .time-display { font-size: 12px; font-weight: 600; color: #ddd; }
-
-        .player-settings-menu {
-            display: none;
-            position: absolute;
-            bottom: 65px;
-            right: 15px;
-            background: rgba(12, 12, 18, 0.96);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--accent-color);
-            border-radius: 14px;
-            padding: 12px;
-            z-index: 30;
-            min-width: 190px;
-            box-shadow: 0 0 30px rgba(255, 0, 60, 0.3);
-        }
-
-        .player-settings-menu.active { display: block; }
-        .settings-title { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin: 6px 8px 4px; font-weight: 800; }
-        .settings-item { padding: 8px 12px; font-size: 13px; color: #fff; cursor: pointer; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .settings-item:hover { background: rgba(255, 0, 60, 0.25); }
-        .settings-item.active { color: var(--accent-color); font-weight: 800; }
-
-        .watch-details, .watch-comments { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 18px; padding: 22px; }
-        .watch-title { font-size: 22px; font-weight: 800; margin-bottom: 14px; }
-        .watch-author-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-        
-        .subscribe-btn {
-            background: var(--accent-color);
+        .close-screen-btn {
+            position: fixed;
+            top: 25px; right: 35px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
             color: #fff;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 24px;
-            font-weight: 800;
-            font-size: 13px;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 0 15px var(--accent-glow);
+            z-index: 310;
+            transition: all 0.3s;
         }
 
-        .watch-comments-list { display: flex; flex-direction: column; gap: 12px; max-height: 280px; overflow-y: auto; margin: 18px 0; }
-        .watch-comment-item { padding: 12px; background: rgba(255, 255, 255, 0.03); border-radius: 10px; font-size: 14px; border-left: 3px solid var(--accent-color); }
-        .watch-comment-item strong { color: var(--accent-color); margin-right: 5px; }
-        .watch-comment-form { display: flex; gap: 12px; }
-        .watch-comment-form input { flex-grow: 1; padding: 12px 16px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--glass-border); border-radius: 12px; color: #fff; outline: none; }
-        .watch-comment-form button { background: var(--accent-color); color: #fff; border: none; padding: 12px 22px; border-radius: 12px; cursor: pointer; font-weight: 700; }
-        .watch-sidebar h3 { font-size: 17px; margin-bottom: 16px; font-weight: 800; }
-        .sidebar-clips { display: flex; flex-direction: column; gap: 14px; }
-        .sidebar-clip-item { display: flex; gap: 12px; background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; cursor: pointer; }
-        .sidebar-thumb { width: 130px; height: 75px; background: #000; flex-shrink: 0; }
-        .sidebar-thumb video { width: 100%; height: 100%; object-fit: cover; }
-        .sidebar-info { padding: 8px; display: flex; flex-direction: column; justify-content: center; }
-        .sidebar-title { font-size: 13px; font-weight: 700; line-height: 1.3; }
-        .sidebar-meta { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
-        .close-watch-btn { position: fixed; top: 25px; right: 40px; background: var(--accent-color); border: none; color: #fff; width: 44px; height: 44px; border-radius: 50%; font-size: 22px; cursor: pointer; box-shadow: 0 0 20px var(--accent-glow); z-index: 310; }
+        .close-screen-btn:hover {
+            background: var(--accent-pink);
+            border-color: var(--accent-pink);
+        }
 
-        /* Профиль */
-        .profile-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 3, 5, 0.96); backdrop-filter: blur(25px); z-index: 250; overflow-y: auto; padding: 40px 5%; }
-        .profile-header { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 35px; max-width: 1000px; margin: 0 auto 35px; display: flex; align-items: center; gap: 30px; position: relative; }
-        .profile-avatar-large { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(45deg, var(--accent-color), #550000); display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 900; box-shadow: 0 0 25px var(--accent-glow); border: 3px solid var(--accent-color); }
-        .profile-details h2 { font-size: 28px; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
-        .profile-details p { color: var(--text-muted); font-size: 14px; margin-bottom: 18px; }
-        .profile-stats { display: flex; gap: 20px; }
-        .stat-item { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); padding: 12px 22px; border-radius: 14px; text-align: center; }
-        .stat-value { font-size: 20px; font-weight: 800; color: var(--accent-color); }
-        .stat-label { font-size: 12px; color: var(--text-muted); }
-        .logout-btn { position: absolute; top: 30px; right: 30px; background: rgba(255, 0, 60, 0.15); border: 1px solid var(--accent-color); color: #fff; padding: 10px 20px; border-radius: 14px; cursor: pointer; font-weight: 700; font-size: 13px; }
-        .profile-content { max-width: 1000px; margin: 0 auto; }
-        .profile-tabs { display: flex; gap: 20px; border-bottom: 1px solid var(--glass-border); margin-bottom: 25px; padding-bottom: 10px; }
-        .profile-tab { background: none; border: none; color: var(--text-muted); font-size: 16px; font-weight: 700; cursor: pointer; padding: 8px 16px; }
-        .profile-tab.active { color: var(--accent-color); border-bottom: 3px solid var(--accent-color); }
+        .comments-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 20px;
+        }
 
-        /* Модалки */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(15px); z-index: 400; justify-content: center; align-items: center; }
-        .modal-content { background: rgba(12, 12, 18, 0.98); border: 1px solid var(--glass-border); width: 90%; max-width: 440px; border-radius: 28px; padding: 35px; box-shadow: 0 0 50px rgba(255, 0, 60, 0.25); position: relative; }
-        .close-btn { position: absolute; top: 22px; right: 22px; background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
-        .modal h2 { margin-bottom: 22px; font-size: 24px; font-weight: 800; }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-muted); font-weight: 600; }
-        .form-group input[type="text"], .form-group input[type="password"] { width: 100%; padding: 14px 18px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--glass-border); border-radius: 14px; color: #fff; outline: none; }
-        .form-group select { width: 100%; padding: 14px 18px; background-color: #121216; border: 1px solid var(--glass-border); border-radius: 14px; color: #fff; outline: none; }
-        .submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary)); border: none; border-radius: 14px; color: #ffffff; font-weight: 800; font-size: 16px; cursor: pointer; margin-top: 10px; box-shadow: 0 0 20px var(--accent-glow); }
-        .file-upload-label { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; background: rgba(255, 255, 255, 0.04); border: 2px dashed var(--glass-border); border-radius: 14px; color: var(--text-muted); cursor: pointer; font-weight: 600; }
-        .file-upload-wrapper input[type="file"] { display: none; }
+        .comment-item {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--accent-cyan);
+            font-size: 14px;
+        }
 
-        /* Стиль Панели Админа */
-        .admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 3, 5, 0.96); backdrop-filter: blur(25px); z-index: 500; overflow-y: auto; padding: 40px 5%; }
-        .admin-box { max-width: 900px; margin: 0 auto; background: var(--card-bg); border: 1px solid #00d2ff; border-radius: 24px; padding: 30px; box-shadow: 0 0 40px rgba(0, 210, 255, 0.3); }
-        .admin-box h2 { font-size: 26px; color: #00d2ff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .user-list-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .user-list-table th, .user-list-table td { padding: 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 14px; }
-        .user-list-table th { color: var(--text-muted); text-transform: uppercase; font-size: 12px; }
-        .admin-action-btn { padding: 6px 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 12px; margin-right: 5px; }
-        .btn-verify { background: #00d2ff; color: #000; }
-        .btn-mod { background: #ffaa00; color: #000; }
+        .comment-form {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .comment-form input {
+            flex-grow: 1;
+            padding: 12px 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: #fff;
+            outline: none;
+        }
+
+        .comment-form button {
+            background: var(--accent-cyan);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            color: #000;
+        }
+
+        /* Админ панель */
+        .admin-modal-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 5, 8, 0.96);
+            backdrop-filter: blur(25px);
+            z-index: 500;
+            overflow-y: auto;
+            padding: 40px 4%;
+        }
+
+        .admin-card-container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border: 1px solid var(--accent-pink);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(255, 0, 85, 0.2);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .admin-table th, .admin-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 14px;
+        }
+
+        .admin-table th {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .btn-cyan { background: var(--accent-cyan); color: #000; }
+        .btn-gold { background: var(--accent-gold); color: #000; }
+        .btn-danger { background: var(--accent-pink); color: #fff; }
+
+        /* Диалоговые модалки */
+        .modal-dialog {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 600;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dialog-box {
+            background: #0f111a;
+            border: 1px solid var(--border-color);
+            width: 90%;
+            max-width: 440px;
+            border-radius: 24px;
+            padding: 32px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .form-field { margin-bottom: 18px; }
+        .form-field label { display: block; margin-bottom: 8px; font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+        .form-field input, .form-field select {
+            width: 100%; padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px; color: #fff; outline: none;
+        }
+
+        .submit-dialog-btn {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, var(--accent-cyan), #0077ff);
+            border: none; border-radius: 12px; color: #000; font-weight: 800;
+            cursor: pointer; text-transform: uppercase; margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -525,641 +569,335 @@
 
     <!-- Шапка -->
     <header>
-        <div class="logo" onclick="showMainFeed()">
-            <i class="fa-solid fa-bolt-lightning" style="color: var(--accent-color);"></i> GAME<span>CLIPS</span>
+        <div class="logo" onclick="renderMainFeed()">
+            <i class="fa-solid fa-gamepad" style="color: var(--accent-cyan);"></i> GAME<span>HUB</span>
         </div>
 
-        <div class="search-box">
+        <div class="search-bar">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="Поиск топовых клипов..." oninput="handleSearch()">
+            <input type="text" id="searchInput" placeholder="Поиск клипов и игровых моментов..." oninput="handleSearch()">
         </div>
 
-        <div class="header-actions">
-            <!-- Кнопка Админки -->
-            <button class="admin-btn" id="adminHeaderBtn" onclick="openAdminPanel()">
-                <i class="fa-solid fa-user-shield"></i> Панель Админа
+        <div class="header-controls">
+            <button class="btn-admin" id="adminControlBtn" onclick="openAdminModal()">
+                <i class="fa-solid fa-shield-halved"></i> Админка
             </button>
-            <button class="upload-btn" onclick="openUploadModal()">
-                <i class="fa-solid fa-plus"></i> Опубликовать
+            <button class="btn-upload" onclick="openUploadDialog()">
+                <i class="fa-solid fa-plus"></i> Загрузить
             </button>
-            <div class="user-profile-btn" id="userHeaderBtn" onclick="handleUserBtnClick()">
-                <div class="user-avatar" id="headerAvatar"><i class="fa-solid fa-user"></i></div>
-                <span id="headerUserName" style="font-size: 14px; font-weight: 700;">Войти</span>
+            <div class="user-chip" onclick="handleUserProfileClick()">
+                <div class="avatar-small" id="headerAvatar">G</div>
+                <span id="headerUserName" style="font-size: 13px; font-weight: 700;">Войти</span>
             </div>
         </div>
     </header>
 
-    <!-- Лента -->
-    <div class="container" id="mainContainer">
-        <div class="top-bar-controls">
-            <div class="tags-nav">
-                <div class="tag-pill active" onclick="filterClips('all', this)">Все клипы</div>
-                <div class="tag-pill" onclick="filterClips('эпик', this)">🔥 #эпик</div>
-                <div class="tag-pill" onclick="filterClips('баги', this)">😂 #баги</div>
-                <div class="tag-pill" onclick="filterClips('соло', this)">⚔️ #соло</div>
-                <div class="tag-pill" onclick="filterClips('скилл', this)">🎯 #скилл</div>
+    <!-- Главная лента -->
+    <main class="main-wrapper">
+        <div class="category-bar">
+            <div class="filter-tags">
+                <div class="tag-btn active" onclick="setCategoryFilter('all', this)">Все моменты</div>
+                <div class="tag-btn" onclick="setCategoryFilter('скилл', this)">🎯 #скилл</div>
+                <div class="tag-btn" onclick="setCategoryFilter('эпик', this)">🔥 #эпик</div>
+                <div class="tag-btn" onclick="setCategoryFilter('баги', this)">😂 #баги</div>
+                <div class="tag-btn" onclick="setCategoryFilter('фан', this)">🎮 #фан</div>
             </div>
-
-            <select class="sort-select" id="sortSelect" onchange="renderClips()">
-                <option value="newest">Сначала новые</option>
-                <option value="popular">По популярности</option>
-            </select>
         </div>
 
-        <div class="clips-grid" id="clipsContainer"></div>
+        <div class="cards-grid" id="clipsGrid"></div>
+    </main>
+
+    <!-- Экран просмотра плеера -->
+    <div class="watch-overlay" id="watchOverlay">
+        <button class="close-screen-btn" onclick="closeWatchOverlay()"><i class="fa-solid fa-xmark"></i></button>
+        
+        <div class="watch-grid">
+            <div>
+                <div class="player-container">
+                    <video id="mainVideoPlayer" controls controlsList="nodownload"></video>
+                </div>
+
+                <div class="comments-section">
+                    <h3 style="font-size: 18px; margin-bottom: 15px;">Комментарии (<span id="commentsCount">0</span>)</h3>
+                    <div id="commentsList"></div>
+                    <div class="comment-form">
+                        <input type="text" id="commentInput" placeholder="Написать комментарий...">
+                        <button onclick="submitComment()">Отправить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h2 id="watchClipTitle" style="font-size: 22px; margin-bottom: 12px;">---</h2>
+                <div id="watchAuthorMeta" style="margin-bottom: 20px; color: var(--text-muted); font-size: 14px;">---</div>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 25px;">
+                    <button class="action-icon-btn" id="watchLikeBtn" onclick="toggleLikeInWatch()" style="font-size: 16px;">
+                        <i class="fa-regular fa-heart"></i> <span id="watchLikesCount">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Панель Админа -->
-    <div class="admin-modal" id="adminModal">
-        <button class="close-watch-btn" onclick="closeAdminPanel()"><i class="fa-solid fa-xmark"></i></button>
-        <div class="admin-box">
-            <h2><i class="fa-solid fa-shield-halved"></i> Панель Разработчика / Администрирование</h2>
-            <p style="color: var(--text-muted);">Управляйте пользователями, выдавайте галочки верификации и роли модераторов.</p>
-            
-            <table class="user-list-table">
+    <!-- Модалка Админ-панели -->
+    <div class="admin-modal-screen" id="adminModalScreen">
+        <button class="close-screen-btn" onclick="closeAdminModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="admin-card-container">
+            <h2 style="color: var(--accent-pink); display: flex; align-items: center; gap: 10px;">
+                <i class="fa-solid fa-user-shield"></i> Панель управления проектом
+            </h2>
+            <p style="color: var(--text-muted); margin-top: 5px; font-size: 14px;">Выдача галочек, управление ролями участников и блокировка пользователей.</p>
+
+            <table class="admin-table">
                 <thead>
                     <tr>
-                        <th>Игрок</th>
+                        <th>Пользователь</th>
                         <th>Роль</th>
-                        <th>Галочка</th>
+                        <th>Статус</th>
                         <th>Действия</th>
                     </tr>
                 </thead>
-                <tbody id="adminUserList"></tbody>
+                <tbody id="adminUsersTable"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- Профиль -->
-    <div class="profile-modal" id="profileModal">
-        <button class="close-watch-btn" onclick="closeProfile()"><i class="fa-solid fa-xmark"></i></button>
-
-        <div class="profile-header">
-            <div class="profile-avatar-large" id="profileAvatarLarge">U</div>
-            <div class="profile-details">
-                <h2 id="profileName">Никнейм <span id="profileVerifiedBadge"></span></h2>
-                <p id="profileRoleBadge" style="color: var(--accent-color); font-weight: bold;">Игрок</p>
-                <div class="profile-stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="statMyClips">0</div>
-                        <div class="stat-label">Клипов</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="statTotalLikes">0</div>
-                        <div class="stat-label">Лайков</div>
-                    </div>
-                </div>
-            </div>
-            <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Выйти</button>
-        </div>
-
-        <div class="profile-content">
-            <div class="profile-tabs">
-                <button class="profile-tab active" id="tabMyClipsBtn" onclick="switchProfileTab('myClips')">Мои клипы</button>
-                <button class="profile-tab" id="tabLikedBtn" onclick="switchProfileTab('liked')">Понравилось ❤️</button>
-            </div>
-            <div class="clips-grid" id="profileClipsGrid"></div>
-        </div>
-    </div>
-
-    <!-- Просмотр Видео (Плеер) -->
-    <div class="watch-modal" id="watchModal">
-        <button class="close-watch-btn" onclick="closeWatchView()"><i class="fa-solid fa-xmark"></i></button>
-        <div class="watch-container">
-            <div class="main-player-box">
-                <div class="custom-player-wrapper">
-                    <div class="custom-player-container" id="playerWrapper">
-                        <video id="watchVideoPlayer" onclick="togglePlay()"></video>
-                        
-                        <div class="player-settings-menu" id="playerSettingsMenu">
-                            <div class="settings-title">Качество</div>
-                            <div class="settings-item active" onclick="setQuality('1080p60', this)">1080p60</div>
-                            <div class="settings-item" onclick="setQuality('720p', this)">720p</div>
-                            <div class="settings-title" style="margin-top:10px;">Скорость</div>
-                            <div class="settings-item active" onclick="setSpeed(1, this)">1.0x</div>
-                            <div class="settings-item" onclick="setSpeed(1.5, this)">1.5x</div>
-                            <div class="settings-item" onclick="setSpeed(2, this)">2.0x</div>
-                        </div>
-
-                        <div class="player-controls-overlay">
-                            <div class="progress-bar-container" onclick="seekVideo(event)">
-                                <div class="progress-filled" id="progressBar"></div>
-                            </div>
-                            <div class="controls-row">
-                                <div class="left-controls">
-                                    <button class="player-btn" onclick="togglePlay()" id="playPauseBtn"><i class="fa-solid fa-play"></i></button>
-                                    <button class="player-btn" onclick="toggleMute()" id="muteBtn"><i class="fa-solid fa-volume-high"></i></button>
-                                    <div class="time-display"><span id="currentTime">0:00</span> / <span id="durationTime">0:00</span></div>
-                                </div>
-                                <div class="right-controls">
-                                    <button class="player-btn" onclick="toggleSettingsMenu()"><i class="fa-solid fa-gear"></i></button>
-                                    <button class="player-btn" onclick="toggleFullscreen()"><i class="fa-solid fa-expand"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="watch-details">
-                    <div class="watch-title" id="watchTitle">---</div>
-                    <div class="watch-author-bar">
-                        <div class="author">
-                            <div class="avatar" id="watchAvatar">U</div>
-                            <div>
-                                <span id="watchAuthor" style="font-weight: 800; font-size: 16px;">---</span>
-                                <span id="watchVerifiedBadge"></span>
-                                <div id="watchMeta" style="color: var(--text-muted); font-size: 12px;">---</div>
-                            </div>
-                        </div>
-                        <button class="subscribe-btn" id="subscribeBtn" onclick="toggleSubscribe()">Подписаться</button>
-                    </div>
-                    <div class="actions">
-                        <button class="action-btn" id="watchLikeBtn" onclick="toggleLikeInWatch()">
-                            <i class="fa-regular fa-heart"></i> <span id="watchLikesCount">0</span>
-                        </button>
-                        <button class="action-btn" onclick="shareClip('клип')">
-                            <i class="fa-regular fa-share-from-square"></i> Поделиться
-                        </button>
-                    </div>
-                </div>
-
-                <div class="watch-comments">
-                    <h3>Обсуждение (<span id="watchCommentsCount">0</span>)</h3>
-                    <div class="watch-comments-list" id="watchCommentsList"></div>
-                    <div class="watch-comment-form">
-                        <input type="text" id="watchCommentInput" placeholder="Оставьте комментарий...">
-                        <button onclick="addCommentInWatch()">Отправить</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="watch-sidebar">
-                <h3>Рекомендуем</h3>
-                <div class="sidebar-clips" id="sidebarClips"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Модалка Авторизации -->
-    <div class="modal" id="authModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
-            <h2>Вход в GameClips</h2>
-            <form id="authForm" onsubmit="handleAuthSubmit(event)">
-                <div class="form-group">
+    <!-- Диалог входа -->
+    <div class="modal-dialog" id="authDialog">
+        <div class="dialog-box">
+            <button style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #fff; cursor: pointer;" onclick="closeAuthDialog()"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="margin-bottom: 20px;">Авторизация</h2>
+            <form onsubmit="handleAuth(event)">
+                <div class="form-field">
                     <label>Никнейм игрока</label>
-                    <input type="text" id="authUsername" placeholder="Например: CyberKnight или admin" required>
+                    <input type="text" id="authUsername" placeholder="Например: admin" required>
                 </div>
-                <div class="form-group">
-                    <label>Пароль</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="submit-btn">Войти</button>
+                <button type="submit" class="submit-dialog-btn">Войти</button>
             </form>
             <p style="font-size: 11px; color: var(--text-muted); margin-top: 15px; text-align: center;">
-                💡 <b>Тест Разработчика:</b> Логин: <code>admin</code> | Пароль: <code>admin</code>
+                💡 <b>Тест Разработчика:</b> Введите логин <code>admin</code>
             </p>
         </div>
     </div>
 
-    <!-- Модалка Загрузки -->
-    <div class="modal" id="uploadModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-            <h2>Опубликовать хайлайт</h2>
-            <form id="uploadForm" onsubmit="handleUpload(event)">
-                <div class="form-group">
-                    <label>Выберите видеофайл (.mp4)</label>
-                    <div class="file-upload-wrapper">
-                        <input type="file" id="videoFile" accept="video/*" required onchange="updateFileName(this)">
-                        <label for="videoFile" class="file-upload-label">
-                            <i class="fa-solid fa-cloud-arrow-up"></i>
-                            <span id="fileNameText">Нажмите для выбора клипа</span>
-                        </label>
-                    </div>
+    <!-- Диалог Загрузки -->
+    <div class="modal-dialog" id="uploadDialog">
+        <div class="dialog-box">
+            <button style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #fff; cursor: pointer;" onclick="closeUploadDialog()"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="margin-bottom: 20px;">Опубликовать клип</h2>
+            <form onsubmit="handleVideoUpload(event)">
+                <div class="form-field">
+                    <label>Видеофайл (.mp4)</label>
+                    <input type="file" id="videoFileInput" accept="video/*" required>
                 </div>
-                <div class="form-group">
+                <div class="form-field">
                     <label>Название клипа</label>
-                    <input type="text" id="videoTitle" placeholder="Минус 5 на точке B!" required>
+                    <input type="text" id="videoTitleInput" placeholder="Невероятный моментальный фраги!" required>
                 </div>
-                <div class="form-group">
+                <div class="form-field">
                     <label>Категория</label>
-                    <select id="videoTag">
+                    <select id="videoCategorySelect">
+                        <option value="скилл">🎯 #скилл</option>
                         <option value="эпик">🔥 #эпик</option>
                         <option value="баги">😂 #баги</option>
-                        <option value="соло">⚔️ #соло</option>
-                        <option value="скилл">🎯 #скилл</option>
+                        <option value="фан">🎮 #фан</option>
                     </select>
                 </div>
-                <button type="submit" class="submit-btn">Опубликовать</button>
+                <button type="submit" class="submit-dialog-btn">Загрузить</button>
             </form>
         </div>
     </div>
 
     <script>
-        // База Пользователей
-        let usersDB = JSON.parse(localStorage.getItem('gameclips_users_db')) || [
-            { username: "admin", role: "admin", isVerified: true },
-            { username: "ProGamer99", role: "user", isVerified: true },
-            { username: "BugHunter", role: "moderator", isVerified: false },
-            { username: "NinjaShadow", role: "user", isVerified: false }
+        /* База пользователей */
+        let usersDB = JSON.parse(localStorage.getItem('gh_users_db')) || [
+            { username: "admin", role: "admin", isVerified: true, isBanned: false },
+            { username: "CyberPro", role: "user", isVerified: true, isBanned: false },
+            { username: "GameMod", role: "moderator", isVerified: false, isBanned: false }
         ];
 
-        let currentUser = JSON.parse(localStorage.getItem('gameclips_user')) || null;
-        let subscriptions = JSON.parse(localStorage.getItem('gameclips_subs')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('gh_current_user')) || null;
 
-        let clips = JSON.parse(localStorage.getItem('gameclips_data')) || [
+        /* База клипов */
+        let clipsDB = JSON.parse(localStorage.getItem('gh_clips_db')) || [
             {
-                id: 1,
-                title: "Невероятный прострел через всю карту!",
-                author: "ProGamer99",
+                id: 101,
+                title: "Эпичный момент на последней секунде матча!",
+                author: "CyberPro",
                 tag: "скилл",
-                likes: 42,
-                views: 310,
+                likes: 85,
+                views: 540,
                 likedBy: [],
-                comments: [{ author: "BugHunter", text: "Красава!" }],
+                comments: [{ author: "GameMod", text: "Отличный тайминг!" }],
                 videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-game-animation-of-a-robot-character-42964-large.mp4"
             },
             {
-                id: 2,
-                title: "Физика игры снова сломалась 🤣",
-                author: "BugHunter",
+                id: 102,
+                title: "Когда физика просто перестала работать...",
+                author: "GameMod",
                 tag: "баги",
-                likes: 128,
-                views: 890,
+                likes: 120,
+                views: 920,
                 likedBy: [],
                 comments: [],
                 videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-player-losing-a-video-game-40320-large.mp4"
             }
         ];
 
-        let currentFilter = 'all';
+        let currentCategory = 'all';
         let searchQuery = '';
-        let activeWatchClipId = null;
-        let currentProfileTab = 'myClips';
+        let activeWatchId = null;
 
-        function showToast(message, icon = 'fa-circle-check') {
+        function showNotification(msg, icon = 'fa-check-circle') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.innerHTML = `<i class="fa-solid ${icon}"></i> ${message}`;
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> ${msg}`;
             container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+            setTimeout(() => toast.remove(), 3200);
         }
 
-        function saveData() { 
-            localStorage.setItem('gameclips_data', JSON.stringify(clips));
-            localStorage.setItem('gameclips_users_db', JSON.stringify(usersDB));
+        function saveStorage() {
+            localStorage.setItem('gh_clips_db', JSON.stringify(clipsDB));
+            localStorage.setItem('gh_users_db', JSON.stringify(usersDB));
         }
 
-        function saveUser() {
-            if (currentUser) localStorage.setItem('gameclips_user', JSON.stringify(currentUser));
-            else localStorage.removeItem('gameclips_user');
-            updateHeaderUserUI();
+        function saveCurrentUser() {
+            if (currentUser) localStorage.setItem('gh_current_user', JSON.stringify(currentUser));
+            else localStorage.removeItem('gh_current_user');
+            updateHeaderUI();
         }
 
-        function getUserInfo(username) {
-            return usersDB.find(u => u.username === username) || { username: username, role: "user", isVerified: false };
+        function getUser(username) {
+            return usersDB.find(u => u.username === username) || { username: username, role: "user", isVerified: false, isBanned: false };
         }
 
-        function renderClips() {
-            const container = document.getElementById('clipsContainer');
-            container.innerHTML = '';
+        function renderMainFeed() {
+            const grid = document.getElementById('clipsGrid');
+            grid.innerHTML = '';
 
-            let list = clips.filter(c => {
-                const matchesTag = currentFilter === 'all' || c.tag === currentFilter;
-                const matchesSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchesTag && matchesSearch;
+            let filtered = clipsDB.filter(clip => {
+                const matchesCat = currentCategory === 'all' || clip.tag === currentCategory;
+                const matchesSearch = clip.title.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCat && matchesSearch;
             });
 
-            const sortType = document.getElementById('sortSelect').value;
-            if (sortType === 'popular') list.sort((a, b) => b.views - a.views);
-            else list.sort((a, b) => b.id - a.id);
-
-            list.forEach(clip => container.appendChild(createClipCard(clip)));
+            filtered.sort((a, b) => b.id - a.id);
+            filtered.forEach(clip => grid.appendChild(buildClipCard(clip)));
         }
 
-        function createClipCard(clip) {
+        function buildClipCard(clip) {
             const isLiked = currentUser && clip.likedBy.includes(currentUser.username);
-            const authorInfo = getUserInfo(clip.author);
-            
-            // Проверка прав на удаление (Автор ИЛИ Модератор ИЛИ Админ)
+            const authorData = getUser(clip.author);
+
+            // Права на удаление: Автор ИЛИ Модератор ИЛИ Админ
             const canDelete = currentUser && (
                 currentUser.username === clip.author || 
                 currentUser.role === 'admin' || 
                 currentUser.role === 'moderator'
             );
 
+            let roleBadge = '';
+            if (authorData.role === 'admin') roleBadge = `<span class="role-badge role-admin">Админ</span>`;
+            else if (authorData.role === 'moderator') roleBadge = `<span class="role-badge role-mod">Модер</span>`;
+
             const card = document.createElement('div');
             card.className = 'clip-card';
-            card.onclick = () => openWatchView(clip.id);
+            card.onclick = () => openWatchOverlay(clip.id);
             card.innerHTML = `
-                <div class="video-wrapper">
-                    <video preload="metadata" muted>
-                        <source src="${clip.videoUrl}" type="video/mp4">
-                    </video>
-                    <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
+                <div class="thumbnail-box">
+                    <video preload="metadata" muted><source src="${clip.videoUrl}" type="video/mp4"></video>
+                    <div class="play-badge"><i class="fa-solid fa-play"></i></div>
                 </div>
-                <div class="clip-info">
-                    <div class="clip-title">${escapeHtml(clip.title)}</div>
-                    <div class="clip-meta">
-                        <div class="author">
-                            <div class="avatar">${clip.author[0].toUpperCase()}</div>
-                            ${escapeHtml(clip.author)} ${authorInfo.isVerified ? '<i class="fa-solid fa-circle-check verified-badge" title="Подтвержденный игрок"></i>' : ''}
-                        </div>
-                        <span>#${clip.tag} • <i class="fa-regular fa-eye"></i> ${clip.views}</span>
+                <div class="clip-details">
+                    <div class="clip-title-text">${escapeHTML(clip.title)}</div>
+                    <div class="author-info">
+                        <div class="avatar-small" style="width:24px; height:24px; font-size:11px;">${clip.author[0].toUpperCase()}</div>
+                        ${escapeHTML(clip.author)} 
+                        ${authorData.isVerified ? '<i class="fa-solid fa-circle-check verified-icon" title="Верифицирован"></i>' : ''}
+                        ${roleBadge}
                     </div>
-                    <div class="actions" onclick="event.stopPropagation()">
-                        <button class="action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${clip.id})">
-                            <i class="${isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i> 
-                            <span>${clip.likes}</span>
+                    <div class="card-actions-bar" onclick="event.stopPropagation()">
+                        <button class="action-icon-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${clip.id})">
+                            <i class="${isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i> ${clip.likes}
                         </button>
-                        <button class="action-btn" onclick="openWatchView(${clip.id})">
-                            <i class="fa-regular fa-comment"></i> ${clip.comments.length}
-                        </button>
-                        ${canDelete ? `<button class="action-btn delete-btn" onclick="deleteClip(${clip.id})" title="Удалить клип"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        <span><i class="fa-regular fa-eye"></i> ${clip.views}</span>
+                        ${canDelete ? `<button class="action-icon-btn delete-btn" onclick="deleteVideoClip(${clip.id})" title="Удалить"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </div>
                 </div>
             `;
             return card;
         }
 
-        /* --- ФУНКЦИЯ УДАЛЕНИЯ КЛИПА --- */
-        function deleteClip(id) {
-            if (!confirm('Вы действительно хотите удалить этот клип?')) return;
-            clips = clips.filter(c => c.id !== id);
-            saveData();
-            renderClips();
-            if (document.getElementById('profileModal').style.display === 'block') renderProfileClips();
-            showToast('Видео успешно удалено!', 'fa-trash');
+        function deleteVideoClip(id) {
+            if (!confirm("Удалить этот клип безвозвратно?")) return;
+            clipsDB = clipsDB.filter(c => c.id !== id);
+            saveStorage();
+            renderMainFeed();
+            showNotification("Видео успешно удалено", "fa-trash");
         }
 
-        /* --- АДМИН ПАНЕЛЬ --- */
-        function openAdminPanel() {
-            if (!currentUser || currentUser.role !== 'admin') return;
-            renderAdminUserList();
-            document.getElementById('adminModal').style.display = 'block';
-        }
-
-        function closeAdminPanel() { document.getElementById('adminModal').style.display = 'none'; }
-
-        function renderAdminUserList() {
-            const tbody = document.getElementById('adminUserList');
-            tbody.innerHTML = '';
-            usersDB.forEach(user => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><b>${escapeHtml(user.username)}</b></td>
-                    <td><span style="color: ${user.role === 'admin' ? '#00d2ff' : user.role === 'moderator' ? '#ffaa00' : '#888'}">${user.role.toUpperCase()}</span></td>
-                    <td>${user.isVerified ? '✔ Да' : 'Нет'}</td>
-                    <td>
-                        <button class="admin-action-btn btn-verify" onclick="adminToggleVerify('${user.username}')">${user.isVerified ? 'Снять галочку' : 'Выдать галочку'}</button>
-                        <button class="admin-action-btn btn-mod" onclick="adminToggleMod('${user.username}')">${user.role === 'moderator' ? 'Снять модерку' : 'Сделать модератором'}</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function adminToggleVerify(username) {
-            const u = getUserInfo(username);
-            u.isVerified = !u.isVerified;
-            saveData();
-            renderAdminUserList();
-            renderClips();
-            showToast(`Статус галочки для ${username} изменен`);
-        }
-
-        function adminToggleMod(username) {
-            const u = getUserInfo(username);
-            if (u.role === 'admin') return alert('Нельзя изменить роль Админа');
-            u.role = u.role === 'moderator' ? 'user' : 'moderator';
-            saveData();
-            renderAdminUserList();
-            renderClips();
-            showToast(`Роль ${username} изменена на ${u.role}`);
-        }
-
-        /* --- ПЛЕЕР УПРАВЛЕНИЕ --- */
-        const player = document.getElementById('watchVideoPlayer');
-        player.ontimeupdate = function() {
-            const bar = document.getElementById('progressBar');
-            const pct = (player.currentTime / player.duration) * 100;
-            bar.style.width = `${pct}%`;
-            document.getElementById('currentTime').textContent = formatTime(player.currentTime);
-            document.getElementById('durationTime').textContent = formatTime(player.duration || 0);
-        };
-
-        function formatTime(sec) {
-            const m = Math.floor(sec / 60); const s = Math.floor(sec % 60);
-            return `${m}:${s < 10 ? '0' : ''}${s}`;
-        }
-
-        function togglePlay() {
-            const playBtn = document.getElementById('playPauseBtn').querySelector('i');
-            if (player.paused) { player.play(); playBtn.className = 'fa-solid fa-pause'; }
-            else { player.pause(); playBtn.className = 'fa-solid fa-play'; }
-        }
-
-        function seekVideo(e) {
-            const rect = e.currentTarget.getBoundingClientRect();
-            player.currentTime = ((e.clientX - rect.left) / rect.width) * player.duration;
-        }
-
-        function toggleMute() {
-            player.muted = !player.muted;
-            document.getElementById('muteBtn').querySelector('i').className = player.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
-        }
-
-        function toggleFullscreen() {
-            const wrapper = document.getElementById('playerWrapper');
-            if (!document.fullscreenElement) wrapper.requestFullscreen();
-            else document.exitFullscreen();
-        }
-
-        function openWatchView(clipId) {
-            const clip = clips.find(c => c.id === clipId);
+        /* Плеер */
+        function openWatchOverlay(id) {
+            const clip = clipsDB.find(c => c.id === id);
             if (!clip) return;
 
-            activeWatchClipId = clipId;
+            activeWatchId = id;
             clip.views++;
-            saveData();
+            saveStorage();
 
-            const authorInfo = getUserInfo(clip.author);
-
-            document.getElementById('watchTitle').textContent = clip.title;
-            document.getElementById('watchAuthor').textContent = clip.author;
-            document.getElementById('watchAvatar').textContent = clip.author[0].toUpperCase();
-            document.getElementById('watchVerifiedBadge').innerHTML = authorInfo.isVerified ? '<i class="fa-solid fa-circle-check verified-badge"></i>' : '';
-            document.getElementById('watchMeta').textContent = `#${clip.tag} • ${clip.views} просмотров`;
-            document.getElementById('watchLikesCount').textContent = clip.likes;
-
+            const player = document.getElementById('mainVideoPlayer');
             player.src = clip.videoUrl;
             player.play();
-            document.getElementById('playPauseBtn').querySelector('i').className = 'fa-solid fa-pause';
 
-            updateWatchLikeBtnState(clip);
-            renderWatchComments();
-            renderSidebarClips();
+            document.getElementById('watchClipTitle').textContent = clip.title;
+            document.getElementById('watchAuthorMeta').textContent = `Автор: ${clip.author} • #${clip.tag} • ${clip.views} просмотров`;
+            document.getElementById('watchLikesCount').textContent = clip.likes;
 
-            document.getElementById('watchModal').style.display = 'block';
+            renderComments();
+            document.getElementById('watchOverlay').style.display = 'block';
             document.body.style.overflow = 'hidden';
-            renderClips();
+            renderMainFeed();
         }
 
-        function closeWatchView() {
+        function closeWatchOverlay() {
+            const player = document.getElementById('mainVideoPlayer');
             player.pause(); player.src = '';
-            document.getElementById('watchModal').style.display = 'none';
+            document.getElementById('watchOverlay').style.display = 'none';
             document.body.style.overflow = 'auto';
-            activeWatchClipId = null;
+            activeWatchId = null;
         }
 
-        function renderWatchComments() {
-            const clip = clips.find(c => c.id === activeWatchClipId);
+        function renderComments() {
+            const clip = clipsDB.find(c => c.id === activeWatchId);
             if (!clip) return;
-            document.getElementById('watchCommentsCount').textContent = clip.comments.length;
-            document.getElementById('watchCommentsList').innerHTML = clip.comments.map(c => `
-                <div class="watch-comment-item"><strong>${escapeHtml(c.author)}:</strong> ${escapeHtml(c.text)}</div>
+            document.getElementById('commentsCount').textContent = clip.comments.length;
+            document.getElementById('commentsList').innerHTML = clip.comments.map(c => `
+                <div class="comment-item"><b>${escapeHTML(c.author)}:</b> ${escapeHTML(c.text)}</div>
             `).join('');
         }
 
-        function addCommentInWatch() {
-            if (!currentUser) return openAuthModal();
-            const input = document.getElementById('watchCommentInput');
+        function submitComment() {
+            if (!currentUser) return openAuthDialog();
+            if (currentUser.isBanned) return showNotification("Ваш аккаунт заблокирован!", "fa-ban");
+
+            const input = document.getElementById('commentInput');
             const text = input.value.trim();
-            if (text && activeWatchClipId) {
-                const clip = clips.find(c => c.id === activeWatchClipId);
+            if (text && activeWatchId) {
+                const clip = clipsDB.find(c => c.id === activeWatchId);
                 clip.comments.push({ author: currentUser.username, text: text });
-                saveData();
+                saveStorage();
                 input.value = '';
-                renderWatchComments();
-                renderClips();
+                renderComments();
             }
-        }
-
-        function toggleLikeInWatch() {
-            if (activeWatchClipId) {
-                toggleLike(activeWatchClipId);
-                const clip = clips.find(c => c.id === activeWatchClipId);
-                updateWatchLikeBtnState(clip);
-            }
-        }
-
-        function updateWatchLikeBtnState(clip) {
-            const isLiked = currentUser && clip.likedBy.includes(currentUser.username);
-            const likeBtn = document.getElementById('watchLikeBtn');
-            likeBtn.className = `action-btn ${isLiked ? 'liked' : ''}`;
-            likeBtn.querySelector('i').className = `${isLiked ? 'fa-solid' : 'fa-regular'} fa-heart`;
-            document.getElementById('watchLikesCount').textContent = clip.likes;
-        }
-
-        function renderSidebarClips() {
-            const container = document.getElementById('sidebarClips');
-            container.innerHTML = '';
-            clips.filter(c => c.id !== activeWatchClipId).forEach(clip => {
-                const item = document.createElement('div');
-                item.className = 'sidebar-clip-item';
-                item.onclick = () => openWatchView(clip.id);
-                item.innerHTML = `
-                    <div class="sidebar-thumb"><video src="${clip.videoUrl}" muted></video></div>
-                    <div class="sidebar-info">
-                        <div class="sidebar-title">${escapeHtml(clip.title)}</div>
-                        <div class="sidebar-meta">${escapeHtml(clip.author)} • #${clip.tag}</div>
-                    </div>
-                `;
-                container.appendChild(item);
-            });
-        }
-
-        /* --- ПОЛЬЗОВАТЕЛЬ & ПРОФИЛЬ --- */
-        function updateHeaderUserUI() {
-            const avatar = document.getElementById('headerAvatar');
-            const nameSpan = document.getElementById('headerUserName');
-            const adminBtn = document.getElementById('adminHeaderBtn');
-
-            if (currentUser) {
-                avatar.textContent = currentUser.username[0].toUpperCase();
-                nameSpan.textContent = currentUser.username;
-                adminBtn.style.display = (currentUser.role === 'admin') ? 'flex' : 'none';
-            } else {
-                avatar.innerHTML = '<i class="fa-solid fa-user"></i>';
-                nameSpan.textContent = 'Войти';
-                adminBtn.style.display = 'none';
-            }
-        }
-
-        function handleUserBtnClick() { if (currentUser) openProfile(); else openAuthModal(); }
-
-        function openProfile() {
-            if (!currentUser) return;
-            const u = getUserInfo(currentUser.username);
-            document.getElementById('profileName').innerHTML = `${escapeHtml(u.username)} ${u.isVerified ? '<i class="fa-solid fa-circle-check verified-badge"></i>' : ''}`;
-            document.getElementById('profileRoleBadge').textContent = `Роль: ${u.role.toUpperCase()}`;
-            document.getElementById('profileAvatarLarge').textContent = u.username[0].toUpperCase();
-            updateProfileStats();
-            renderProfileClips();
-            document.getElementById('profileModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeProfile() { document.getElementById('profileModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
-
-        function updateProfileStats() {
-            const myClips = clips.filter(c => c.author === currentUser.username);
-            document.getElementById('statMyClips').textContent = myClips.length;
-            document.getElementById('statTotalLikes').textContent = myClips.reduce((acc, c) => acc + c.likes, 0);
-        }
-
-        function switchProfileTab(tab) {
-            currentProfileTab = tab;
-            document.getElementById('tabMyClipsBtn').classList.toggle('active', tab === 'myClips');
-            document.getElementById('tabLikedBtn').classList.toggle('active', tab === 'liked');
-            renderProfileClips();
-        }
-
-        function renderProfileClips() {
-            const container = document.getElementById('profileClipsGrid');
-            container.innerHTML = '';
-            let list = (currentProfileTab === 'myClips') ? clips.filter(c => c.author === currentUser.username) : clips.filter(c => c.likedBy.includes(currentUser.username));
-            if (list.length === 0) {
-                container.innerHTML = `<div style="color: var(--text-muted); padding: 20px;">Видео пока нет.</div>`;
-                return;
-            }
-            list.forEach(clip => container.appendChild(createClipCard(clip)));
-        }
-
-        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
-        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
-
-        function handleAuthSubmit(e) {
-            e.preventDefault();
-            const username = document.getElementById('authUsername').value.trim();
-            let user = getUserInfo(username);
-
-            if (!usersDB.some(u => u.username === username)) {
-                user = { username: username, role: "user", isVerified: false };
-                usersDB.push(user);
-            }
-
-            currentUser = user;
-            saveData();
-            saveUser();
-            closeAuthModal();
-            showToast(`Вы вошли как ${username}`);
-            renderClips();
-        }
-
-        function logout() {
-            currentUser = null;
-            saveUser();
-            closeProfile();
-            renderClips();
-            showToast('Вы вышли из системы');
         }
 
         function toggleLike(id) {
-            if (!currentUser) return openAuthModal();
-            const clip = clips.find(c => c.id === id);
+            if (!currentUser) return openAuthDialog();
+            if (currentUser.isBanned) return showNotification("Ваш аккаунт заблокирован!", "fa-ban");
+
+            const clip = clipsDB.find(c => c.id === id);
             if (clip) {
                 const idx = clip.likedBy.indexOf(currentUser.username);
                 if (idx === -1) {
@@ -1167,55 +905,156 @@
                 } else {
                     clip.likedBy.splice(idx, 1); clip.likes--;
                 }
-                saveData();
-                renderClips();
+                saveStorage();
+                renderMainFeed();
+                if (activeWatchId === id) {
+                    document.getElementById('watchLikesCount').textContent = clip.likes;
+                }
             }
         }
 
-        function openUploadModal() { if (!currentUser) return openAuthModal(); document.getElementById('uploadModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('uploadModal').style.display = 'none'; }
-        function updateFileName(input) { document.getElementById('fileNameText').textContent = (input.files && input.files[0]) ? input.files[0].name : "Нажмите для выбора клипа"; }
+        /* Админка */
+        function openAdminModal() {
+            if (!currentUser || currentUser.role !== 'admin') return;
+            renderAdminUsers();
+            document.getElementById('adminModalScreen').style.display = 'block';
+        }
 
-        function handleUpload(event) {
-            event.preventDefault();
-            const fileInput = document.getElementById('videoFile');
-            const titleInput = document.getElementById('videoTitle');
-            const tagInput = document.getElementById('videoTag');
+        function closeAdminModal() { document.getElementById('adminModalScreen').style.display = 'none'; }
+
+        function renderAdminUsers() {
+            const tbody = document.getElementById('adminUsersTable');
+            tbody.innerHTML = '';
+            usersDB.forEach(user => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><b>${escapeHTML(user.username)}</b></td>
+                    <td><span style="color:${user.role === 'admin' ? '#ff0055' : user.role === 'moderator' ? '#ffb700' : '#888'}">${user.role.toUpperCase()}</span></td>
+                    <td>${user.isBanned ? '🚫 ЗАБАНЕН' : user.isVerified ? '✔ Верифицирован' : 'Обычный'}</td>
+                    <td>
+                        <button class="btn-small btn-cyan" onclick="adminVerify('${user.username}')">${user.isVerified ? 'Снять ✔' : 'Выдать ✔'}</button>
+                        <button class="btn-small btn-gold" onclick="adminRole('${user.username}')">${user.role === 'moderator' ? 'Снять модера' : 'Выдать модера'}</button>
+                        <button class="btn-small btn-danger" onclick="adminBan('${user.username}')">${user.isBanned ? 'Разбанить' : 'Забанить'}</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function adminVerify(username) {
+            const u = getUser(username);
+            u.isVerified = !u.isVerified;
+            saveStorage(); renderAdminUsers(); renderMainFeed();
+            showNotification(`Статус верификации ${username} изменен`);
+        }
+
+        function adminRole(username) {
+            const u = getUser(username);
+            if (u.role === 'admin') return alert('Роль админа нельзя изменять');
+            u.role = u.role === 'moderator' ? 'user' : 'moderator';
+            saveStorage(); renderAdminUsers(); renderMainFeed();
+            showNotification(`Роль ${username} изменена`);
+        }
+
+        function adminBan(username) {
+            const u = getUser(username);
+            if (u.role === 'admin') return alert('Нельзя забанить администратора');
+            u.isBanned = !u.isBanned;
+            saveStorage(); renderAdminUsers();
+            showNotification(`Статус блокировки ${username} изменен`);
+        }
+
+        /* Авторизация & Загрузка */
+        function updateHeaderUI() {
+            const avatar = document.getElementById('headerAvatar');
+            const name = document.getElementById('headerUserName');
+            const adminBtn = document.getElementById('adminControlBtn');
+
+            if (currentUser) {
+                avatar.textContent = currentUser.username[0].toUpperCase();
+                name.textContent = currentUser.username;
+                adminBtn.style.display = (currentUser.role === 'admin') ? 'flex' : 'none';
+            } else {
+                avatar.innerHTML = '<i class="fa-solid fa-user"></i>';
+                name.textContent = 'Войти';
+                adminBtn.style.display = 'none';
+            }
+        }
+
+        function handleUserProfileClick() { if (!currentUser) openAuthDialog(); else logout(); }
+
+        function openAuthDialog() { document.getElementById('authDialog').style.display = 'flex'; }
+        function closeAuthDialog() { document.getElementById('authDialog').style.display = 'none'; }
+
+        function handleAuth(e) {
+            e.preventDefault();
+            const username = document.getElementById('authUsername').value.trim();
+            let user = getUser(username);
+
+            if (!usersDB.some(u => u.username === username)) {
+                user = { username: username, role: "user", isVerified: false, isBanned: false };
+                usersDB.push(user);
+            }
+
+            currentUser = user;
+            saveStorage(); saveCurrentUser();
+            closeAuthDialog();
+            showNotification(`Добро пожаловать, ${username}!`);
+            renderMainFeed();
+        }
+
+        function logout() {
+            if (confirm("Выйти из аккаунта?")) {
+                currentUser = null;
+                saveCurrentUser();
+                renderMainFeed();
+                showNotification("Вы вышли из системы");
+            }
+        }
+
+        function openUploadDialog() {
+            if (!currentUser) return openAuthDialog();
+            if (currentUser.isBanned) return showNotification("Забаненные пользователи не могут загружать видео", "fa-ban");
+            document.getElementById('uploadDialog').style.display = 'flex';
+        }
+
+        function closeUploadDialog() { document.getElementById('uploadDialog').style.display = 'none'; }
+
+        function handleVideoUpload(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('videoFileInput');
+            const titleInput = document.getElementById('videoTitleInput');
+            const categorySelect = document.getElementById('videoCategorySelect');
 
             if (fileInput.files && fileInput.files[0]) {
                 const newClip = {
                     id: Date.now(),
                     title: titleInput.value,
-                    author: currentUser ? currentUser.username : "Аноним",
-                    tag: tagInput.value,
-                    likes: 0,
-                    views: 1,
-                    likedBy: [],
-                    comments: [],
+                    author: currentUser.username,
+                    tag: categorySelect.value,
+                    likes: 0, views: 1,
+                    likedBy: [], comments: [],
                     videoUrl: URL.createObjectURL(fileInput.files[0])
                 };
-                clips.unshift(newClip);
-                saveData();
-                renderClips();
-                closeModal();
-                event.target.reset();
-                showToast('Клип опубликован!');
+                clipsDB.unshift(newClip);
+                saveStorage(); renderMainFeed();
+                closeUploadDialog(); e.target.reset();
+                showNotification("Клип успешно опубликован!");
             }
         }
 
-        function filterClips(tag, element) {
-            currentFilter = tag;
-            document.querySelectorAll('.tag-pill').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-            renderClips();
+        function setCategoryFilter(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderMainFeed();
         }
 
-        function handleSearch() { searchQuery = document.getElementById('searchInput').value; renderClips(); }
-        function shareClip(title) { showToast(`Ссылка скопирована!`); }
-        function escapeHtml(text) { return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+        function handleSearch() { searchQuery = document.getElementById('searchInput').value; renderMainFeed(); }
+        function escapeHTML(str) { return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 
-        updateHeaderUserUI();
-        renderClips();
+        updateHeaderUI();
+        renderMainFeed();
     </script>
 </body>
 </html>
