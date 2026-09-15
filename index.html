@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameClips — Хайлайты и Профиль Игрока</title>
+    <title>GameClips — Кастомный Плеер и Качество</title>
     <!-- Иконки FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -128,7 +128,6 @@
             box-shadow: 0 0 25px var(--accent-glow);
         }
 
-        /* Аватар в шапке / Кнопка входа */
         .user-profile-btn {
             display: flex;
             align-items: center;
@@ -166,12 +165,20 @@
             padding: 0 20px;
         }
 
+        .top-bar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
         .tags-nav {
             display: flex;
             gap: 12px;
-            margin-bottom: 30px;
             overflow-x: auto;
-            padding-bottom: 10px;
+            padding-bottom: 5px;
         }
 
         .tag-pill {
@@ -193,6 +200,18 @@
             border-color: var(--accent-color);
             box-shadow: 0 0 12px var(--accent-glow);
         }
+
+        .sort-select {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 18px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .sort-select option { background: #08080a; }
 
         /* --- Сетка клипов --- */
         .clips-grid {
@@ -285,15 +304,130 @@
         .action-btn:hover { color: var(--text-main); }
         .action-btn.liked { color: var(--accent-color); text-shadow: 0 0 10px var(--accent-glow); }
 
-        /* --- Страница Просмотра (Watch View) --- */
+        /* --- Страница Просмотра с Кастомным Видеоплеером (Custom YouTube Player) --- */
         .watch-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 8, 0.95); backdrop-filter: blur(20px); z-index: 300; overflow-y: auto; padding: 40px 5%;
         }
         .watch-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 340px; gap: 30px; }
         @media (max-width: 900px) { .watch-container { grid-template-columns: 1fr; } }
         .main-player-box { display: flex; flex-direction: column; gap: 15px; }
-        .watch-video-wrapper { width: 100%; padding-top: 56.25%; position: relative; background: #000; border-radius: 16px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 0 30px rgba(255, 0, 60, 0.2); }
-        .watch-video-wrapper video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        
+        /* Контейнер Кастомного Плеера */
+        .custom-player-container {
+            width: 100%;
+            padding-top: 56.25%;
+            position: relative;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.2);
+        }
+
+        .custom-player-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Меню настроек качества прямо над видео */
+        .player-settings-menu {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            right: 20px;
+            background: rgba(15, 15, 20, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 10px;
+            z-index: 20;
+            min-width: 160px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .player-settings-menu.active { display: block; }
+
+        .settings-option-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin: 5px 8px;
+            font-weight: 700;
+        }
+
+        .settings-item {
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .settings-item:hover { background: rgba(255, 0, 60, 0.2); }
+        .settings-item.active { color: var(--accent-color); font-weight: 700; }
+
+        /* Элементы Кастомного Контроллера Плеера */
+        .custom-controls-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .player-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .player-btn:hover { color: var(--accent-color); }
+
+        .quality-badge {
+            background: var(--accent-color);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 4px;
+        }
+
+        .subscribe-btn {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .subscribe-btn.subscribed {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            box-shadow: none;
+        }
+
         .watch-details, .watch-comments { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; }
         .watch-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
         .watch-author-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
@@ -313,79 +447,23 @@
         .sidebar-meta { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
         .close-watch-btn { position: fixed; top: 25px; right: 40px; background: var(--accent-color); border: none; color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; box-shadow: 0 0 15px var(--accent-glow); z-index: 310; }
 
-        /* --- Личный Кабинет / Профиль Игрока (Profile Modal) --- */
-        .profile-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 8, 0.95); backdrop-filter: blur(20px); z-index: 250; overflow-y: auto; padding: 40px 5%;
-        }
-
-        .profile-header {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 1000px;
-            margin: 0 auto 30px;
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            position: relative;
-        }
-
-        .profile-avatar-large {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--accent-color), #550000);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            font-weight: bold;
-            box-shadow: 0 0 20px var(--accent-glow);
-            border: 2px solid var(--accent-color);
-        }
-
+        /* --- Профиль Игрока --- */
+        .profile-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 8, 0.95); backdrop-filter: blur(20px); z-index: 250; overflow-y: auto; padding: 40px 5%; }
+        .profile-header { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; max-width: 1000px; margin: 0 auto 30px; display: flex; align-items: center; gap: 25px; position: relative; }
+        .profile-avatar-large { width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(45deg, var(--accent-color), #550000); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: bold; box-shadow: 0 0 20px var(--accent-glow); border: 2px solid var(--accent-color); }
         .profile-details h2 { font-size: 26px; margin-bottom: 5px; }
         .profile-details p { color: var(--text-muted); font-size: 14px; margin-bottom: 15px; }
-
-        .profile-stats {
-            display: flex;
-            gap: 20px;
-        }
-
-        .stat-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 10px 18px;
-            border-radius: 12px;
-            text-align: center;
-        }
-
+        .profile-stats { display: flex; gap: 20px; }
+        .stat-item { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); padding: 10px 18px; border-radius: 12px; text-align: center; }
         .stat-value { font-size: 18px; font-weight: 700; color: var(--accent-color); }
         .stat-label { font-size: 12px; color: var(--text-muted); }
-
-        .logout-btn {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            background: rgba(255, 0, 60, 0.15);
-            border: 1px solid var(--accent-color);
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.2s;
-        }
-
-        .logout-btn:hover { background: var(--accent-color); box-shadow: 0 0 12px var(--accent-glow); }
-
+        .logout-btn { position: absolute; top: 25px; right: 25px; background: rgba(255, 0, 60, 0.15); border: 1px solid var(--accent-color); color: #fff; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-size: 13px; }
         .profile-content { max-width: 1000px; margin: 0 auto; }
         .profile-tabs { display: flex; gap: 15px; border-bottom: 1px solid var(--glass-border); margin-bottom: 25px; padding-bottom: 10px; }
-        .profile-tab { background: none; border: none; color: var(--text-muted); font-size: 16px; font-weight: 600; cursor: pointer; padding: 6px 12px; transition: color 0.2s; }
+        .profile-tab { background: none; border: none; color: var(--text-muted); font-size: 16px; font-weight: 600; cursor: pointer; padding: 6px 12px; }
         .profile-tab.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
 
-        /* --- Общие модальные окна (Загрузка & Авторизация) --- */
+        /* Модалки */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 400; justify-content: center; align-items: center; }
         .modal-content { background: rgba(15, 15, 20, 0.95); border: 1px solid var(--glass-border); width: 90%; max-width: 420px; border-radius: 24px; padding: 30px; box-shadow: 0 0 40px rgba(255, 0, 60, 0.2); position: relative; }
         .close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
@@ -425,20 +503,28 @@
         </div>
     </header>
 
-    <!-- Основной контент (Лента) -->
+    <!-- Основной контент -->
     <div class="container" id="mainContainer">
-        <div class="tags-nav">
-            <div class="tag-pill active" onclick="filterClips('all', this)">Все клипы</div>
-            <div class="tag-pill" onclick="filterClips('эпик', this)">🔥 #эпик</div>
-            <div class="tag-pill" onclick="filterClips('баги', this)">😂 #баги</div>
-            <div class="tag-pill" onclick="filterClips('соло', this)">⚔️ #соло</div>
-            <div class="tag-pill" onclick="filterClips('скилл', this)">🎯 #скилл</div>
+        <div class="top-bar-controls">
+            <div class="tags-nav">
+                <div class="tag-pill active" onclick="filterClips('all', this)">Все клипы</div>
+                <div class="tag-pill" onclick="filterClips('эпик', this)">🔥 #эпик</div>
+                <div class="tag-pill" onclick="filterClips('баги', this)">😂 #баги</div>
+                <div class="tag-pill" onclick="filterClips('соло', this)">⚔️ #соло</div>
+                <div class="tag-pill" onclick="filterClips('скилл', this)">🎯 #скилл</div>
+            </div>
+
+            <!-- Сортировка -->
+            <select class="sort-select" id="sortSelect" onchange="renderClips()">
+                <option value="newest">Сначала новые</option>
+                <option value="popular">По популярности (просмотрам)</option>
+            </select>
         </div>
 
         <div class="clips-grid" id="clipsContainer"></div>
     </div>
 
-    <!-- Страница Кабинета / Профиля Игрока -->
+    <!-- Кабинет Игрока -->
     <div class="profile-modal" id="profileModal">
         <button class="close-watch-btn" onclick="closeProfile()"><i class="fa-solid fa-xmark"></i></button>
 
@@ -470,22 +556,49 @@
         </div>
     </div>
 
-    <!-- Полноэкранный просмотр видео (Watch View) -->
+    <!-- Полноэкранный просмотр видео с меню настроек качества (YouTube Style) -->
     <div class="watch-modal" id="watchModal">
         <button class="close-watch-btn" onclick="closeWatchView()"><i class="fa-solid fa-xmark"></i></button>
         <div class="watch-container">
             <div class="main-player-box">
-                <div class="watch-video-wrapper">
-                    <video id="watchVideoPlayer" controls autoplay></video>
+                <!-- Кастомный Видеоплеер -->
+                <div class="custom-player-container">
+                    <video id="watchVideoPlayer" controls></video>
+                    
+                    <!-- Меню переключения Качества & Скорости -->
+                    <div class="player-settings-menu" id="playerSettingsMenu">
+                        <div class="settings-option-title">Качество видео</div>
+                        <div class="settings-item active" onclick="setQuality('1080p60', this)">1080p60 <span class="quality-badge">HD</span></div>
+                        <div class="settings-item" onclick="setQuality('720p', this)">720p <span class="quality-badge">HD</span></div>
+                        <div class="settings-item" onclick="setQuality('480p', this)">480p</div>
+                        <div class="settings-item" onclick="setQuality('360p', this)">360p</div>
+                        
+                        <div class="settings-option-title" style="margin-top:10px;">Скорость</div>
+                        <div class="settings-item active" onclick="setSpeed(1, this)">1.0x (Обычная)</div>
+                        <div class="settings-item" onclick="setSpeed(1.25, this)">1.25x</div>
+                        <div class="settings-item" onclick="setSpeed(1.5, this)">1.5x</div>
+                        <div class="settings-item" onclick="setSpeed(2, this)">2.0x</div>
+                    </div>
+
+                    <!-- Панель управления качества (Кнопка Шестеренка) -->
+                    <div class="custom-controls-bar">
+                        <div style="font-size: 13px; font-weight: 600;" id="currentQualityLabel">Качество: 1080p60</div>
+                        <button class="player-btn" onclick="toggleSettingsMenu()"><i class="fa-solid fa-gear"></i></button>
+                    </div>
                 </div>
+
                 <div class="watch-details">
                     <div class="watch-title" id="watchTitle">---</div>
                     <div class="watch-author-bar">
                         <div class="author">
                             <div class="avatar" id="watchAvatar">U</div>
-                            <span id="watchAuthor">---</span>
+                            <div>
+                                <span id="watchAuthor" style="font-weight: 700;">---</span>
+                                <i class="fa-solid fa-circle-check" style="color: var(--accent-color); font-size: 12px; margin-left: 3px;" title="Подтвержденный игрок"></i>
+                                <div id="watchMeta" style="color: var(--text-muted); font-size: 12px; margin-top: 2px;">---</div>
+                            </div>
                         </div>
-                        <div id="watchMeta" style="color: var(--text-muted); font-size: 13px;">---</div>
+                        <button class="subscribe-btn" id="subscribeBtn" onclick="toggleSubscribe()">Подписаться</button>
                     </div>
                     <div class="actions">
                         <button class="action-btn" id="watchLikeBtn" onclick="toggleLikeInWatch()">
@@ -508,13 +621,13 @@
             </div>
 
             <div class="watch-sidebar">
-                <h3>Другие клипы</h3>
+                <h3>Рекомендуем по теме</h3>
                 <div class="sidebar-clips" id="sidebarClips"></div>
             </div>
         </div>
     </div>
 
-    <!-- Модальное окно Авторизации / Регистрации -->
+    <!-- Авторизация -->
     <div class="modal" id="authModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -536,7 +649,7 @@
         </div>
     </div>
 
-    <!-- Модальное окно Загрузки Клипа -->
+    <!-- Загрузка -->
     <div class="modal" id="uploadModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -571,11 +684,8 @@
     </div>
 
     <script>
-        /* ==========================================
-           1. ДАННЫЕ И СОСТОЯНИЕ (LOCALSTORAGE / FIREBASE READY)
-           ========================================== */
-        
         let currentUser = JSON.parse(localStorage.getItem('gameclips_user')) || null;
+        let subscriptions = JSON.parse(localStorage.getItem('gameclips_subs')) || [];
 
         let clips = JSON.parse(localStorage.getItem('gameclips_data')) || [
             {
@@ -586,10 +696,7 @@
                 likes: 42,
                 views: 310,
                 likedBy: [],
-                comments: [
-                    { author: "HardSkill", text: "Жесть прострел!" },
-                    { author: "ProGamer99", text: "Спасибо!" }
-                ],
+                comments: [{ author: "HardSkill", text: "Жесть прострел!" }],
                 videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-game-animation-of-a-robot-character-42964-large.mp4"
             },
             {
@@ -635,21 +742,24 @@
             updateHeaderUserUI();
         }
 
-        /* ==========================================
-           2. РЕНДЕР ЛЕНТЫ КЛИПОВ
-           ========================================== */
-
         function renderClips() {
             const container = document.getElementById('clipsContainer');
             container.innerHTML = '';
 
-            const filtered = clips.filter(c => {
+            let list = clips.filter(c => {
                 const matchesTag = currentFilter === 'all' || c.tag === currentFilter;
                 const matchesSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase());
                 return matchesTag && matchesSearch;
             });
 
-            filtered.forEach(clip => {
+            const sortType = document.getElementById('sortSelect').value;
+            if (sortType === 'popular') {
+                list.sort((a, b) => b.views - a.views);
+            } else {
+                list.sort((a, b) => b.id - a.id);
+            }
+
+            list.forEach(clip => {
                 container.appendChild(createClipCard(clip));
             });
         }
@@ -692,9 +802,7 @@
             return card;
         }
 
-        /* ==========================================
-           3. РЕЖИМ ПРОСМОТРА КЛИПА (WATCH VIEW)
-           ========================================== */
+        /* --- КАСТОМНЫЙ ПЛЕЕР И ПЕРЕКЛЮЧЕНИЕ КАЧЕСТВА --- */
 
         function openWatchView(clipId) {
             const clip = clips.find(c => c.id === clipId);
@@ -714,6 +822,7 @@
             player.src = clip.videoUrl;
 
             updateWatchLikeBtnState(clip);
+            updateSubscribeBtnState(clip.author);
             renderWatchComments();
             renderSidebarClips();
 
@@ -728,7 +837,71 @@
             player.src = '';
             document.getElementById('watchModal').style.display = 'none';
             document.body.style.overflow = 'auto';
+            document.getElementById('playerSettingsMenu').classList.remove('active');
             activeWatchClipId = null;
+        }
+
+        function toggleSettingsMenu() {
+            document.getElementById('playerSettingsMenu').classList.toggle('active');
+        }
+
+        function setQuality(qualityLabel, element) {
+            const player = document.getElementById('watchVideoPlayer');
+            const currentTime = player.currentTime; // Запоминаем текущую секунду!
+            const isPlaying = !player.paused;
+
+            document.getElementById('currentQualityLabel').textContent = `Качество: ${qualityLabel}`;
+            
+            // Смена активного пункта в меню
+            const items = element.parentElement.querySelectorAll('.settings-item');
+            items.forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            // Симулируем бесшовное переключение потока качества
+            player.currentTime = currentTime;
+            if (isPlaying) player.play();
+
+            document.getElementById('playerSettingsMenu').classList.remove('active');
+        }
+
+        function setSpeed(speed, element) {
+            const player = document.getElementById('watchVideoPlayer');
+            player.playbackRate = speed;
+            document.getElementById('playerSettingsMenu').classList.remove('active');
+        }
+
+        function updateSubscribeBtnState(authorName) {
+            const btn = document.getElementById('subscribeBtn');
+            const isSubbed = subscriptions.includes(authorName);
+
+            if (isSubbed) {
+                btn.textContent = "Вы подписаны";
+                btn.classList.add('subscribed');
+            } else {
+                btn.textContent = "Подписаться";
+                btn.classList.remove('subscribed');
+            }
+        }
+
+        function toggleSubscribe() {
+            if (!currentUser) {
+                alert("Войдите в аккаунт, чтобы подписываться на авторов!");
+                openAuthModal();
+                return;
+            }
+
+            const clip = clips.find(c => c.id === activeWatchClipId);
+            if (!clip) return;
+
+            const index = subscriptions.indexOf(clip.author);
+            if (index === -1) {
+                subscriptions.push(clip.author);
+            } else {
+                subscriptions.splice(index, 1);
+            }
+
+            localStorage.setItem('gameclips_subs', JSON.stringify(subscriptions));
+            updateSubscribeBtnState(clip.author);
         }
 
         function updateWatchLikeBtnState(clip) {
@@ -754,7 +927,7 @@
 
         function addCommentInWatch() {
             if (!currentUser) {
-                alert("Пожалуйста, войдите в аккаунт, чтобы оставлять комментарии!");
+                alert("Войдите в профиль, чтобы писать комментарии!");
                 openAuthModal();
                 return;
             }
@@ -800,9 +973,7 @@
             });
         }
 
-        /* ==========================================
-           4. ЛИЧНЫЙ КАБИНЕТ И ПОЛЬЗОВАТЕЛИ (PROFILE)
-           ========================================== */
+        /* --- ПОЛЬЗОВАТЕЛЬ & КАБИНЕТ --- */
 
         function updateHeaderUserUI() {
             const avatar = document.getElementById('headerAvatar');
@@ -818,23 +989,17 @@
         }
 
         function handleUserBtnClick() {
-            if (currentUser) {
-                openProfile();
-            } else {
-                openAuthModal();
-            }
+            if (currentUser) openProfile();
+            else openAuthModal();
         }
 
         function openProfile() {
             if (!currentUser) return;
-
             document.getElementById('profileName').textContent = currentUser.username;
             document.getElementById('profileHandle').textContent = `@${currentUser.username.toLowerCase()}`;
             document.getElementById('profileAvatarLarge').textContent = currentUser.username[0].toUpperCase();
-
             updateProfileStats();
             renderProfileClips();
-
             document.getElementById('profileModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
@@ -863,34 +1028,20 @@
             const container = document.getElementById('profileClipsGrid');
             container.innerHTML = '';
 
-            let list = [];
-            if (currentProfileTab === 'myClips') {
-                list = clips.filter(c => c.author === currentUser.username);
-            } else {
-                list = clips.filter(c => c.likedBy.includes(currentUser.username));
-            }
+            let list = (currentProfileTab === 'myClips')
+                ? clips.filter(c => c.author === currentUser.username)
+                : clips.filter(c => c.likedBy.includes(currentUser.username));
 
             if (list.length === 0) {
-                container.innerHTML = `<div style="color: var(--text-muted); padding: 20px;">Нет доступных клипов.</div>`;
+                container.innerHTML = `<div style="color: var(--text-muted); padding: 20px;">Пока ничего нет.</div>`;
                 return;
             }
 
-            list.forEach(clip => {
-                container.appendChild(createClipCard(clip));
-            });
+            list.forEach(clip => container.appendChild(createClipCard(clip)));
         }
 
-        /* ==========================================
-           5. АВТОРИЗАЦИЯ & ВХОД (FIREBASE INTEGRATION READY)
-           ========================================== */
-
-        function openAuthModal() {
-            document.getElementById('authModal').style.display = 'flex';
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').style.display = 'none';
-        }
+        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
+        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
 
         function toggleAuthMode() {
             isAuthRegisterMode = !isAuthRegisterMode;
@@ -902,13 +1053,6 @@
         function handleAuthSubmit(e) {
             e.preventDefault();
             const username = document.getElementById('authUsername').value.trim();
-            
-            /* === ПРИМЕЧАНИЕ ДЛЯ FIREBASE ===
-               Если ты решишь подключить настоящую БД Firebase, 
-               здесь будет вызываться: firebase.auth().signInWithEmailAndPassword(...) 
-               или firebase.auth().createUserWithEmailAndPassword(...)
-            ================================== */
-
             if (username) {
                 currentUser = { username: username };
                 saveUser();
@@ -924,10 +1068,6 @@
             closeProfile();
             renderClips();
         }
-
-        /* ==========================================
-           6. ЛАЙКИ И ПУБЛИКАЦИЯ
-           ========================================== */
 
         function toggleLike(id) {
             if (!currentUser) {
@@ -964,13 +1104,10 @@
             document.getElementById('uploadModal').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('uploadModal').style.display = 'none';
-        }
+        function closeModal() { document.getElementById('uploadModal').style.display = 'none'; }
 
         function updateFileName(input) {
-            const label = document.getElementById('fileNameText');
-            label.textContent = (input.files && input.files[0]) ? input.files[0].name : "Нажмите для выбора видео";
+            document.getElementById('fileNameText').textContent = (input.files && input.files[0]) ? input.files[0].name : "Нажмите для выбора видео";
         }
 
         function handleUpload(event) {
@@ -1015,15 +1152,9 @@
             renderClips();
         }
 
-        function shareClip(title) {
-            alert(`Ссылка на клип "${title}" скопирована в буфер обмена!`);
-        }
+        function shareClip(title) { alert(`Ссылка на клип "${title}" скопирована!`); }
+        function escapeHtml(text) { return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 
-        function escapeHtml(text) {
-            return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
-        // Инициализация
         updateHeaderUserUI();
         renderClips();
     </script>
