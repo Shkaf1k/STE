@@ -70,7 +70,6 @@
             text-shadow: 0 0 12px var(--accent-glow);
         }
 
-        /* Строка поиска */
         .search-box {
             position: relative;
             flex-grow: 1;
@@ -124,7 +123,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 30px auto;
             padding: 0 20px;
         }
@@ -157,9 +156,10 @@
             box-shadow: 0 0 12px var(--accent-glow);
         }
 
+        /* --- Сетка горизонтальных YouTube-карточек --- */
         .clips-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 25px;
         }
 
@@ -168,11 +168,12 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
 
         .clip-card:hover {
@@ -181,10 +182,11 @@
             box-shadow: 0 10px 30px rgba(255, 0, 60, 0.15);
         }
 
+        /* Горизонтальный формат 16:9 как на YouTube */
         .video-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 133%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
             background: #000;
         }
 
@@ -195,7 +197,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            cursor: pointer;
         }
 
         .play-overlay {
@@ -203,26 +204,38 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 40px;
+            font-size: 36px;
             color: rgba(255, 255, 255, 0.9);
             pointer-events: none;
-            transition: opacity 0.2s;
-            opacity: 1;
+            transition: opacity 0.2s, transform 0.2s;
             text-shadow: 0 0 15px var(--accent-glow);
+            background: rgba(0, 0, 0, 0.4);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .clip-card:hover .play-overlay {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: rgba(255, 0, 60, 0.6);
         }
 
         .clip-info {
-            padding: 18px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             flex-grow: 1;
         }
 
         .clip-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             line-height: 1.4;
+            color: #fff;
         }
 
         .clip-meta {
@@ -267,7 +280,7 @@
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -284,65 +297,221 @@
             text-shadow: 0 0 10px var(--accent-glow);
         }
 
-        /* Интерактивная секция комментариев */
-        .comments-section {
+        /* --- Страница Просмотра Видео (Full Watch View) --- */
+        .watch-modal {
             display: none;
-            padding-top: 10px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.1);
-            margin-top: 10px;
-        }
-
-        .comments-section.open {
-            display: block;
-        }
-
-        .comments-list {
-            max-height: 120px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 8, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 300;
             overflow-y: auto;
-            margin-bottom: 10px;
+            padding: 40px 5%;
+        }
+
+        .watch-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 30px;
+            position: relative;
+        }
+
+        @media (max-width: 900px) {
+            .watch-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .main-player-box {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 15px;
         }
 
-        .comment-item {
-            font-size: 12px;
+        .watch-video-wrapper {
+            width: 100%;
+            padding-top: 56.25%;
+            position: relative;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.2);
+        }
+
+        .watch-video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .watch-details {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .watch-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .watch-author-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* Полноразмерный блок комментариев */
+        .watch-comments {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .watch-comments h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .watch-comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .watch-comment-item {
+            padding: 10px;
             background: rgba(255, 255, 255, 0.03);
-            padding: 6px 10px;
             border-radius: 8px;
+            font-size: 13px;
         }
 
-        .comment-item strong {
+        .watch-comment-item strong {
             color: var(--accent-color);
         }
 
-        .comment-input-group {
+        .watch-comment-form {
             display: flex;
-            gap: 6px;
+            gap: 10px;
         }
 
-        .comment-input-group input {
+        .watch-comment-form input {
             flex-grow: 1;
-            padding: 6px 10px;
+            padding: 10px 14px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
-            border-radius: 8px;
+            border-radius: 10px;
             color: #fff;
-            font-size: 12px;
             outline: none;
         }
 
-        .comment-input-group button {
+        .watch-comment-form button {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Боковая колонка других клипов */
+        .watch-sidebar h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-clips {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sidebar-clip-item {
+            display: flex;
+            gap: 10px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .sidebar-clip-item:hover {
+            border-color: var(--accent-color);
+        }
+
+        .sidebar-thumb {
+            width: 120px;
+            height: 68px;
+            background: #000;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .sidebar-thumb video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar-info {
+            padding: 6px 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .sidebar-title {
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .sidebar-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .close-watch-btn {
+            position: fixed;
+            top: 25px;
+            right: 40px;
             background: var(--accent-color);
             border: none;
             color: #fff;
-            padding: 6px 12px;
-            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
             cursor: pointer;
-            font-size: 12px;
+            box-shadow: 0 0 15px var(--accent-glow);
+            z-index: 310;
         }
 
-        /* --- Модальное окно --- */
+        /* --- Модальное окно загрузки --- */
         .modal {
             display: none;
             position: fixed;
@@ -380,91 +549,15 @@
             cursor: pointer;
         }
 
-        .close-btn:hover {
-            color: var(--accent-color);
-        }
-
-        .modal h2 {
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .form-group input[type="text"] {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: var(--text-main);
-            outline: none;
-        }
-
-        .form-group select {
-            width: 100%;
-            padding: 12px 16px;
-            background-color: #121216;
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: var(--text-main);
-            outline: none;
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg fill='%23ff003c' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-        }
-
-        .form-group select option {
-            background-color: #121216;
-            color: #ffffff;
-        }
-
-        .file-upload-wrapper input[type="file"] {
-            display: none;
-        }
-
-        .file-upload-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px dashed var(--glass-border);
-            border-radius: 12px;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-
-        .file-upload-label:hover {
-            border-color: var(--accent-color);
-            color: #fff;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
-            border: none;
-            border-radius: 12px;
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
+        .modal h2 { margin-bottom: 20px; font-size: 22px; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); }
+        .form-group input[type="text"] { width: 100%; padding: 12px 16px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--glass-border); border-radius: 12px; color: var(--text-main); outline: none; }
+        .form-group select { width: 100%; padding: 12px 16px; background-color: #121216; border: 1px solid var(--glass-border); border-radius: 12px; color: var(--text-main); outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg fill='%23ff003c' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; }
+        .form-group select option { background-color: #121216; color: #ffffff; }
+        .file-upload-wrapper input[type="file"] { display: none; }
+        .file-upload-label { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px; background: rgba(255, 255, 255, 0.04); border: 1px dashed var(--glass-border); border-radius: 12px; color: var(--text-muted); cursor: pointer; }
+        .submit-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary)); border: none; border-radius: 12px; color: #ffffff; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 10px; box-shadow: 0 0 15px var(--accent-glow); }
     </style>
 </head>
 <body>
@@ -478,7 +571,7 @@
         <!-- Поиск -->
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="Поиск по названию клипа..." oninput="handleSearch()">
+            <input type="text" id="searchInput" placeholder="Поиск видео..." oninput="handleSearch()">
         </div>
 
         <button class="upload-btn" onclick="openModal()">
@@ -501,7 +594,56 @@
         <div class="clips-grid" id="clipsContainer"></div>
     </div>
 
-    <!-- Модальное окно -->
+    <!-- Полноэкранная страница просмотра клипа (Watch View) -->
+    <div class="watch-modal" id="watchModal">
+        <button class="close-watch-btn" onclick="closeWatchView()"><i class="fa-solid fa-xmark"></i></button>
+        
+        <div class="watch-container">
+            <!-- Основное видео и детали -->
+            <div class="main-player-box">
+                <div class="watch-video-wrapper">
+                    <video id="watchVideoPlayer" controls autoplay></video>
+                </div>
+                
+                <div class="watch-details">
+                    <div class="watch-title" id="watchTitle">---</div>
+                    <div class="watch-author-bar">
+                        <div class="author">
+                            <div class="avatar" id="watchAvatar">U</div>
+                            <span id="watchAuthor">---</span>
+                        </div>
+                        <div id="watchMeta" style="color: var(--text-muted); font-size: 13px;">---</div>
+                    </div>
+                    <div class="actions">
+                        <button class="action-btn" id="watchLikeBtn" onclick="toggleLikeInWatch()">
+                            <i class="fa-regular fa-heart"></i> <span id="watchLikesCount">0</span>
+                        </button>
+                        <button class="action-btn" onclick="shareClip('текущий клип')">
+                            <i class="fa-regular fa-share-from-square"></i> Поделиться
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Блок комментариев -->
+                <div class="watch-comments">
+                    <h3>Комментарии (<span id="watchCommentsCount">0</span>)</h3>
+                    <div class="watch-comments-list" id="watchCommentsList"></div>
+                    <div class="watch-comment-form">
+                        <input type="text" id="watchCommentInput" placeholder="Напишите комментарий...">
+                        <button onclick="addCommentInWatch()">Отправить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Рекомендации справа -->
+            <div class="watch-sidebar">
+                <h3>Другие клипы</h3>
+                <div class="sidebar-clips" id="sidebarClips"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно загрузки -->
     <div class="modal" id="uploadModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -511,7 +653,7 @@
                     <label>Выберите видеофайл (.mp4)</label>
                     <div class="file-upload-wrapper">
                         <input type="file" id="videoFile" accept="video/*" required onchange="updateFileName(this)">
-                        <label for="videoFile" class="file-upload-label" id="fileLabel">
+                        <label for="videoFile" class="file-upload-label">
                             <i class="fa-solid fa-cloud-arrow-up"></i>
                             <span id="fileNameText">Нажмите для выбора видео</span>
                         </label>
@@ -568,13 +710,14 @@
                 likes: 89,
                 views: 540,
                 isLiked: false,
-                comments: [],
+                comments: ["Эпик момент!"],
                 videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-controller-while-playing-a-video-game-41553-large.mp4"
             }
         ];
 
         let currentFilter = 'all';
         let searchQuery = '';
+        let activeWatchClipId = null;
 
         function renderClips() {
             const container = document.getElementById('clipsContainer');
@@ -589,9 +732,10 @@
             filteredClips.forEach(clip => {
                 const card = document.createElement('div');
                 card.className = 'clip-card';
+                card.onclick = () => openWatchView(clip.id);
                 card.innerHTML = `
                     <div class="video-wrapper">
-                        <video loop preload="metadata" onclick="togglePlay(this, ${clip.id})">
+                        <video preload="metadata" muted>
                             <source src="${clip.videoUrl}" type="video/mp4">
                         </video>
                         <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
@@ -605,26 +749,17 @@
                             </div>
                             <span>#${clip.tag} • <i class="fa-regular fa-eye"></i> ${clip.views}</span>
                         </div>
-                        <div class="actions">
+                        <div class="actions" onclick="event.stopPropagation()">
                             <button class="action-btn ${clip.isLiked ? 'liked' : ''}" onclick="toggleLike(${clip.id})">
                                 <i class="${clip.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i> 
                                 <span>${clip.likes}</span>
                             </button>
-                            <button class="action-btn" onclick="toggleComments(${clip.id})">
+                            <button class="action-btn" onclick="openWatchView(${clip.id})">
                                 <i class="fa-regular fa-comment"></i> ${clip.comments.length}
                             </button>
                             <button class="action-btn" onclick="shareClip('${escapeHtml(clip.title)}')">
                                 <i class="fa-regular fa-share-from-square"></i>
                             </button>
-                        </div>
-                        <div class="comments-section" id="comments-${clip.id}">
-                            <div class="comments-list" id="comments-list-${clip.id}">
-                                ${clip.comments.map(c => `<div class="comment-item"><strong>Игрок:</strong> ${escapeHtml(c)}</div>`).join('')}
-                            </div>
-                            <div class="comment-input-group">
-                                <input type="text" placeholder="Оставить комментарий..." id="input-${clip.id}">
-                                <button onclick="addComment(${clip.id})">Отправить</button>
-                            </div>
                         </div>
                     </div>
                 `;
@@ -632,28 +767,103 @@
             });
         }
 
-        function togglePlay(video, clipId) {
-            const overlay = video.parentElement.querySelector('.play-overlay');
-            if (video.paused) {
-                document.querySelectorAll('video').forEach(v => {
-                    v.pause();
-                    if (v.parentElement.querySelector('.play-overlay')) {
-                        v.parentElement.querySelector('.play-overlay').style.opacity = '1';
-                    }
-                });
-                video.play();
-                overlay.style.opacity = '0';
+        // --- Открытие клипа на отдельном экране ---
+        function openWatchView(clipId) {
+            const clip = clips.find(c => c.id === clipId);
+            if (!clip) return;
 
-                // Увеличение просмотров
-                const clip = clips.find(c => c.id === clipId);
+            activeWatchClipId = clipId;
+            clip.views++; // Считаем просмотр
+
+            document.getElementById('watchTitle').textContent = clip.title;
+            document.getElementById('watchAuthor').textContent = clip.author;
+            document.getElementById('watchAvatar').textContent = clip.author[0].toUpperCase();
+            document.getElementById('watchMeta').textContent = `#${clip.tag} • ${clip.views} просмотров`;
+            document.getElementById('watchLikesCount').textContent = clip.likes;
+
+            const player = document.getElementById('watchVideoPlayer');
+            player.src = clip.videoUrl;
+
+            // Обновляем лайк-кнопку
+            const likeBtn = document.getElementById('watchLikeBtn');
+            likeBtn.className = `action-btn ${clip.isLiked ? 'liked' : ''}`;
+            likeBtn.querySelector('i').className = `${clip.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart`;
+
+            renderWatchComments();
+            renderSidebarClips();
+
+            document.getElementById('watchModal').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // замок скролла
+            renderClips();
+        }
+
+        function closeWatchView() {
+            const player = document.getElementById('watchVideoPlayer');
+            player.pause();
+            player.src = '';
+            document.getElementById('watchModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            activeWatchClipId = null;
+        }
+
+        function renderWatchComments() {
+            const clip = clips.find(c => c.id === activeWatchClipId);
+            if (!clip) return;
+
+            document.getElementById('watchCommentsCount').textContent = clip.comments.length;
+            const container = document.getElementById('watchCommentsList');
+            container.innerHTML = clip.comments.map(c => `
+                <div class="watch-comment-item">
+                    <strong>Игрок:</strong> ${escapeHtml(c)}
+                </div>
+            `).join('');
+        }
+
+        function addCommentInWatch() {
+            const input = document.getElementById('watchCommentInput');
+            const text = input.value.trim();
+            if (text && activeWatchClipId) {
+                const clip = clips.find(c => c.id === activeWatchClipId);
                 if (clip) {
-                    clip.views++;
+                    clip.comments.push(text);
+                    input.value = '';
+                    renderWatchComments();
                     renderClips();
                 }
-            } else {
-                video.pause();
-                overlay.style.opacity = '1';
             }
+        }
+
+        function toggleLikeInWatch() {
+            if (activeWatchClipId) {
+                toggleLike(activeWatchClipId);
+                const clip = clips.find(c => c.id === activeWatchClipId);
+                document.getElementById('watchLikesCount').textContent = clip.likes;
+                const likeBtn = document.getElementById('watchLikeBtn');
+                likeBtn.className = `action-btn ${clip.isLiked ? 'liked' : ''}`;
+                likeBtn.querySelector('i').className = `${clip.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart`;
+            }
+        }
+
+        function renderSidebarClips() {
+            const container = document.getElementById('sidebarClips');
+            container.innerHTML = '';
+
+            const otherClips = clips.filter(c => c.id !== activeWatchClipId);
+            otherClips.forEach(clip => {
+                const item = document.createElement('div');
+                item.className = 'sidebar-clip-item';
+                item.onclick = () => openWatchView(clip.id);
+                item.innerHTML = `
+                    <div class="sidebar-thumb">
+                        <video src="${clip.videoUrl}" muted></video>
+                    </div>
+                    <div class="sidebar-info">
+                        <div class="sidebar-title">${escapeHtml(clip.title)}</div>
+                        <div class="sidebar-meta">${escapeHtml(clip.author)} • #${clip.tag}</div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
         }
 
         function toggleLike(id) {
@@ -662,24 +872,6 @@
                 clip.isLiked = !clip.isLiked;
                 clip.likes += clip.isLiked ? 1 : -1;
                 renderClips();
-            }
-        }
-
-        function toggleComments(id) {
-            const section = document.getElementById(`comments-${id}`);
-            section.classList.toggle('open');
-        }
-
-        function addComment(id) {
-            const input = document.getElementById(`input-${id}`);
-            const text = input.value.trim();
-            if (text) {
-                const clip = clips.find(c => c.id === id);
-                if (clip) {
-                    clip.comments.push(text);
-                    renderClips();
-                    document.getElementById(`comments-${id}`).classList.add('open');
-                }
             }
         }
 
