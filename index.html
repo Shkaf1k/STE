@@ -12,7 +12,7 @@
             --glass-bg: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 0, 60, 0.2);
             --glass-hover: rgba(255, 0, 60, 0.1);
-            --accent-color: #ff003c; /* Агрессивный красный */
+            --accent-color: #ff003c;
             --accent-glow: rgba(255, 0, 60, 0.5);
             --accent-secondary: #990024;
             --text-main: #ffffff;
@@ -31,14 +31,13 @@
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
-            /* Красно-чёрный неоновый фон */
             background-image: 
                 radial-gradient(circle at 15% 15%, rgba(255, 0, 60, 0.12) 0%, transparent 45%),
                 radial-gradient(circle at 85% 85%, rgba(153, 0, 36, 0.15) 0%, transparent 50%);
             background-attachment: fixed;
         }
 
-        /* --- Стеклянная Шапка (Navbar) --- */
+        /* --- Шапка --- */
         header {
             position: sticky;
             top: 0;
@@ -52,6 +51,7 @@
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--glass-border);
             box-shadow: 0 4px 20px rgba(255, 0, 60, 0.05);
+            gap: 20px;
         }
 
         .logo {
@@ -70,6 +70,37 @@
             text-shadow: 0 0 12px var(--accent-glow);
         }
 
+        /* Строка поиска */
+        .search-box {
+            position: relative;
+            flex-grow: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            color: #fff;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
         .upload-btn {
             background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
             color: #ffffff;
@@ -84,6 +115,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            white-space: nowrap;
         }
 
         .upload-btn:hover {
@@ -91,14 +123,12 @@
             box-shadow: 0 0 25px var(--accent-glow);
         }
 
-        /* --- Контейнер страницы --- */
         .container {
             max-width: 1200px;
             margin: 30px auto;
             padding: 0 20px;
         }
 
-        /* --- Фильтры по тегам --- */
         .tags-nav {
             display: flex;
             gap: 12px;
@@ -127,14 +157,12 @@
             box-shadow: 0 0 12px var(--accent-glow);
         }
 
-        /* --- Сетка клипов --- */
         .clips-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 25px;
         }
 
-        /* --- Стеклянная карточка клипа --- */
         .clip-card {
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -156,7 +184,7 @@
         .video-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 133%; /* Соотношение сторон 3:4 */
+            padding-top: 133%;
             background: #000;
         }
 
@@ -179,12 +207,8 @@
             color: rgba(255, 255, 255, 0.9);
             pointer-events: none;
             transition: opacity 0.2s;
-            opacity: 0;
-            text-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        .video-wrapper:hover .play-overlay {
             opacity: 1;
+            text-shadow: 0 0 15px var(--accent-glow);
         }
 
         .clip-info {
@@ -232,7 +256,8 @@
 
         .actions {
             display: flex;
-            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
             margin-top: auto;
             padding-top: 10px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -259,7 +284,65 @@
             text-shadow: 0 0 10px var(--accent-glow);
         }
 
-        /* --- Модальное окно загрузки --- */
+        /* Интерактивная секция комментариев */
+        .comments-section {
+            display: none;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
+        }
+
+        .comments-section.open {
+            display: block;
+        }
+
+        .comments-list {
+            max-height: 120px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .comment-item {
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        .comment-item strong {
+            color: var(--accent-color);
+        }
+
+        .comment-input-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .comment-input-group input {
+            flex-grow: 1;
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .comment-input-group button {
+            background: var(--accent-color);
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* --- Модальное окно --- */
         .modal {
             display: none;
             position: fixed;
@@ -295,7 +378,6 @@
             color: var(--text-muted);
             font-size: 20px;
             cursor: pointer;
-            transition: color 0.2s;
         }
 
         .close-btn:hover {
@@ -305,7 +387,6 @@
         .modal h2 {
             margin-bottom: 20px;
             font-size: 22px;
-            color: #fff;
         }
 
         .form-group {
@@ -327,26 +408,18 @@
             border-radius: 12px;
             color: var(--text-main);
             outline: none;
-            transition: border-color 0.3s;
         }
 
-        .form-group input[type="text"]:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 10px var(--accent-glow);
-        }
-
-        /* Стильный кастомный выпадающий список */
         .form-group select {
             width: 100%;
             padding: 12px 16px;
-            background-color: #121216; /* Фикс светлого фона */
+            background-color: #121216;
             border: 1px solid var(--glass-border);
             border-radius: 12px;
             color: var(--text-main);
             outline: none;
             cursor: pointer;
-            appearance: none; /* Убираем системный стрелку браузера */
-            -webkit-appearance: none;
+            appearance: none;
             background-image: url("data:image/svg+xml;utf8,<svg fill='%23ff003c' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
             background-repeat: no-repeat;
             background-position: right 12px center;
@@ -355,13 +428,6 @@
         .form-group select option {
             background-color: #121216;
             color: #ffffff;
-            padding: 12px;
-        }
-
-        /* Стильная кнопка выбора файла */
-        .file-upload-wrapper {
-            position: relative;
-            width: 100%;
         }
 
         .file-upload-wrapper input[type="file"] {
@@ -379,13 +445,11 @@
             border-radius: 12px;
             color: var(--text-muted);
             cursor: pointer;
-            transition: all 0.3s;
         }
 
         .file-upload-label:hover {
             border-color: var(--accent-color);
             color: #fff;
-            background: rgba(255, 0, 60, 0.05);
         }
 
         .submit-btn {
@@ -400,12 +464,6 @@
             cursor: pointer;
             margin-top: 10px;
             box-shadow: 0 0 15px var(--accent-glow);
-            transition: all 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            box-shadow: 0 0 25px var(--accent-glow);
-            transform: translateY(-1px);
         }
     </style>
 </head>
@@ -416,6 +474,13 @@
         <a href="#" class="logo">
             <i class="fa-solid fa-fire-flame-curved" style="color: var(--accent-color);"></i> GAME<span>CLIPS</span>
         </a>
+
+        <!-- Поиск -->
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Поиск по названию клипа..." oninput="handleSearch()">
+        </div>
+
         <button class="upload-btn" onclick="openModal()">
             <i class="fa-solid fa-plus"></i> Загрузить клип
         </button>
@@ -423,7 +488,7 @@
 
     <!-- Основной контент -->
     <div class="container">
-        <!-- Фильтры по категории -->
+        <!-- Фильтры -->
         <div class="tags-nav">
             <div class="tag-pill active" onclick="filterClips('all', this)">Все клипы</div>
             <div class="tag-pill" onclick="filterClips('эпик', this)">🔥 #эпик</div>
@@ -436,7 +501,7 @@
         <div class="clips-grid" id="clipsContainer"></div>
     </div>
 
-    <!-- Модальное окно загрузки -->
+    <!-- Модальное окно -->
     <div class="modal" id="uploadModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -479,7 +544,9 @@
                 author: "ProGamer99",
                 tag: "скилл",
                 likes: 42,
+                views: 310,
                 isLiked: false,
+                comments: ["Жесть прострел!", "Учись, бот!"],
                 videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-game-animation-of-a-robot-character-42964-large.mp4"
             },
             {
@@ -488,7 +555,9 @@
                 author: "BugHunter",
                 tag: "баги",
                 likes: 128,
+                views: 890,
                 isLiked: false,
+                comments: ["Разрабы почините!"],
                 videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-player-losing-a-video-game-40320-large.mp4"
             },
             {
@@ -497,27 +566,32 @@
                 author: "NinjaShadow",
                 tag: "эпик",
                 likes: 89,
+                views: 540,
                 isLiked: false,
+                comments: [],
                 videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-controller-while-playing-a-video-game-41553-large.mp4"
             }
         ];
 
         let currentFilter = 'all';
+        let searchQuery = '';
 
         function renderClips() {
             const container = document.getElementById('clipsContainer');
             container.innerHTML = '';
 
-            const filteredClips = currentFilter === 'all' 
-                ? clips 
-                : clips.filter(c => c.tag === currentFilter);
+            const filteredClips = clips.filter(c => {
+                const matchesTag = currentFilter === 'all' || c.tag === currentFilter;
+                const matchesSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesTag && matchesSearch;
+            });
 
             filteredClips.forEach(clip => {
                 const card = document.createElement('div');
                 card.className = 'clip-card';
                 card.innerHTML = `
                     <div class="video-wrapper">
-                        <video loop preload="metadata" onclick="togglePlay(this)">
+                        <video loop preload="metadata" onclick="togglePlay(this, ${clip.id})">
                             <source src="${clip.videoUrl}" type="video/mp4">
                         </video>
                         <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
@@ -529,16 +603,28 @@
                                 <div class="avatar">${clip.author[0].toUpperCase()}</div>
                                 ${escapeHtml(clip.author)}
                             </div>
-                            <span>#${clip.tag}</span>
+                            <span>#${clip.tag} • <i class="fa-regular fa-eye"></i> ${clip.views}</span>
                         </div>
                         <div class="actions">
                             <button class="action-btn ${clip.isLiked ? 'liked' : ''}" onclick="toggleLike(${clip.id})">
                                 <i class="${clip.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i> 
                                 <span>${clip.likes}</span>
                             </button>
-                            <button class="action-btn" onclick="shareClip('${escapeHtml(clip.title)}')">
-                                <i class="fa-regular fa-share-from-square"></i> Поделиться
+                            <button class="action-btn" onclick="toggleComments(${clip.id})">
+                                <i class="fa-regular fa-comment"></i> ${clip.comments.length}
                             </button>
+                            <button class="action-btn" onclick="shareClip('${escapeHtml(clip.title)}')">
+                                <i class="fa-regular fa-share-from-square"></i>
+                            </button>
+                        </div>
+                        <div class="comments-section" id="comments-${clip.id}">
+                            <div class="comments-list" id="comments-list-${clip.id}">
+                                ${clip.comments.map(c => `<div class="comment-item"><strong>Игрок:</strong> ${escapeHtml(c)}</div>`).join('')}
+                            </div>
+                            <div class="comment-input-group">
+                                <input type="text" placeholder="Оставить комментарий..." id="input-${clip.id}">
+                                <button onclick="addComment(${clip.id})">Отправить</button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -546,7 +632,7 @@
             });
         }
 
-        function togglePlay(video) {
+        function togglePlay(video, clipId) {
             const overlay = video.parentElement.querySelector('.play-overlay');
             if (video.paused) {
                 document.querySelectorAll('video').forEach(v => {
@@ -557,6 +643,13 @@
                 });
                 video.play();
                 overlay.style.opacity = '0';
+
+                // Увеличение просмотров
+                const clip = clips.find(c => c.id === clipId);
+                if (clip) {
+                    clip.views++;
+                    renderClips();
+                }
             } else {
                 video.pause();
                 overlay.style.opacity = '1';
@@ -572,10 +665,33 @@
             }
         }
 
+        function toggleComments(id) {
+            const section = document.getElementById(`comments-${id}`);
+            section.classList.toggle('open');
+        }
+
+        function addComment(id) {
+            const input = document.getElementById(`input-${id}`);
+            const text = input.value.trim();
+            if (text) {
+                const clip = clips.find(c => c.id === id);
+                if (clip) {
+                    clip.comments.push(text);
+                    renderClips();
+                    document.getElementById(`comments-${id}`).classList.add('open');
+                }
+            }
+        }
+
         function filterClips(tag, element) {
             currentFilter = tag;
             document.querySelectorAll('.tag-pill').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
+            renderClips();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value;
             renderClips();
         }
 
@@ -612,7 +728,9 @@
                     author: "Ты (Игрок)",
                     tag: tagInput.value,
                     likes: 0,
+                    views: 1,
                     isLiked: false,
+                    comments: [],
                     videoUrl: videoObjectUrl
                 };
 
